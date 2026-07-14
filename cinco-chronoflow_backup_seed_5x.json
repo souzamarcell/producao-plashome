@@ -1,0 +1,838 @@
+{
+  "__app": "chronoflow",
+  "__version": 1,
+  "__exportedAt": "2026-07-14T10:00:00Z",
+  "data": {
+    "fornecedores": [
+      {
+        "id": "IDXAJI0",
+        "nome": "Polímeros Sul Ltda",
+        "contato": "Marcos Tavares"
+      },
+      {
+        "id": "IDY6DPB",
+        "nome": "Aço Inox Distribuidora",
+        "contato": "Renata Lima"
+      },
+      {
+        "id": "IDHSAHX",
+        "nome": "Vidros Cristal SA",
+        "contato": "Eduardo Nunes"
+      },
+      {
+        "id": "IDTHV3A",
+        "nome": "Couro Premium Insumos",
+        "contato": "Bianca Rocha"
+      },
+      {
+        "id": "ID3ZMF8",
+        "nome": "Componentes Eletrônicos BR",
+        "contato": "Felipe Souza"
+      },
+      {
+        "id": "IDQFQ1W",
+        "nome": "Casa do plástico",
+        "contato": "Pedro Alves"
+      },
+      {
+        "id": "IDNYVSW",
+        "nome": "Ferro e tintas",
+        "contato": "Luis Carlos"
+      }
+    ],
+    "materiasPrimas": [
+      {
+        "id": "IDMDD4V",
+        "nome": "Policarbonato Transparente",
+        "unidade": "kg"
+      },
+      {
+        "id": "ID30T9N",
+        "nome": "Aço Inox 316L",
+        "unidade": "kg"
+      },
+      {
+        "id": "IDT3W5U",
+        "nome": "Vidro Mineral 1.5mm",
+        "unidade": "un"
+      },
+      {
+        "id": "IDZBIKC",
+        "nome": "Couro Legítimo Marrom",
+        "unidade": "m"
+      },
+      {
+        "id": "IDIDKWN",
+        "nome": "Movimento Quartzo PC21",
+        "unidade": "un"
+      }
+    ],
+    "produtores": [
+      {
+        "id": "IDNHJ7X",
+        "nome": "Oficina Central de Injeção"
+      },
+      {
+        "id": "IDVG0FN",
+        "nome": "Metalúrgica Vega"
+      },
+      {
+        "id": "ID9XUY4",
+        "nome": "Vidraçaria Prisma"
+      },
+      {
+        "id": "ID1IBLJ",
+        "nome": "Curtume Bela Vista"
+      },
+      {
+        "id": "IDH75LX",
+        "nome": "Eletrônica Precisão"
+      }
+    ],
+    "produtosSemiacabados": [
+      {
+        "id": "IDO6QJI",
+        "nome": "Caixa Injetada Polida",
+        "unidade": "un"
+      },
+      {
+        "id": "IDUJV6O",
+        "nome": "Estrutura em Aço Polido",
+        "unidade": "un"
+      },
+      {
+        "id": "IDH9SDB",
+        "nome": "Vidro Cortado e Biselado",
+        "unidade": "un"
+      },
+      {
+        "id": "IDDW2PC",
+        "nome": "Pulseira de Couro Costurada",
+        "unidade": "un"
+      },
+      {
+        "id": "IDN9T84",
+        "nome": "Módulo de Maquinário Montado",
+        "unidade": "un"
+      }
+    ],
+    "montadores": [
+      {
+        "id": "IDAZYTJ",
+        "nome": "Linha de Montagem Campinas",
+        "tipo": "Interna"
+      },
+      {
+        "id": "IDXEPQ8",
+        "nome": "Ateliê Relojoaria Fina",
+        "tipo": "Externa"
+      },
+      {
+        "id": "ID5JSG6",
+        "nome": "Montagem Express SP",
+        "tipo": "Externa"
+      },
+      {
+        "id": "ID5KXVF",
+        "nome": "Equipe Interna Noturna",
+        "tipo": "Interna"
+      },
+      {
+        "id": "ID1T2TA",
+        "nome": "Cooperativa Artesãos Sul",
+        "tipo": "Externa"
+      }
+    ],
+    "clientes": [
+      {
+        "id": "IDLA753",
+        "nome": "Relojoaria Ponteiro de Ouro",
+        "cidade": "Campinas"
+      },
+      {
+        "id": "IDLC58D",
+        "nome": "Boutique Tempo & Estilo",
+        "cidade": "São Paulo"
+      },
+      {
+        "id": "IDRC11E",
+        "nome": "Distribuidora Cronos",
+        "cidade": "Belo Horizonte"
+      },
+      {
+        "id": "IDRTJ5P",
+        "nome": "Loja Vitrine Elegante",
+        "cidade": "Curitiba"
+      },
+      {
+        "id": "IDHT0HL",
+        "nome": "E-commerce Relógios BR",
+        "cidade": "Rio de Janeiro"
+      }
+    ],
+    "modelosRelogio": [
+      {
+        "id": "ID9XPSE",
+        "nome": "Relógio Aurora",
+        "bom": [
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDO6QJI",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDH9SDB",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDDW2PC",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDN9T84",
+            "qtd": 1
+          }
+        ]
+      },
+      {
+        "id": "IDIMVIH",
+        "nome": "Relógio Vega Steel",
+        "bom": [
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDUJV6O",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDH9SDB",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDN9T84",
+            "qtd": 1
+          }
+        ]
+      },
+      {
+        "id": "IDCWI64",
+        "nome": "Relógio Prisma Clássico",
+        "bom": [
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDO6QJI",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDH9SDB",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDN9T84",
+            "qtd": 1
+          }
+        ]
+      },
+      {
+        "id": "IDCIYHE",
+        "nome": "Relógio Nero Executivo",
+        "bom": [
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDUJV6O",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDDW2PC",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDN9T84",
+            "qtd": 1
+          }
+        ]
+      },
+      {
+        "id": "ID7UR23",
+        "nome": "Relógio Solaris Sport",
+        "bom": [
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDO6QJI",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDDW2PC",
+            "qtd": 1
+          },
+          {
+            "tipo": "semiacabado",
+            "itemId": "IDN9T84",
+            "qtd": 1
+          }
+        ]
+      }
+    ],
+    "pedidosCompra": [
+      {
+        "id": "IDGDPPQ",
+        "fornecedorId": "IDXAJI0",
+        "materiaId": "IDMDD4V",
+        "quantidade": 50,
+        "valor": 18.5,
+        "status": "entregue",
+        "dataPedido": "2026-06-24T09:00:00Z",
+        "dataRecebimento": "2026-06-26T14:00:00Z",
+        "recebidoPor": "Carlos Mendes"
+      },
+      {
+        "id": "IDPKI7P",
+        "fornecedorId": "IDY6DPB",
+        "materiaId": "ID30T9N",
+        "quantidade": 30,
+        "valor": 42.0,
+        "status": "entregue",
+        "dataPedido": "2026-06-29T10:00:00Z",
+        "dataRecebimento": "2026-07-01T15:00:00Z",
+        "recebidoPor": "Ana Paula"
+      },
+      {
+        "id": "IDHOCN9",
+        "fornecedorId": "IDHSAHX",
+        "materiaId": "IDT3W5U",
+        "quantidade": 200,
+        "valor": 3.2,
+        "status": "pendente",
+        "dataPedido": "2026-07-11T11:00:00Z",
+        "dataRecebimento": null,
+        "recebidoPor": null
+      },
+      {
+        "id": "ID9UZFK",
+        "fornecedorId": "IDTHV3A",
+        "materiaId": "IDZBIKC",
+        "quantidade": 40,
+        "valor": 55.0,
+        "status": "entregue",
+        "dataPedido": "2026-07-04T08:00:00Z",
+        "dataRecebimento": "2026-07-06T13:00:00Z",
+        "recebidoPor": "Carlos Mendes"
+      },
+      {
+        "id": "IDCGVYI",
+        "fornecedorId": "ID3ZMF8",
+        "materiaId": "IDIDKWN",
+        "quantidade": 150,
+        "valor": 12.75,
+        "status": "entregue",
+        "dataPedido": "2026-07-07T09:00:00Z",
+        "dataRecebimento": "2026-07-09T16:00:00Z",
+        "recebidoPor": "Ana Paula"
+      }
+    ],
+    "ordensProducao": [
+      {
+        "id": "IDZIOYK",
+        "produtorId": "IDNHJ7X",
+        "produtoId": "IDO6QJI",
+        "quantidadeSolicitada": 40,
+        "quantidadeRecebida": 40,
+        "entregas": [
+          {
+            "data": "2026-06-30T11:00:00Z",
+            "quantidade": 40
+          }
+        ],
+        "status": "concluida",
+        "dataCriacao": "2026-06-28T09:00:00Z"
+      },
+      {
+        "id": "ID55NF4",
+        "produtorId": "IDVG0FN",
+        "produtoId": "IDUJV6O",
+        "quantidadeSolicitada": 25,
+        "quantidadeRecebida": 25,
+        "entregas": [
+          {
+            "data": "2026-07-02T10:00:00Z",
+            "quantidade": 25
+          }
+        ],
+        "status": "concluida",
+        "dataCriacao": "2026-06-30T09:00:00Z"
+      },
+      {
+        "id": "IDEDTJV",
+        "produtorId": "ID9XUY4",
+        "produtoId": "IDH9SDB",
+        "quantidadeSolicitada": 60,
+        "quantidadeRecebida": 60,
+        "entregas": [
+          {
+            "data": "2026-07-04T14:00:00Z",
+            "quantidade": 60
+          }
+        ],
+        "status": "concluida",
+        "dataCriacao": "2026-07-02T09:00:00Z"
+      },
+      {
+        "id": "IDA1WJ0",
+        "produtorId": "ID1IBLJ",
+        "produtoId": "IDDW2PC",
+        "quantidadeSolicitada": 35,
+        "quantidadeRecebida": 20,
+        "entregas": [
+          {
+            "data": "2026-07-08T15:00:00Z",
+            "quantidade": 20
+          }
+        ],
+        "status": "aberta",
+        "dataCriacao": "2026-07-06T09:00:00Z"
+      },
+      {
+        "id": "IDEL624",
+        "produtorId": "IDH75LX",
+        "produtoId": "IDN9T84",
+        "quantidadeSolicitada": 45,
+        "quantidadeRecebida": 45,
+        "entregas": [
+          {
+            "data": "2026-07-05T13:00:00Z",
+            "quantidade": 45
+          }
+        ],
+        "status": "concluida",
+        "dataCriacao": "2026-07-03T09:00:00Z"
+      }
+    ],
+    "ordensMontagem": [
+      {
+        "id": "ID5935A",
+        "montadorId": "IDAZYTJ",
+        "modeloId": "ID9XPSE",
+        "quantidadeEnviada": 8,
+        "quantidadeRecebida": 8,
+        "perdas": 0,
+        "status": "concluida",
+        "dataEnvio": "2026-07-07T09:00:00Z",
+        "dataRecebimento": "2026-07-09T10:00:00Z"
+      },
+      {
+        "id": "ID4I3QK",
+        "montadorId": "IDXEPQ8",
+        "modeloId": "IDIMVIH",
+        "quantidadeEnviada": 8,
+        "quantidadeRecebida": 7,
+        "perdas": 1,
+        "status": "concluida",
+        "dataEnvio": "2026-07-08T10:00:00Z",
+        "dataRecebimento": "2026-07-10T11:00:00Z"
+      },
+      {
+        "id": "ID9T7E8",
+        "montadorId": "ID5JSG6",
+        "modeloId": "IDCWI64",
+        "quantidadeEnviada": 12,
+        "quantidadeRecebida": 0,
+        "perdas": 0,
+        "status": "enviada",
+        "dataEnvio": "2026-07-11T09:00:00Z",
+        "dataRecebimento": null
+      },
+      {
+        "id": "ID0LVSN",
+        "montadorId": "ID5KXVF",
+        "modeloId": "IDCIYHE",
+        "quantidadeEnviada": 6,
+        "quantidadeRecebida": 6,
+        "perdas": 0,
+        "status": "concluida",
+        "dataEnvio": "2026-07-09T14:00:00Z",
+        "dataRecebimento": "2026-07-11T09:00:00Z"
+      },
+      {
+        "id": "IDCXLL4",
+        "montadorId": "ID1T2TA",
+        "modeloId": "ID7UR23",
+        "quantidadeEnviada": 5,
+        "quantidadeRecebida": 5,
+        "perdas": 0,
+        "status": "concluida",
+        "dataEnvio": "2026-07-10T15:00:00Z",
+        "dataRecebimento": "2026-07-12T10:00:00Z"
+      }
+    ],
+    "expedicoes": [
+      {
+        "id": "ID6WKTA",
+        "clienteId": "IDLA753",
+        "itens": [
+          {
+            "modeloId": "ID9XPSE",
+            "quantidade": 3
+          }
+        ],
+        "data": "2026-07-10T09:00:00Z"
+      },
+      {
+        "id": "IDPHR62",
+        "clienteId": "IDLC58D",
+        "itens": [
+          {
+            "modeloId": "IDIMVIH",
+            "quantidade": 2
+          },
+          {
+            "modeloId": "IDCIYHE",
+            "quantidade": 1
+          }
+        ],
+        "data": "2026-07-11T10:00:00Z"
+      },
+      {
+        "id": "ID31YIH",
+        "clienteId": "IDRC11E",
+        "itens": [
+          {
+            "modeloId": "ID7UR23",
+            "quantidade": 2
+          }
+        ],
+        "data": "2026-07-12T11:00:00Z"
+      },
+      {
+        "id": "IDOWGZR",
+        "clienteId": "IDRTJ5P",
+        "itens": [
+          {
+            "modeloId": "ID9XPSE",
+            "quantidade": 2
+          }
+        ],
+        "data": "2026-07-13T14:00:00Z"
+      },
+      {
+        "id": "IDDPG8S",
+        "clienteId": "IDHT0HL",
+        "itens": [
+          {
+            "modeloId": "IDCIYHE",
+            "quantidade": 1
+          },
+          {
+            "modeloId": "IDIMVIH",
+            "quantidade": 1
+          }
+        ],
+        "data": "2026-07-14T09:00:00Z"
+      }
+    ],
+    "estoqueMateriaPrima": {
+      "IDMDD4V": 48,
+      "ID30T9N": 30,
+      "IDZBIKC": 38,
+      "IDIDKWN": 150
+    },
+    "estoqueSemiacabados": {
+      "IDO6QJI": 15,
+      "IDUJV6O": 11,
+      "IDH9SDB": 30,
+      "IDDW2PC": 1,
+      "IDN9T84": 6
+    },
+    "estoqueAcabados": {
+      "ID9XPSE": 2,
+      "IDIMVIH": 4,
+      "IDCIYHE": 5,
+      "ID7UR23": 3
+    },
+    "historico": [
+      {
+        "id": "ID8P0TV",
+        "data": "2026-07-14T11:00:00Z",
+        "tipo": "Ajuste",
+        "desc": "Ajuste em Relógio Aurora: 3 → 2 (Perda não registrada)"
+      },
+      {
+        "id": "ID6VZ41",
+        "data": "2026-07-14T10:00:00Z",
+        "tipo": "Ajuste",
+        "desc": "Ajuste em Relógio Nero Executivo: 4 → 5 (Devolução)"
+      },
+      {
+        "id": "IDBI4Q2",
+        "data": "2026-07-14T09:00:00Z",
+        "tipo": "Expedição",
+        "desc": "Enviado para E-commerce Relógios BR: 1x Relógio Nero Executivo, 1x Relógio Vega Steel"
+      },
+      {
+        "id": "IDIXA11",
+        "data": "2026-07-13T14:00:00Z",
+        "tipo": "Expedição",
+        "desc": "Enviado para Loja Vitrine Elegante: 2x Relógio Aurora"
+      },
+      {
+        "id": "IDEIYZC",
+        "data": "2026-07-13T11:00:00Z",
+        "tipo": "Ajuste",
+        "desc": "Ajuste em Vidro Cortado e Biselado: 32 → 30 (Erro Operacional)"
+      },
+      {
+        "id": "IDW1SWJ",
+        "data": "2026-07-13T10:00:00Z",
+        "tipo": "Ajuste",
+        "desc": "Ajuste em Couro Legítimo Marrom: 40 → 38 (Perda não registrada)"
+      },
+      {
+        "id": "IDAIR4C",
+        "data": "2026-07-12T11:00:00Z",
+        "tipo": "Expedição",
+        "desc": "Enviado para Distribuidora Cronos: 2x Relógio Solaris Sport"
+      },
+      {
+        "id": "IDKEP7Y",
+        "data": "2026-07-12T10:00:00Z",
+        "tipo": "Montagem",
+        "desc": "5 unidades prontas de Relógio Solaris Sport (Cooperativa Artesãos Sul)"
+      },
+      {
+        "id": "IDWZS3T",
+        "data": "2026-07-12T09:00:00Z",
+        "tipo": "Ajuste",
+        "desc": "Ajuste em Policarbonato Transparente: 50 → 48 (Erro Operacional)"
+      },
+      {
+        "id": "IDJ2QP8",
+        "data": "2026-07-11T11:00:00Z",
+        "tipo": "Compra",
+        "desc": "Pedido criado: 200 de Vidro Mineral 1.5mm — Vidros Cristal SA"
+      },
+      {
+        "id": "IDGDSWM",
+        "data": "2026-07-11T10:00:00Z",
+        "tipo": "Expedição",
+        "desc": "Enviado para Boutique Tempo & Estilo: 2x Relógio Vega Steel, 1x Relógio Nero Executivo"
+      },
+      {
+        "id": "IDG8JDP",
+        "data": "2026-07-11T09:00:00Z",
+        "tipo": "Montagem",
+        "desc": "Ordem enviada: 12 kits de Relógio Prisma Clássico — Montagem Express SP"
+      },
+      {
+        "id": "IDTZ0YN",
+        "data": "2026-07-11T09:00:00Z",
+        "tipo": "Montagem",
+        "desc": "6 unidades prontas de Relógio Nero Executivo (Equipe Interna Noturna)"
+      },
+      {
+        "id": "IDZKLOO",
+        "data": "2026-07-10T15:00:00Z",
+        "tipo": "Montagem",
+        "desc": "Ordem enviada: 5 kits de Relógio Solaris Sport — Cooperativa Artesãos Sul"
+      },
+      {
+        "id": "ID58KXO",
+        "data": "2026-07-10T11:00:00Z",
+        "tipo": "Montagem",
+        "desc": "7 unidades prontas de Relógio Vega Steel (Ateliê Relojoaria Fina) · Perdas: 1"
+      },
+      {
+        "id": "IDKPUXQ",
+        "data": "2026-07-10T09:00:00Z",
+        "tipo": "Expedição",
+        "desc": "Enviado para Relojoaria Ponteiro de Ouro: 3x Relógio Aurora"
+      },
+      {
+        "id": "IDPVS7H",
+        "data": "2026-07-09T16:00:00Z",
+        "tipo": "Recebimento",
+        "desc": "Recebido: 150 de Movimento Quartzo PC21 por Ana Paula"
+      },
+      {
+        "id": "IDUJZA7",
+        "data": "2026-07-09T14:00:00Z",
+        "tipo": "Montagem",
+        "desc": "Ordem enviada: 6 kits de Relógio Nero Executivo — Equipe Interna Noturna"
+      },
+      {
+        "id": "ID3J2D5",
+        "data": "2026-07-09T10:00:00Z",
+        "tipo": "Montagem",
+        "desc": "8 unidades prontas de Relógio Aurora (Linha de Montagem Campinas)"
+      },
+      {
+        "id": "ID6T4UF",
+        "data": "2026-07-08T15:00:00Z",
+        "tipo": "Produção",
+        "desc": "Entrega recebida: 20 de Pulseira de Couro Costurada (Curtume Bela Vista)"
+      },
+      {
+        "id": "ID2IAGL",
+        "data": "2026-07-08T10:00:00Z",
+        "tipo": "Montagem",
+        "desc": "Ordem enviada: 8 kits de Relógio Vega Steel — Ateliê Relojoaria Fina"
+      },
+      {
+        "id": "IDE6IVW",
+        "data": "2026-07-07T09:00:00Z",
+        "tipo": "Compra",
+        "desc": "Pedido criado: 150 de Movimento Quartzo PC21 — Componentes Eletrônicos BR"
+      },
+      {
+        "id": "ID0L725",
+        "data": "2026-07-07T09:00:00Z",
+        "tipo": "Montagem",
+        "desc": "Ordem enviada: 8 kits de Relógio Aurora — Linha de Montagem Campinas"
+      },
+      {
+        "id": "IDVS4F8",
+        "data": "2026-07-06T13:00:00Z",
+        "tipo": "Recebimento",
+        "desc": "Recebido: 40 de Couro Legítimo Marrom por Carlos Mendes"
+      },
+      {
+        "id": "IDTPAC5",
+        "data": "2026-07-06T09:00:00Z",
+        "tipo": "Produção",
+        "desc": "Ordem criada: 35 de Pulseira de Couro Costurada — Curtume Bela Vista"
+      },
+      {
+        "id": "ID5OWF7",
+        "data": "2026-07-05T13:00:00Z",
+        "tipo": "Produção",
+        "desc": "Entrega recebida: 45 de Módulo de Maquinário Montado (Eletrônica Precisão)"
+      },
+      {
+        "id": "ID64DPJ",
+        "data": "2026-07-04T14:00:00Z",
+        "tipo": "Produção",
+        "desc": "Entrega recebida: 60 de Vidro Cortado e Biselado (Vidraçaria Prisma)"
+      },
+      {
+        "id": "ID8UT0C",
+        "data": "2026-07-04T08:00:00Z",
+        "tipo": "Compra",
+        "desc": "Pedido criado: 40 de Couro Legítimo Marrom — Couro Premium Insumos"
+      },
+      {
+        "id": "ID6HID2",
+        "data": "2026-07-03T09:00:00Z",
+        "tipo": "Produção",
+        "desc": "Ordem criada: 45 de Módulo de Maquinário Montado — Eletrônica Precisão"
+      },
+      {
+        "id": "ID3KX7E",
+        "data": "2026-07-02T10:00:00Z",
+        "tipo": "Produção",
+        "desc": "Entrega recebida: 25 de Estrutura em Aço Polido (Metalúrgica Vega)"
+      },
+      {
+        "id": "IDZHWJR",
+        "data": "2026-07-02T09:00:00Z",
+        "tipo": "Produção",
+        "desc": "Ordem criada: 60 de Vidro Cortado e Biselado — Vidraçaria Prisma"
+      },
+      {
+        "id": "ID874FR",
+        "data": "2026-07-01T15:00:00Z",
+        "tipo": "Recebimento",
+        "desc": "Recebido: 30 de Aço Inox 316L por Ana Paula"
+      },
+      {
+        "id": "ID9CHJ7",
+        "data": "2026-06-30T11:00:00Z",
+        "tipo": "Produção",
+        "desc": "Entrega recebida: 40 de Caixa Injetada Polida (Oficina Central de Injeção)"
+      },
+      {
+        "id": "IDZW9XA",
+        "data": "2026-06-30T09:00:00Z",
+        "tipo": "Produção",
+        "desc": "Ordem criada: 25 de Estrutura em Aço Polido — Metalúrgica Vega"
+      },
+      {
+        "id": "ID5TB94",
+        "data": "2026-06-29T10:00:00Z",
+        "tipo": "Compra",
+        "desc": "Pedido criado: 30 de Aço Inox 316L — Aço Inox Distribuidora"
+      },
+      {
+        "id": "IDL1CQ9",
+        "data": "2026-06-28T09:00:00Z",
+        "tipo": "Produção",
+        "desc": "Ordem criada: 40 de Caixa Injetada Polida — Oficina Central de Injeção"
+      },
+      {
+        "id": "IDM5IGQ",
+        "data": "2026-06-26T14:00:00Z",
+        "tipo": "Recebimento",
+        "desc": "Recebido: 50 de Policarbonato Transparente por Carlos Mendes"
+      },
+      {
+        "id": "ID0Y9DO",
+        "data": "2026-06-24T09:00:00Z",
+        "tipo": "Compra",
+        "desc": "Pedido criado: 50 de Policarbonato Transparente — Polímeros Sul Ltda"
+      }
+    ],
+    "ajustes": [
+      {
+        "id": "IDY9V86",
+        "data": "2026-07-12T09:00:00Z",
+        "tipo": "materiaPrima",
+        "itemId": "IDMDD4V",
+        "antes": 50,
+        "depois": 48,
+        "motivo": "Erro Operacional"
+      },
+      {
+        "id": "ID60RJI",
+        "data": "2026-07-13T10:00:00Z",
+        "tipo": "materiaPrima",
+        "itemId": "IDZBIKC",
+        "antes": 40,
+        "depois": 38,
+        "motivo": "Perda não registrada"
+      },
+      {
+        "id": "IDCKJLT",
+        "data": "2026-07-13T11:00:00Z",
+        "tipo": "semiacabado",
+        "itemId": "IDH9SDB",
+        "antes": 32,
+        "depois": 30,
+        "motivo": "Erro Operacional"
+      },
+      {
+        "id": "IDOTOHP",
+        "data": "2026-07-14T10:00:00Z",
+        "tipo": "acabado",
+        "itemId": "IDCIYHE",
+        "antes": 4,
+        "depois": 5,
+        "motivo": "Devolução"
+      },
+      {
+        "id": "IDNAM14",
+        "data": "2026-07-14T11:00:00Z",
+        "tipo": "acabado",
+        "itemId": "ID9XPSE",
+        "antes": 3,
+        "depois": 2,
+        "motivo": "Perda não registrada"
+      }
+    ]
+  }
+}
