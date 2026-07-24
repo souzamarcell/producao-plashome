@@ -852,7 +852,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.0.7</span>
+        <span>Controle de Produção · Relógios · Versão 1.0.9</span>
       </div>
       <button
         class="menu-btn"
@@ -1099,8 +1099,11 @@
                   <th>Fornecedor</th>
                   <th>Material</th>
                   <th>Qtd</th>
+                  <th>Valor Unit.</th>
+                  <th>Total</th>
                   <th>Status</th>
                   <th>Recebido por</th>
+                  <th>Data Ped.</th>
                   <th>Data Receb.</th>
                 </tr>
               </thead>
@@ -1318,7 +1321,8 @@
               <thead>
                 <tr>
                   <th>Material</th>
-                  <th>Unidade</th>
+                  <th>Valor Unidade</th>
+                  <th>Total</th>
                   <th>Quantidade</th>
                 </tr>
               </thead>
@@ -1437,7 +1441,8 @@
               <thead>
                 <tr>
                   <th>Material</th>
-                  <th>Unidade</th>
+                  <th>Valor Unidade</th>
+                  <th>Total</th>
                   <th>Quantidade</th>
                 </tr>
               </thead>
@@ -2097,6 +2102,20 @@
         if (tipo === 'semiacabado') return nome(db.produtosSemiacabados, id)
         return nomeModeloComCodigo(id)
       }
+      function getValorUnitarioMateria(materiaId) {
+        const materia = db.materiasPrimas.find((x) => x.id === materiaId)
+        if (materia && materia.valor != null && materia.valor !== '') {
+          return Number(materia.valor)
+        }
+        const compra = [...db.pedidosCompra]
+          .filter((p) => p.materiaId === materiaId && p.status === 'entregue')
+          .sort(
+            (a, b) =>
+              new Date(b.dataRecebimento || b.dataPedido) -
+              new Date(a.dataRecebimento || a.dataPedido)
+          )[0]
+        return compra && compra.valor != null ? Number(compra.valor) : null
+      }
 
       /* ============================= COMPRAS ============================= */
       function fornecedorDisplayName(item) {
@@ -2113,10 +2132,32 @@
         )
         return found ? fornecedorDisplayName(found) : String(value)
       }
+      function resolveMateriaId(value) {
+        if (!value) return null
+        const byId = db.materiasPrimas.find((x) => x.id === value)
+        if (byId) return byId.id
+        const byName = db.materiasPrimas.find(
+          (x) =>
+            String(x.nome || '')
+              .trim()
+              .toLowerCase() === String(value).trim().toLowerCase()
+        )
+        if (byName) return byName.id
+        const created = { id: uid(), nome: String(value).trim(), unidade: '—' }
+        db.materiasPrimas.push(created)
+        return created.id
+      }
       function materiaLabel(value) {
         if (!value) return '—'
         const item = db.materiasPrimas.find((x) => x.id === value)
-        return item ? item.nome : String(value)
+        if (item) return item.nome
+        const byName = db.materiasPrimas.find(
+          (x) =>
+            String(x.nome || '')
+              .trim()
+              .toLowerCase() === String(value).trim().toLowerCase()
+        )
+        return byName ? byName.nome : String(value)
       }
       function getFornecedoresUnicos() {
         const grupos = []
@@ -2191,10 +2232,11 @@
           toast('Preencha fornecedor, material e quantidade.')
           return
         }
+        const materiaId = resolveMateriaId(materiaNome)
         db.pedidosCompra.push({
           id: uid(),
           fornecedorId: fornecedorNome,
-          materiaId: materiaNome,
+          materiaId,
           quantidade,
           valor: valor || 0,
           status: 'pendente',
@@ -2224,7 +2266,7 @@
           'Editar Pedido',
           `
     <label>Fornecedor</label><select id="pc-edit-fornecedor" onchange="atualizarMateriasEdicao(this.value)">${renderFornecedorSelect(p.fornecedorId)}</select>
-    <label>Matéria-Prima</label><select id="pc-edit-materia">${renderMateriasSelect(p.fornecedorId, p.materiaId)}</select>
+    <label>Matéria-Prima</label><select id="pc-edit-materia">${renderMateriasSelect(p.fornecedorId, materiaLabel(p.materiaId))}</select>
     <label>Quantidade</label><input id="pc-edit-quantidade" type="number" min="0" step="0.01" value="${p.quantidade}">
     <label>Valor Unitário (R$)</label><input id="pc-edit-valor" type="number" min="0" step="0.01" value="${p.valor || 0}">
     <div class="btn-row">
@@ -2253,7 +2295,7 @@
           return
         }
         p.fornecedorId = fornecedorNome
-        p.materiaId = materiaNome
+        p.materiaId = resolveMateriaId(materiaNome)
         p.quantidade = quantidade
         p.valor = valor || 0
         save()
@@ -2264,7 +2306,22 @@
       function excluirPedidoCompra(id) {
         const p = db.pedidosCompra.find((x) => x.id === id)
         if (!p) return
-        if (!confirm('Excluir este pedido de compra?')) return
+        openModal(
+          'Excluir Pedido',
+          `
+    <div style="padding:8px 0 4px;">
+      <p style="margin:0 0 12px;">Deseja realmente excluir este pedido de compra?</p>
+      <div class="hint" style="margin-bottom:12px;">${escapeHtml(materiaLabel(p.materiaId))} — ${escapeHtml(fornecedorLabel(p.fornecedorId))}</div>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn-danger" onclick="confirmarExclusaoPedido('${id}')">Excluir</button>
+      </div>
+    </div>`
+        )
+      }
+      function confirmarExclusaoPedido(id) {
+        const p = db.pedidosCompra.find((x) => x.id === id)
+        if (!p) return
         db.pedidosCompra = db.pedidosCompra.filter((x) => x.id !== id)
         addHistorico(
           'Compra',
@@ -2274,6 +2331,7 @@
             (p.fornecedorId || 'fornecedor')
         )
         save()
+        closeModal()
         toast('Pedido excluído.')
         renderCompras()
       }
@@ -2301,7 +2359,7 @@
         p.status = 'entregue'
         p.dataRecebimento = nowISO()
         p.recebidoPor = nomeFunc
-        addStock('materiaPrima', p.materiaId, p.quantidade)
+        addStock('materiaPrima', resolveMateriaId(p.materiaId), p.quantidade)
         addHistorico(
           'Recebimento',
           'Recebido: ' +
@@ -2345,8 +2403,8 @@
               .map(
                 (p) => `
     <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
-    <td class="mono">${p.quantidade}</td><td><span class="badge ${p.status === 'entregue' ? 'badge-done' : 'badge-pending'}">${p.status}</span></td>
-    <td>${p.recebidoPor || '—'}</td><td>${fmtDate(p.dataRecebimento)}</td></tr>`
+    <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.valor || 0)}</td><td class="mono">${fmtMoney((p.quantidade || 0) * (p.valor || 0))}</td><td><span class="badge ${p.status === 'entregue' ? 'badge-done' : 'badge-pending'}">${p.status}</span></td>
+    <td>${p.recebidoPor || '—'}</td><td>${fmtDate(p.dataPedido)}</td><td>${fmtDate(p.dataRecebimento)}</td></tr>`
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhum pedido registrado.</td></tr>`
@@ -2735,12 +2793,15 @@
       function renderEstoquesReports() {
         const mRows = db.materiasPrimas.length
           ? db.materiasPrimas
-              .map(
-                (m) =>
-                  `<tr><td>${m.nome}</td><td>${m.unidade || '—'}</td><td class="mono">${getStock('materiaPrima', m.id)}</td></tr>`
-              )
+              .map((m) => {
+                const quantidade = getStock('materiaPrima', m.id)
+                const valorUnitario = getValorUnitarioMateria(m.id)
+                const total =
+                  valorUnitario != null ? quantidade * valorUnitario : null
+                return `<tr><td>${m.nome}</td><td class="mono">${valorUnitario != null ? fmtMoney(valorUnitario) : '—'}</td><td class="mono">${total != null ? fmtMoney(total) : '—'}</td><td class="mono">${quantidade}</td></tr>`
+              })
               .join('')
-          : `<tr class="empty-row"><td colspan="3">Nenhuma matéria-prima cadastrada.</td></tr>`
+          : `<tr class="empty-row"><td colspan="4">Nenhuma matéria-prima cadastrada.</td></tr>`
         const sRows = db.produtosSemiacabados.length
           ? db.produtosSemiacabados
               .map(
