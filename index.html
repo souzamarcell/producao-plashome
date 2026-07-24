@@ -1078,6 +1078,7 @@
                   <th>Fornecedor</th>
                   <th>Material</th>
                   <th>Qtd</th>
+                  <th>Valor Unit.</th>
                   <th>Total</th>
                   <th>Data</th>
                   <th></th>
@@ -2216,6 +2217,66 @@
         toast('Pedido registrado.')
         renderCompras()
       }
+      function editarPedidoCompra(id) {
+        const p = db.pedidosCompra.find((x) => x.id === id)
+        if (!p) return
+        openModal(
+          'Editar Pedido',
+          `
+    <label>Fornecedor</label><select id="pc-edit-fornecedor" onchange="atualizarMateriasEdicao(this.value)">${renderFornecedorSelect(p.fornecedorId)}</select>
+    <label>Matéria-Prima</label><select id="pc-edit-materia">${renderMateriasSelect(p.fornecedorId, p.materiaId)}</select>
+    <label>Quantidade</label><input id="pc-edit-quantidade" type="number" min="0" step="0.01" value="${p.quantidade}">
+    <label>Valor Unitário (R$)</label><input id="pc-edit-valor" type="number" min="0" step="0.01" value="${p.valor || 0}">
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="salvarEdicaoPedidoCompra('${id}')">Salvar</button>
+    </div>`
+        )
+      }
+      function atualizarMateriasEdicao(fornecedorNome) {
+        const select = document.getElementById('pc-edit-materia')
+        if (!select) return
+        select.innerHTML = renderMateriasSelect(fornecedorNome, '')
+      }
+      function salvarEdicaoPedidoCompra(id) {
+        const p = db.pedidosCompra.find((x) => x.id === id)
+        if (!p) return
+        const fornecedorNome =
+          document.getElementById('pc-edit-fornecedor').value
+        const materiaNome = document.getElementById('pc-edit-materia').value
+        const quantidade = parseFloat(
+          document.getElementById('pc-edit-quantidade').value
+        )
+        const valor = parseFloat(document.getElementById('pc-edit-valor').value)
+        if (!fornecedorNome || !materiaNome || !quantidade) {
+          toast('Preencha fornecedor, material e quantidade.')
+          return
+        }
+        p.fornecedorId = fornecedorNome
+        p.materiaId = materiaNome
+        p.quantidade = quantidade
+        p.valor = valor || 0
+        save()
+        closeModal()
+        toast('Pedido atualizado.')
+        renderCompras()
+      }
+      function excluirPedidoCompra(id) {
+        const p = db.pedidosCompra.find((x) => x.id === id)
+        if (!p) return
+        if (!confirm('Excluir este pedido de compra?')) return
+        db.pedidosCompra = db.pedidosCompra.filter((x) => x.id !== id)
+        addHistorico(
+          'Compra',
+          'Pedido excluído: ' +
+            (p.materiaId || 'item') +
+            ' — ' +
+            (p.fornecedorId || 'fornecedor')
+        )
+        save()
+        toast('Pedido excluído.')
+        renderCompras()
+      }
       function confirmarRecebimento(id) {
         const p = db.pedidosCompra.find((x) => x.id === id)
         if (!p) return
@@ -2271,7 +2332,7 @@
               .map(
                 (p) => `
     <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
-    <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.quantidade * p.valor)}</td><td>${fmtDate(p.dataPedido)}</td>
+    <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.valor || 0)}</td><td class="mono">${fmtMoney(p.quantidade * p.valor)}</td><td>${fmtDate(p.dataPedido)}</td>
     <td><button class="btn-ghost btn-sm" title="Editar" onclick="editarPedidoCompra('${p.id}')">✏️</button><button class="btn-danger btn-sm" title="Excluir" onclick="excluirPedidoCompra('${p.id}')">🗑️</button><button class="btn-primary btn-sm" onclick="confirmarRecebimento('${p.id}')">Receber</button></td></tr>`
               )
               .join('')
