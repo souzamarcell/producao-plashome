@@ -852,7 +852,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.0.5</span>
+        <span>Controle de Produção · Relógios · Versão 1.0.7</span>
       </div>
       <button
         class="menu-btn"
@@ -1029,7 +1029,10 @@
           <div class="grid-2">
             <div>
               <label>Fornecedor</label
-              ><select id="pc-fornecedor"></select>
+              ><select
+                id="pc-fornecedor"
+                onchange="atualizarMateriasCompras(this.value)"
+              ></select>
             </div>
             <div>
               <label>Matéria-Prima</label
@@ -2095,21 +2098,102 @@
       }
 
       /* ============================= COMPRAS ============================= */
+      function fornecedorDisplayName(item) {
+        return item?.fornecedor || item?.nome || item?.contato || '—'
+      }
+      function fornecedorLabel(value) {
+        if (!value) return '—'
+        const item = db.fornecedores.find((x) => x.id === value)
+        if (item) return fornecedorDisplayName(item)
+        const normalized = String(value).trim().toLowerCase()
+        const found = db.fornecedores.find(
+          (x) =>
+            String(fornecedorDisplayName(x)).trim().toLowerCase() === normalized
+        )
+        return found ? fornecedorDisplayName(found) : String(value)
+      }
+      function materiaLabel(value) {
+        if (!value) return '—'
+        const item = db.materiasPrimas.find((x) => x.id === value)
+        return item ? item.nome : String(value)
+      }
+      function getFornecedoresUnicos() {
+        const grupos = []
+        const vistos = new Set()
+        db.fornecedores.forEach((item) => {
+          const nomeFornecedor = String(fornecedorDisplayName(item)).trim()
+          if (!nomeFornecedor) return
+          const key = nomeFornecedor.toLowerCase()
+          if (vistos.has(key)) return
+          vistos.add(key)
+          grupos.push(nomeFornecedor)
+        })
+        return grupos
+      }
+      function getProdutosFornecedor(fornecedorNome) {
+        const nome = String(fornecedorNome || '')
+          .trim()
+          .toLowerCase()
+        return db.fornecedores
+          .filter((item) => {
+            const nomeFornecedor = String(fornecedorDisplayName(item))
+              .trim()
+              .toLowerCase()
+            return nomeFornecedor === nome
+          })
+          .map((item) =>
+            String(item.produto || item.nome || item.contato || '').trim()
+          )
+          .filter(Boolean)
+      }
+      function renderFornecedorSelect(selectedValue) {
+        const fornecedores = getFornecedoresUnicos()
+        const value = selectedValue || fornecedores[0] || ''
+        return fornecedores.length
+          ? fornecedores
+              .map(
+                (nome) =>
+                  `<option value="${escapeHtml(nome)}" ${nome === value ? 'selected' : ''}>${escapeHtml(nome)}</option>`
+              )
+              .join('')
+          : '<option value="">Nenhum fornecedor cadastrado</option>'
+      }
+      function renderMateriasSelect(fornecedorNome, selectedValue) {
+        const produtos = getProdutosFornecedor(fornecedorNome)
+        const value = selectedValue || produtos[0] || ''
+        if (!produtos.length) {
+          return '<option value="">Nenhum produto para este fornecedor</option>'
+        }
+        return produtos
+          .map(
+            (produto) =>
+              `<option value="${escapeHtml(produto)}" ${produto === value ? 'selected' : ''}>${escapeHtml(produto)}</option>`
+          )
+          .join('')
+      }
+      function atualizarMateriasCompras(fornecedorNome) {
+        const materiaSelect = document.getElementById('pc-materia')
+        const currentValue = materiaSelect.value
+        materiaSelect.innerHTML = renderMateriasSelect(
+          fornecedorNome,
+          currentValue
+        )
+      }
       function criarPedidoCompra() {
-        const fornecedorId = document.getElementById('pc-fornecedor').value
-        const materiaId = document.getElementById('pc-materia').value
+        const fornecedorNome = document.getElementById('pc-fornecedor').value
+        const materiaNome = document.getElementById('pc-materia').value
         const quantidade = parseFloat(
           document.getElementById('pc-quantidade').value
         )
         const valor = parseFloat(document.getElementById('pc-valor').value)
-        if (!fornecedorId || !materiaId || !quantidade) {
+        if (!fornecedorNome || !materiaNome || !quantidade) {
           toast('Preencha fornecedor, material e quantidade.')
           return
         }
         db.pedidosCompra.push({
           id: uid(),
-          fornecedorId,
-          materiaId,
+          fornecedorId: fornecedorNome,
+          materiaId: materiaNome,
           quantidade,
           valor: valor || 0,
           status: 'pendente',
@@ -2122,9 +2206,9 @@
           'Pedido criado: ' +
             quantidade +
             ' de ' +
-            nome(db.materiasPrimas, materiaId) +
+            materiaNome +
             ' — ' +
-            nome(db.fornecedores, fornecedorId)
+            fornecedorNome
         )
         document.getElementById('pc-quantidade').value = ''
         document.getElementById('pc-valor').value = ''
@@ -2138,7 +2222,7 @@
         openModal(
           'Confirmar Recebimento',
           `
-    <p class="hint">${p.quantidade} de <b>${nome(db.materiasPrimas, p.materiaId)}</b> — Fornecedor: ${nome(db.fornecedores, p.fornecedorId)}</p>
+    <p class="hint">${p.quantidade} de <b>${materiaLabel(p.materiaId)}</b> — Fornecedor: ${fornecedorLabel(p.fornecedorId)}</p>
     <label>Recebido por</label><input id="modal-recebido-por" placeholder="Nome do funcionário">
     <div class="btn-row"><button class="btn-primary" onclick="finalizarRecebimento('${id}')">Confirmar</button></div>
   `
@@ -2162,7 +2246,7 @@
           'Recebido: ' +
             p.quantidade +
             ' de ' +
-            nome(db.materiasPrimas, p.materiaId) +
+            materiaLabel(p.materiaId) +
             ' por ' +
             nomeFunc
         )
@@ -2172,20 +2256,23 @@
         renderAll()
       }
       function renderCompras() {
-        document.getElementById('pc-fornecedor').innerHTML = optList(
-          db.fornecedores
-        )
-        document.getElementById('pc-materia').innerHTML = optList(
-          db.materiasPrimas
+        const fornecedorSelect = document.getElementById('pc-fornecedor')
+        const materiaSelect = document.getElementById('pc-materia')
+        const fornecedorAtual = fornecedorSelect.value || ''
+        const materiaAtual = materiaSelect.value || ''
+        fornecedorSelect.innerHTML = renderFornecedorSelect(fornecedorAtual)
+        materiaSelect.innerHTML = renderMateriasSelect(
+          fornecedorSelect.value || getFornecedoresUnicos()[0] || '',
+          materiaAtual
         )
         const pend = db.pedidosCompra.filter((p) => p.status === 'pendente')
         document.getElementById('tbl-pc-pendentes').innerHTML = pend.length
           ? pend
               .map(
                 (p) => `
-    <tr><td class="serial">${p.id}</td><td>${nome(db.fornecedores, p.fornecedorId)}</td><td>${nome(db.materiasPrimas, p.materiaId)}</td>
+    <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
     <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.quantidade * p.valor)}</td><td>${fmtDate(p.dataPedido)}</td>
-    <td><button class="btn-primary btn-sm" onclick="confirmarRecebimento('${p.id}')">Receber</button></td></tr>`
+    <td><button class="btn-ghost btn-sm" title="Editar" onclick="editarPedidoCompra('${p.id}')">✏️</button><button class="btn-danger btn-sm" title="Excluir" onclick="excluirPedidoCompra('${p.id}')">🗑️</button><button class="btn-primary btn-sm" onclick="confirmarRecebimento('${p.id}')">Receber</button></td></tr>`
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhum pedido pendente.</td></tr>`
@@ -2196,7 +2283,7 @@
           ? all
               .map(
                 (p) => `
-    <tr><td class="serial">${p.id}</td><td>${nome(db.fornecedores, p.fornecedorId)}</td><td>${nome(db.materiasPrimas, p.materiaId)}</td>
+    <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
     <td class="mono">${p.quantidade}</td><td><span class="badge ${p.status === 'entregue' ? 'badge-done' : 'badge-pending'}">${p.status}</span></td>
     <td>${p.recebidoPor || '—'}</td><td>${fmtDate(p.dataRecebimento)}</td></tr>`
               )
@@ -2967,7 +3054,10 @@
           `
     <div class="card" style="padding:0;border:none;box-shadow:none;background:transparent;">
       ${formFields}
-      <div class="btn-row"><button class="btn-primary" onclick="salvarEdicaoCadastro('${id}')">Salvar Alterações</button></div>
+      <div class="btn-row">
+        <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn-primary" onclick="salvarEdicaoCadastro('${id}')">Salvar Alterações</button>
+      </div>
     </div>`
         )
       }
@@ -3608,8 +3698,12 @@
 
       /* ============================= MODAL ============================= */
       function openModal(title, bodyHTML) {
-        document.getElementById('modal-content').innerHTML =
-          `<h3>${title}</h3>${bodyHTML}`
+        document.getElementById('modal-content').innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;">
+            <h3 style="margin:0;">${escapeHtml(title)}</h3>
+            <button type="button" class="btn-ghost btn-sm" onclick="closeModal()" title="Cancelar" aria-label="Fechar modal" style="min-width:32px;padding:6px 8px;line-height:1;">✕</button>
+          </div>
+          ${bodyHTML}`
         document.getElementById('modal-backdrop').classList.add('show')
       }
       function closeModal() {
