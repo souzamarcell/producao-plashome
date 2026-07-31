@@ -828,7 +828,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.1.9</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.1.7</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -860,7 +860,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.1.9</span>
+        <span>Controle de Produção · Relógios · Versão 1.1.7</span>
       </div>
       <button
         class="menu-btn"
@@ -1744,9 +1744,6 @@
           contato: 'SIMONE',
           produto: 'PVC PLÁSTICO',
         },
-      ]
-      const FORNECEDORES_MATERIA_PRIMA_INICIAIS = [
-
         {
           fornecedor: 'POLYSITE',
           cnpj: '',
@@ -1843,6 +1840,60 @@
           cnpj: '',
           contato: 'RODOLFO',
           produto: 'PP NATURAL',
+        },
+        {
+          fornecedor: 'JT EMBALAGEM',
+          cnpj: '',
+          contato: 'ROGERIO',
+          produto: 'CAIXA COLETORA',
+        },
+        {
+          fornecedor: 'JT EMBALAGEM',
+          cnpj: '',
+          contato: 'ROGERIO',
+          produto: 'CAIXA INDIVIDUAL',
+        },
+        {
+          fornecedor: 'DJA EMBALAGEM',
+          cnpj: '',
+          contato: 'EVERTON',
+          produto: 'CAIXA COLETORA',
+        },
+        {
+          fornecedor: 'DJA EMBALAGEM',
+          cnpj: '',
+          contato: 'EVERTON',
+          produto: 'CAIXA INDIVIDUAL',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'CAIXA IND SIGMA',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'TEMAS SOLAPAS',
+        },
+        {
+          fornecedor: 'FMART',
+          cnpj: '',
+          contato: 'ROBERTO',
+          produto: 'MECÂNISMO',
+        },
+        {
+          fornecedor: 'FUXING IMP',
+          cnpj: '',
+          contato: '',
+          produto: 'DESPERTADOR',
+        },
+        {
+          fornecedor: 'DOURADO PVC',
+          cnpj: '',
+          contato: 'SIMONE',
+          produto: 'PVC PLÁSTICO',
         },
       ]
       const PRODUTORES_INICIAIS = [
@@ -3648,14 +3699,13 @@
           : []
 
         if (existentes.length === 0) {
-          data.fornecedoresMateriaPrima = FORNECEDORES_MATERIA_PRIMA_INICIAIS.map(
+          data.fornecedoresMateriaPrima = (data.fornecedores || []).map(
             (item) => ({
               id: uid(),
               fornecedor: item.fornecedor,
               cnpj: item.cnpj,
               cnpf: item.cnpj,
-              nome: item.contato,
-              contato: item.contato,
+              nome: item.nome,
               produto: item.produto,
             })
           )
