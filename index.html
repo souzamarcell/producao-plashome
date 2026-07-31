@@ -819,8 +819,8 @@
     <div class="login-overlay" id="login-overlay">
       <div class="login-card">
         <div class="brand-dial"></div>
-        <h1>Flow PlasHome - V 1.1.4</h1>
-        <div class="sub">Controle de Produção · Relógios</div>
+        <h1>Flow PlasHome</h1>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.1.4</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -1658,6 +1658,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
       /* ============================= DB ============================= */
       const DB_KEY = 'chronoflow_db_v1'
@@ -4394,7 +4395,7 @@
                 (p) => `
     <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
     <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.valor || 0)}</td><td class="mono">${fmtMoney(p.quantidade * p.valor)}</td><td>${fmtDate(p.dataPedido)}</td>
-    <td><button class="btn-ghost btn-sm" title="Editar" onclick="editarPedidoCompra('${p.id}')">✏️</button><button class="btn-danger btn-sm" title="Excluir" onclick="excluirPedidoCompra('${p.id}')">🗑️</button><button class="btn-primary btn-sm" onclick="confirmarRecebimento('${p.id}')">Receber</button></td></tr>`
+    <td><button class="btn-ghost btn-sm" title="Editar" onclick="editarPedidoCompra('${p.id}')">✏️</button><button class="btn-danger btn-sm" title="Excluir" onclick="excluirPedidoCompra('${p.id}')">🗑️</button><button class="btn-ghost btn-sm" title="Baixar PDF" onclick="baixarPedidoPDF('${p.id}')">${ICON_PDF}</button><button class="btn-primary btn-sm" onclick="confirmarRecebimento('${p.id}')">Receber</button></td></tr>`
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhum pedido pendente.</td></tr>`
@@ -4411,6 +4412,67 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhum pedido registrado.</td></tr>`
+      }
+      const ICON_PDF = `<svg width="18" height="18" viewBox="0 0 384 512" style="vertical-align:middle" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#e2e5e7" d="M369.9 97.9L286 14C282 10 276.5 8 271 8H88c-13.3 0-24 10.7-24 24v456c0 13.3 10.7 24 24 24h272c13.3 0 24-10.7 24-24V113.9c0-5.5-2-10.9-6.1-16z"/>
+        <path fill="#b0b7bd" d="M256 128V0l128 128h-96c-17.7 0-32-14.3-32-32z"/>
+        <path fill="#e74c3c" d="M0 224v224c0 8.8 7.2 16 16 16h336c8.8 0 16-7.2 16-16V224c0-8.8-7.2-16-16-16H16c-8.8 0-16 7.2-16 16z"/>
+        <text x="184" y="376" font-family="Arial, Helvetica, sans-serif" font-size="120" font-weight="bold" fill="#fff" text-anchor="middle">PDF</text>
+      </svg>`
+      function slugifyArquivo(str) {
+        return String(str || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-zA-Z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '')
+      }
+      function baixarPedidoPDF(id) {
+        const p = db.pedidosCompra.find((x) => x.id === id)
+        if (!p) {
+          toast('Pedido não encontrado.')
+          return
+        }
+        const { jsPDF } = window.jspdf
+        const doc = new jsPDF()
+        const fornecedor = fornecedorLabel(p.fornecedorId)
+        const material = materiaLabel(p.materiaId)
+        const total = (p.quantidade || 0) * (p.valor || 0)
+        const agora = new Date()
+
+        doc.setFontSize(16)
+        doc.text('Pedido de Compra', 14, 18)
+        doc.setFontSize(11)
+        let y = 32
+        const linha = (label, valor) => {
+          doc.setFont(undefined, 'bold')
+          doc.text(label, 14, y)
+          doc.setFont(undefined, 'normal')
+          doc.text(String(valor), 60, y)
+          y += 8
+        }
+        linha('ID do Pedido:', p.id)
+        linha('Fornecedor:', fornecedor)
+        linha('Matéria-Prima:', material)
+        linha('Quantidade:', p.quantidade)
+        linha('Valor Unitário:', fmtMoney(p.valor || 0))
+        linha('Total:', fmtMoney(total))
+        linha('Status:', p.status)
+        linha('Data do Pedido:', fmtDate(p.dataPedido))
+        linha('Gerado em:', fmtDate(agora.toISOString()))
+
+        const dataArquivo =
+          String(agora.getDate()).padStart(2, '0') +
+          '-' +
+          String(agora.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          agora.getFullYear()
+        const horaArquivo =
+          String(agora.getHours()).padStart(2, '0') +
+          '-' +
+          String(agora.getMinutes()).padStart(2, '0')
+        const nomeArquivo = `Pedido_${slugifyArquivo(p.id)}_${slugifyArquivo(fornecedor)}_${dataArquivo}_${horaArquivo}.pdf`
+
+        doc.save(nomeArquivo)
       }
 
       /* ============================= PRODUÇÃO ============================= */
