@@ -730,12 +730,6 @@
         background: var(--brass-dim);
         color: #1a1510;
       }
-      .est-subview {
-        display: none;
-      }
-      .est-subview.active {
-        display: block;
-      }
 
       .modal-backdrop {
         position: fixed;
@@ -826,7 +820,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.1.7</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.1.5</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -858,7 +852,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.1.7</span>
+        <span>Controle de Produção · Relógios · Versão 1.1.5</span>
       </div>
       <button
         class="menu-btn"
@@ -1324,80 +1318,70 @@
 
       <!-- ESTOQUES -->
       <section class="view" id="view-estoques">
-        <div class="subtabs" id="est-subtabs"></div>
-
-        <div class="est-subview" id="est-sub-materia">
-          <div class="section-title"><h2>Matéria-Prima</h2></div>
-          <div class="card">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Material</th>
-                    <th>Valor Unidade</th>
-                    <th>Total</th>
-                    <th>Quantidade</th>
-                  </tr>
-                </thead>
-                <tbody id="tbl-est-materia"></tbody>
-              </table>
-            </div>
+        <div class="section-title"><h2>Matéria-Prima</h2></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Valor Unidade</th>
+                  <th>Total</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-est-materia"></tbody>
+            </table>
           </div>
         </div>
 
-        <div class="est-subview" id="est-sub-terceiros">
-          <div class="section-title">
-            <h2>Produção em Terceiros (pendente)</h2>
-          </div>
-          <div class="card">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>Produtor</th>
-                    <th>Pendente</th>
-                  </tr>
-                </thead>
-                <tbody id="tbl-est-terceiros"></tbody>
-              </table>
-            </div>
+        <div class="section-title">
+          <h2>Produção em Terceiros (pendente)</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Produtor</th>
+                  <th>Pendente</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-est-terceiros"></tbody>
+            </table>
           </div>
         </div>
 
-        <div class="est-subview" id="est-sub-semi">
-          <div class="section-title"><h2>Produtos Injetados</h2></div>
-          <div class="card">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Produto</th>
-                    <th>Preço</th>
-                    <th>Quantidade</th>
-                  </tr>
-                </thead>
-                <tbody id="tbl-est-semi"></tbody>
-              </table>
-            </div>
+        <div class="section-title"><h2>Produtos Injetados</h2></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Preço</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-est-semi"></tbody>
+            </table>
           </div>
         </div>
 
-        <div class="est-subview" id="est-sub-acabados">
-          <div class="section-title"><h2>Produtos Acabados</h2></div>
-          <div class="card">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Modelo</th>
-                    <th>Cód. Barras</th>
-                    <th>Quantidade</th>
-                  </tr>
-                </thead>
-                <tbody id="tbl-est-acabados"></tbody>
-              </table>
-            </div>
+        <div class="section-title"><h2>Produtos Acabados</h2></div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Modelo</th>
+                  <th>Cód. Barras</th>
+                  <th>Quantidade</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-est-acabados"></tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -1986,26 +1970,25 @@
         },
       ]
       const PRODUTOS_INJETADOS_INICIAIS = [
-        { codigo: '1', nome: 'BASE ALFA BRANCO', mpUtilizadas: 'PSAI - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '2', nome: 'BASE ALFA PRETO', mpUtilizadas: 'PSAI - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '3', nome: 'BASE BETA BRANCO', mpUtilizadas: 'PSAI - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '4', nome: 'BASE BETA PRETO', mpUtilizadas: 'PSAI - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '5', nome: 'BASE GAMA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,11', preco: '' },
-        { codigo: '6', nome: 'BASE GAMA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,11', preco: '' },
-        { codigo: '7', nome: 'BASE DELTA', mpUtilizadas: 'PP - COLORIDO', quantidade: '1', materiaPrima: '0,18', preco: '' },
-        { codigo: '8', nome: 'BASE KAPPA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '9', nome: 'BASE KAPPA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '10', nome: 'BASE SIGMA REDONDO BRANCO', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '11', nome: 'BASE SIGMA REDONDO PRETO', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '12', nome: 'BASE SIGMA QUADRADO BRANCO', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '13', nome: 'BASE SIGMA QUADRADO PRETO', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '14', nome: 'BASE OMEGA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '15', nome: 'BASE OMEGA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '16', nome: 'LENTE ALFA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,12', preco: '' },
-        { codigo: '17', nome: 'LENTE BETA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '1,12', preco: '' },
-        { codigo: '18', nome: 'LENTE GAMA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,1', preco: '' },
-        { codigo: '19', nome: 'LENTE KAPPA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,1', preco: '' },
-        { codigo: '20', nome: 'LENTE MEGA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,08', preco: '' },
+        { nome: 'BASE OMEGA PRETA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE OMEGA BRANCA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE KAPPA PRETA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE KAPPA BRANCA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE GAMA BRANCA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE GAMA PRETA', quantidade: '1', preco: '0,00' },
+        {
+          nome: 'BASE SIGMA QUADRADO BRANCA',
+          quantidade: '1',
+          preco: '0,00',
+        },
+        { nome: 'BASE SIGMA QUADRADO PRETA', quantidade: '1', preco: '0,00' },
+        { nome: 'LENTE KAPPA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE ALFHA/BETA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE DELTA', quantidade: '1', preco: '0,00' },
+        { nome: 'BASE SIGMA REDONDO', quantidade: '1', preco: '0,00' },
+        { nome: 'LENTE GAMA', quantidade: '1', preco: '0,00' },
+        { nome: 'LENTE OMEGA', quantidade: '1', preco: '0,00' },
+        { nome: 'Tema (Solapa)', quantidade: '1', preco: '0,00' },
       ]
       const MONTADORES_INICIAIS = [
         {
@@ -3744,11 +3727,7 @@
         existentes.forEach((item) => {
           const key = `${String(item?.nome || '')
             .trim()
-            .toLowerCase()}|${String(item?.mpUtilizadas || '')
-            .trim()
             .toLowerCase()}|${String(item?.quantidade || '')
-            .trim()
-            .toLowerCase()}|${String(item?.materiaPrima || '')
             .trim()
             .toLowerCase()}|${String(item?.preco || '')
             .trim()
@@ -3762,11 +3741,7 @@
         PRODUTOS_INJETADOS_INICIAIS.forEach((item) => {
           const key = `${String(item.nome || '')
             .trim()
-            .toLowerCase()}|${String(item.mpUtilizadas || '')
-            .trim()
             .toLowerCase()}|${String(item.quantidade || '')
-            .trim()
-            .toLowerCase()}|${String(item.materiaPrima || '')
             .trim()
             .toLowerCase()}|${String(item.preco || '')
             .trim()
@@ -3775,11 +3750,8 @@
             vistos.add(key)
             lista.push({
               id: uid(),
-              codigo: item.codigo,
               nome: item.nome,
-              mpUtilizadas: item.mpUtilizadas,
               quantidade: item.quantidade,
-              materiaPrima: item.materiaPrima,
               preco: item.preco,
             })
           }
@@ -4883,34 +4855,7 @@
           )
           .join('')
       }
-      /* ============================= ESTOQUES ============================= */
-      const estConfig = {
-        materia: { label: 'Matéria-Prima' },
-        terceiros: { label: 'Produção em Terceiros (pendente)' },
-        semi: { label: 'Produtos Injetados' },
-        acabados: { label: 'Produtos Acabados' },
-      }
-      let estAtivo = 'materia'
-      function renderEstSubtabs() {
-        document.getElementById('est-subtabs').innerHTML = Object.keys(
-          estConfig
-        )
-          .map(
-            (k) =>
-              `<button class="subtab-btn ${k === estAtivo ? 'active' : ''}" onclick="trocarEst('${k}')">${estConfig[k].label}</button>`
-          )
-          .join('')
-        Object.keys(estConfig).forEach((k) => {
-          const el = document.getElementById('est-sub-' + k)
-          if (el) el.classList.toggle('active', k === estAtivo)
-        })
-      }
-      function trocarEst(key) {
-        estAtivo = key
-        renderEstSubtabs()
-      }
       function renderEstoquesReports() {
-        renderEstSubtabs()
         const mRows = db.materiasPrimas.length
           ? db.materiasPrimas
               .map((m) => {
@@ -5152,12 +5097,9 @@
         produtosSemiacabados: {
           label: 'Injetados',
           fields: [
-            { key: 'codigo', label: 'ID', type: 'text', auto: true },
             { key: 'nome', label: 'Produtos', type: 'text' },
-            { key: 'mpUtilizadas', label: 'MP UTILIZADAS', type: 'text' },
             { key: 'quantidade', label: 'Quantidade', type: 'text' },
-            { key: 'materiaPrima', label: 'Materia Prima', type: 'text' },
-            { key: 'preco', label: 'Preco', type: 'text' },
+            { key: 'preco', label: 'Preço', type: 'text' },
           ],
         },
         montadores: {
@@ -5177,7 +5119,6 @@
         },
         clientes: {
           label: 'Clientes',
-          showId: true,
           fields: [
             { key: 'razaoSocial', label: 'Razão Social', type: 'text', required: true },
             { key: 'cnpj', label: 'CNPJ', type: 'text' },
@@ -5238,7 +5179,6 @@
           return
         }
         const formFields = cfg.fields
-          .filter((f) => !f.auto)
           .map((f) => renderCadastroFieldHTML(f, '', 'cad-f-'))
           .join('')
         const searchTerm = (cadBusca || '').toLowerCase().trim()
@@ -5260,39 +5200,28 @@
         <input type="text" id="cad-busca" placeholder="Buscar por ${cfg.fields.map((f) => f.label.toLowerCase()).join(', ')}" value="${escapeHtml(cadBusca)}" oninput="buscarCadastros(this.value)" style="max-width:280px;">
       </div>
       <div class="table-wrap"><table>
-      <thead><tr>${cfg.showId ? '<th>ID</th>' : ''}${cfg.fields.map((f) => `<th>${f.label}</th>`).join('')}<th>Ações</th></tr></thead>
+      <thead><tr>${cfg.fields.map((f) => `<th>${f.label}</th>`).join('')}<th>Ações</th></tr></thead>
       <tbody>${
         rows.length
           ? rows
               .map(
                 (item) => `
-        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${item[f.key] || '—'}</td>`).join('')}
+        <tr>${cfg.fields.map((f) => `<td>${item[f.key] || '—'}</td>`).join('')}
         <td>
           <button class="btn-ghost btn-sm" title="Editar" onclick="editarCadastro('${item.id}')">✏️</button>
           <button class="btn-danger btn-sm" title="Excluir" onclick="confirmarExclusaoCadastro('${item.id}')">🗑️</button>
         </td></tr>`
               )
               .join('')
-          : `<tr class="empty-row"><td colspan="${cfg.fields.length + (cfg.showId ? 2 : 1)}">${searchTerm ? 'Nenhum registro encontrado para a busca.' : 'Nenhum registro ainda.'}</td></tr>`
+          : `<tr class="empty-row"><td colspan="${cfg.fields.length + 1}">${searchTerm ? 'Nenhum registro encontrado para a busca.' : 'Nenhum registro ainda.'}</td></tr>`
       }
       </tbody></table></div></div>`
-      }
-      function proximoValorAuto(lista, key) {
-        const max = lista.reduce((acc, item) => {
-          const n = parseInt(String(item?.[key] ?? '').trim(), 10)
-          return Number.isFinite(n) && n > acc ? n : acc
-        }, 0)
-        return String(max + 1)
       }
       function salvarCadastroSimples() {
         const cfg = cadConfig[cadAtivo]
         const obj = { id: uid() }
         let ok = true
         cfg.fields.forEach((f) => {
-          if (f.auto) {
-            obj[f.key] = proximoValorAuto(db[cadAtivo], f.key)
-            return
-          }
           const v = document.getElementById('cad-f-' + f.key).value.trim()
           const isRequired = f.required ?? f.key === 'nome'
           if (isRequired && !v) ok = false
@@ -5320,7 +5249,6 @@
         const item = db[cadAtivo].find((x) => x.id === id)
         if (!item) return
         const formFields = cfg.fields
-          .filter((f) => !f.auto)
           .map((f) =>
             renderCadastroFieldHTML(f, item[f.key] || '', 'cad-edit-')
           )
@@ -5344,7 +5272,6 @@
         const obj = { ...item }
         let ok = true
         cfg.fields.forEach((f) => {
-          if (f.auto) return
           const v = document.getElementById('cad-edit-' + f.key).value.trim()
           const isRequired = f.required ?? f.key === 'nome'
           if (isRequired && !v) ok = false
