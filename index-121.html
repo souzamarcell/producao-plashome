@@ -828,7 +828,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.1.7</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.1</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -860,7 +860,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.1.7</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.1</span>
       </div>
       <button
         class="menu-btn"
@@ -1346,8 +1346,9 @@
                   <tr>
                     <th>Material</th>
                     <th>Valor Unidade</th>
-                    <th>Quantidade</th>
+                    <th>Quantidade Recebida</th>
                     <th>Total</th>
+                    <th>Recebido em</th>
                   </tr>
                 </thead>
                 <tbody id="tbl-est-materia"></tbody>
@@ -1744,6 +1745,8 @@
           contato: 'SIMONE',
           produto: 'PVC PLÁSTICO',
         },
+      ]
+      const FORNECEDORES_MATERIA_PRIMA_INICIAIS = [
         {
           fornecedor: 'POLYSITE',
           cnpj: '',
@@ -1840,60 +1843,6 @@
           cnpj: '',
           contato: 'RODOLFO',
           produto: 'PP NATURAL',
-        },
-        {
-          fornecedor: 'JT EMBALAGEM',
-          cnpj: '',
-          contato: 'ROGERIO',
-          produto: 'CAIXA COLETORA',
-        },
-        {
-          fornecedor: 'JT EMBALAGEM',
-          cnpj: '',
-          contato: 'ROGERIO',
-          produto: 'CAIXA INDIVIDUAL',
-        },
-        {
-          fornecedor: 'DJA EMBALAGEM',
-          cnpj: '',
-          contato: 'EVERTON',
-          produto: 'CAIXA COLETORA',
-        },
-        {
-          fornecedor: 'DJA EMBALAGEM',
-          cnpj: '',
-          contato: 'EVERTON',
-          produto: 'CAIXA INDIVIDUAL',
-        },
-        {
-          fornecedor: 'TOP 6 GRAFICA',
-          cnpj: '',
-          contato: 'MAURICI',
-          produto: 'CAIXA IND SIGMA',
-        },
-        {
-          fornecedor: 'TOP 6 GRAFICA',
-          cnpj: '',
-          contato: 'MAURICI',
-          produto: 'TEMAS SOLAPAS',
-        },
-        {
-          fornecedor: 'FMART',
-          cnpj: '',
-          contato: 'ROBERTO',
-          produto: 'MECÂNISMO',
-        },
-        {
-          fornecedor: 'FUXING IMP',
-          cnpj: '',
-          contato: '',
-          produto: 'DESPERTADOR',
-        },
-        {
-          fornecedor: 'DOURADO PVC',
-          cnpj: '',
-          contato: 'SIMONE',
-          produto: 'PVC PLÁSTICO',
         },
       ]
       const PRODUTORES_INICIAIS = [
@@ -3637,6 +3586,7 @@
           ordensMontagem: [],
           expedicoes: [],
           estoqueMateriaPrima: {},
+          estoqueMateriaPrimaAtualizadoEm: {},
           estoqueSemiacabados: {},
           estoqueAcabados: {},
           historico: [],
@@ -3699,13 +3649,14 @@
           : []
 
         if (existentes.length === 0) {
-          data.fornecedoresMateriaPrima = (data.fornecedores || []).map(
+          data.fornecedoresMateriaPrima = FORNECEDORES_MATERIA_PRIMA_INICIAIS.map(
             (item) => ({
               id: uid(),
               fornecedor: item.fornecedor,
               cnpj: item.cnpj,
               cnpf: item.cnpj,
-              nome: item.nome,
+              nome: item.contato,
+              contato: item.contato,
               produto: item.produto,
             })
           )
@@ -4177,6 +4128,11 @@
               ? db.estoqueSemiacabados
               : db.estoqueAcabados
         map[id] = val
+        if (tipo === 'materiaPrima') {
+          if (!db.estoqueMateriaPrimaAtualizadoEm)
+            db.estoqueMateriaPrimaAtualizadoEm = {}
+          db.estoqueMateriaPrimaAtualizadoEm[id] = nowISO()
+        }
       }
       function addStock(tipo, id, delta) {
         setStock(tipo, id, +(getStock(tipo, id) + delta).toFixed(3))
@@ -4207,10 +4163,11 @@
       }
       function fornecedorLabel(value) {
         if (!value) return '—'
-        const item = db.fornecedores.find((x) => x.id === value)
+        const todos = [...db.fornecedores, ...db.fornecedoresMateriaPrima]
+        const item = todos.find((x) => x.id === value)
         if (item) return fornecedorDisplayName(item)
         const normalized = String(value).trim().toLowerCase()
-        const found = db.fornecedores.find(
+        const found = todos.find(
           (x) =>
             String(fornecedorDisplayName(x)).trim().toLowerCase() === normalized
         )
@@ -4246,21 +4203,24 @@
       function getFornecedoresUnicos() {
         const grupos = []
         const vistos = new Set()
-        db.fornecedores.forEach((item) => {
-          const nomeFornecedor = String(fornecedorDisplayName(item)).trim()
-          if (!nomeFornecedor) return
-          const key = nomeFornecedor.toLowerCase()
-          if (vistos.has(key)) return
-          vistos.add(key)
-          grupos.push(nomeFornecedor)
-        })
+        ;[...db.fornecedores, ...db.fornecedoresMateriaPrima].forEach(
+          (item) => {
+            const nomeFornecedor = String(fornecedorDisplayName(item)).trim()
+            if (!nomeFornecedor) return
+            const key = nomeFornecedor.toLowerCase()
+            if (vistos.has(key)) return
+            vistos.add(key)
+            grupos.push(nomeFornecedor)
+          }
+        )
+        grupos.sort((a, b) => a.localeCompare(b, 'pt-BR'))
         return grupos
       }
       function getProdutosFornecedor(fornecedorNome) {
         const nome = String(fornecedorNome || '')
           .trim()
           .toLowerCase()
-        return db.fornecedores
+        return [...db.fornecedores, ...db.fornecedoresMateriaPrima]
           .filter((item) => {
             const nomeFornecedor = String(fornecedorDisplayName(item))
               .trim()
@@ -5011,17 +4971,58 @@
       }
       function renderEstoquesReports() {
         renderEstSubtabs()
-        const mRowsEst = db.materiasPrimas.length
-          ? db.materiasPrimas
-              .map((m) => {
-                const quantidade = getStock('materiaPrima', m.id)
-                const valorUnitario = getValorUnitarioMateria(m.id)
-                const total =
-                  valorUnitario != null ? quantidade * valorUnitario : null
-                return `<tr><td>${m.nome}</td><td class="mono">${valorUnitario != null ? fmtMoney(valorUnitario) : '—'}</td><td class="mono">${quantidade}</td><td class="mono">${total != null ? fmtMoney(total) : '—'}</td></tr>`
+        const mRowsEst = (() => {
+          const recebidos = db.pedidosCompra.filter(
+            (p) => p.status === 'entregue'
+          )
+          if (!recebidos.length)
+            return `<tr class="empty-row"><td colspan="5">Nenhuma matéria-prima recebida em estoque.</td></tr>`
+          const linhas = recebidos
+            .map((p) => ({
+              nome: materiaLabel(p.materiaId),
+              valorUnitario: p.valor != null && p.valor !== '' ? Number(p.valor) : null,
+              quantidade: Number(p.quantidade) || 0,
+              data: p.dataRecebimento,
+            }))
+            .sort((a, b) =>
+              String(a.nome || '').localeCompare(String(b.nome || ''), 'pt-BR', {
+                sensitivity: 'base',
               })
-              .join('')
-          : `<tr class="empty-row"><td colspan="4">Nenhuma matéria-prima cadastrada.</td></tr>`
+            )
+          let html = ''
+          let i = 0
+          while (i < linhas.length) {
+            const chave = String(linhas[i].nome || '')
+              .trim()
+              .toLowerCase()
+            let j = i
+            let somaQtd = 0
+            let somaTotal = 0
+            let temTotal = false
+            while (
+              j < linhas.length &&
+              String(linhas[j].nome || '')
+                .trim()
+                .toLowerCase() === chave
+            ) {
+              const l = linhas[j]
+              const total =
+                l.valorUnitario != null ? l.quantidade * l.valorUnitario : null
+              html += `<tr><td>${l.nome}</td><td class="mono">${l.valorUnitario != null ? fmtMoney(l.valorUnitario) : '—'}</td><td class="mono">${l.quantidade}</td><td class="mono">${total != null ? fmtMoney(total) : '—'}</td><td class="mono">${fmtDate(l.data)}</td></tr>`
+              somaQtd = +(somaQtd + l.quantidade).toFixed(3)
+              if (total != null) {
+                somaTotal += total
+                temTotal = true
+              }
+              j++
+            }
+            if (j - i > 1) {
+              html += `<tr style="font-weight:700;background:var(--surface-2);"><td>Total — ${linhas[i].nome}</td><td class="mono">—</td><td class="mono">${somaQtd}</td><td class="mono">${temTotal ? fmtMoney(somaTotal) : '—'}</td><td class="mono">—</td></tr>`
+            }
+            i = j
+          }
+          return html
+        })()
         const mRows = db.materiasPrimas.length
           ? db.materiasPrimas
               .map((m) => {
@@ -6240,6 +6241,7 @@
         })
         const mapKeys = [
           'estoqueMateriaPrima',
+          'estoqueMateriaPrimaAtualizadoEm',
           'estoqueSemiacabados',
           'estoqueAcabados',
         ]
