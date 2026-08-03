@@ -359,7 +359,7 @@
       }
 
       main {
-        max-width: 960px;
+        max-width: 1400px;
         margin: 0 auto;
         padding: 16px;
       }
@@ -472,6 +472,46 @@
           calc(100% - 13px) center;
         background-size: 5px 5px;
         background-repeat: no-repeat;
+      }
+      .autocomplete-wrap {
+        position: relative;
+      }
+      .autocomplete-list {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(100% + 4px);
+        z-index: 40;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        box-shadow: var(--shadow-out);
+        max-height: 220px;
+        overflow-y: auto;
+      }
+      .autocomplete-list.show {
+        display: block;
+      }
+      .autocomplete-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        color: var(--ink);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .autocomplete-item:last-child {
+        border-bottom: none;
+      }
+      .autocomplete-item:hover,
+      .autocomplete-item.active {
+        background: var(--bg-2);
+      }
+      .autocomplete-item small {
+        display: block;
+        color: var(--ink-faint);
+        font-size: 11px;
+        margin-top: 2px;
       }
 
       button {
@@ -828,7 +868,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.2.2</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.5</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -860,7 +900,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.2.2</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.5</span>
       </div>
       <button
         class="menu-btn"
@@ -1329,10 +1369,6 @@
         </div>
       </section>
 
-
-
-
-
       <!-- ESTOQUES -->
       <section class="view" id="view-estoques">
         <div class="subtabs" id="est-subtabs"></div>
@@ -1369,6 +1405,7 @@
                     <th>Produto</th>
                     <th>Produtor</th>
                     <th>Pendente</th>
+                    <th>Data e Hora</th>
                   </tr>
                 </thead>
                 <tbody id="tbl-est-terceiros"></tbody>
@@ -1473,12 +1510,29 @@
               <thead>
                 <tr>
                   <th>Material</th>
-                  <th>Valor Unidade</th>
-                  <th>Total</th>
                   <th>Quantidade</th>
+                  <th>Data e Hora</th>
                 </tr>
               </thead>
               <tbody id="rel-materia"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <h2>Retirada Estoque de Matéria-Prima</h2>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Material</th>
+                  <th>Quantidade</th>
+                  <th>Data e Hora</th>
+                </tr>
+              </thead>
+              <tbody id="rel-retiradas-materia"></tbody>
             </table>
           </div>
         </div>
@@ -1696,15 +1750,18 @@
         'materiasPrimas',
         'produtores',
         'produtosSemiacabados',
+        'produtos',
         'montadores',
         'clientes',
         'modelosRelogio',
+        'funcionarios',
         'pedidosCompra',
         'ordensProducao',
         'ordensMontagem',
         'expedicoes',
         'historico',
         'ajustes',
+        'retiradasMateriaPrima',
       ]
       function isValidDB(obj) {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false
@@ -1745,7 +1802,343 @@
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'TEMAS SOLAPAS',
+          produto: 'OMEGA SANTA CEIA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO BASILICA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO-JESUS CRISTO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO NOSSA SENHORA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO-CLASSICO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO-FRUTAS - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO LONDRES - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO-MODERNO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO NATUREZA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA BRANCO-PRETO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO-CLASSICO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO-FRUTA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO LONDRES - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO-MODERNO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO NATUREZA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OMEGA PRETO-PRETO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-FILIPENSES - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-SALMOS - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-SALMOS - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-FRUTA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-GALINHA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-CAFÉ - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-CLASSICO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-CORUJA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA BRANCO-PET (DOG) - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-CAFÉ - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-CLASSICO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-CORUJA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-FRUTA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-GALINHA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'GAMA PRETO-PET (DOG) - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OITAVADO GAMA BRANCO BASILICA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'OITAVADO GAMA PRETO BASILICA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO CLÁSSICO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO FRUTA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO MODERNO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO PRETO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO - PARIS - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA PRETO VACA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA BRANCO  PRETO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'QUADRADO ALPHA BRANCO  VERDE - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - CAFÉ - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - CARRO ANTIGO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - ROCK - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - ROUTE 66 - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - LAMBORGHINI - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA PRETO - CARRO PRETO - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA BRANCO - PRAIA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'BETA BRANCO - FRUTA - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE REDONDO CLASSICO PRETO 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE REDONDO CLASSICO BRANCO 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE REDONDO PRETO VERDE 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE KAPPA REDONDO BRANCO VERDE 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE KAPPA REDONDO BRANCO MADEIRA 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE KAPPA REDONDO PRETO MADEIRA 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE KAPPA REDONDO PRETO PRETO 28 CM - Solapa',
+        },
+        {
+          fornecedor: 'TOP 6 GRAFICA',
+          cnpj: '',
+          contato: 'MAURICI',
+          produto: 'PAREDE KAPPA REDONDO BRANCO PRETO 28 CM - Solapa',
         },
         {
           fornecedor: 'FMART',
@@ -1966,26 +2359,1048 @@
         },
       ]
       const PRODUTOS_INJETADOS_INICIAIS = [
-        { codigo: '1', nome: 'BASE ALFA BRANCO', mpUtilizadas: 'PSAI - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '2', nome: 'BASE ALFA PRETO', mpUtilizadas: 'PSAI - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '3', nome: 'BASE BETA BRANCO', mpUtilizadas: 'PSAI - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '4', nome: 'BASE BETA PRETO', mpUtilizadas: 'PSAI - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '5', nome: 'BASE GAMA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,11', preco: '' },
-        { codigo: '6', nome: 'BASE GAMA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,11', preco: '' },
-        { codigo: '7', nome: 'BASE DELTA', mpUtilizadas: 'PP - COLORIDO', quantidade: '1', materiaPrima: '0,18', preco: '' },
-        { codigo: '8', nome: 'BASE KAPPA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '9', nome: 'BASE KAPPA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,17', preco: '' },
-        { codigo: '10', nome: 'BASE SIGMA REDONDO BRANCO', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '11', nome: 'BASE SIGMA REDONDO PRETO', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '12', nome: 'BASE SIGMA QUADRADO BRANCO', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '13', nome: 'BASE SIGMA QUADRADO PRETO', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '14', nome: 'BASE OMEGA BRANCA', mpUtilizadas: 'PP - BRANCO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '15', nome: 'BASE OMEGA PRETA', mpUtilizadas: 'PP - PRETO', quantidade: '1', materiaPrima: '0,09', preco: '' },
-        { codigo: '16', nome: 'LENTE ALFA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,12', preco: '' },
-        { codigo: '17', nome: 'LENTE BETA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '1,12', preco: '' },
-        { codigo: '18', nome: 'LENTE GAMA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,1', preco: '' },
-        { codigo: '19', nome: 'LENTE KAPPA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,1', preco: '' },
-        { codigo: '20', nome: 'LENTE MEGA', mpUtilizadas: 'Cristal (Lente)', quantidade: '1', materiaPrima: '0,08', preco: '' },
+        {
+          codigo: '1',
+          nome: 'BASE ALFA BRANCO',
+          mpUtilizadas: 'PSAI - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '2',
+          nome: 'BASE ALFA PRETO',
+          mpUtilizadas: 'PSAI - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '3',
+          nome: 'BASE BETA BRANCO',
+          mpUtilizadas: 'PSAI - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '4',
+          nome: 'BASE BETA PRETO',
+          mpUtilizadas: 'PSAI - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '5',
+          nome: 'BASE GAMA BRANCA',
+          mpUtilizadas: 'PP - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,11',
+          preco: '',
+        },
+        {
+          codigo: '6',
+          nome: 'BASE GAMA PRETA',
+          mpUtilizadas: 'PP - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,11',
+          preco: '',
+        },
+        {
+          codigo: '7',
+          nome: 'BASE DELTA',
+          mpUtilizadas: 'PP - COLORIDO',
+          quantidade: '1',
+          materiaPrima: '0,18',
+          preco: '',
+        },
+        {
+          codigo: '8',
+          nome: 'BASE KAPPA BRANCA',
+          mpUtilizadas: 'PP - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '9',
+          nome: 'BASE KAPPA PRETA',
+          mpUtilizadas: 'PP - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '10',
+          nome: 'BASE SIGMA REDONDO BRANCO',
+          mpUtilizadas: 'PP - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '11',
+          nome: 'BASE SIGMA REDONDO PRETO',
+          mpUtilizadas: 'PP - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '12',
+          nome: 'BASE SIGMA QUADRADO BRANCO',
+          mpUtilizadas: 'PP - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '13',
+          nome: 'BASE SIGMA QUADRADO PRETO',
+          mpUtilizadas: 'PP - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '14',
+          nome: 'BASE OMEGA BRANCA',
+          mpUtilizadas: 'PP - BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '15',
+          nome: 'BASE OMEGA PRETA',
+          mpUtilizadas: 'PP - PRETO',
+          quantidade: '1',
+          materiaPrima: '0,09',
+          preco: '',
+        },
+        {
+          codigo: '16',
+          nome: 'LENTE ALFA',
+          mpUtilizadas: 'Cristal (Lente)',
+          quantidade: '1',
+          materiaPrima: '0,12',
+          preco: '',
+        },
+        {
+          codigo: '17',
+          nome: 'LENTE BETA',
+          mpUtilizadas: 'Cristal (Lente)',
+          quantidade: '1',
+          materiaPrima: '1,12',
+          preco: '',
+        },
+        {
+          codigo: '18',
+          nome: 'LENTE GAMA',
+          mpUtilizadas: 'Cristal (Lente)',
+          quantidade: '1',
+          materiaPrima: '0,1',
+          preco: '',
+        },
+        {
+          codigo: '19',
+          nome: 'LENTE KAPPA',
+          mpUtilizadas: 'Cristal (Lente)',
+          quantidade: '1',
+          materiaPrima: '0,1',
+          preco: '',
+        },
+        {
+          codigo: '20',
+          nome: 'LENTE MEGA',
+          mpUtilizadas: 'Cristal (Lente)',
+          quantidade: '1',
+          materiaPrima: '0,08',
+          preco: '',
+        },
+      ]
+      const PRODUTOS_INICIAIS = [
+        {
+          codigo: 'PHR003-BCL',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO-CLASSICO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684031',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-BFR',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO-FRUTAS',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684482',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-BLO',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO LONDRES',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684680',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-BMO',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO-MODERNO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684437',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-BNT',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO NATUREZA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001035',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-BPT',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA BRANCO-PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684475',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PCL',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO-CLASSICO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684505',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PFR',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO-FRUTA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684574',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PLO',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO LONDRES',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684666',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PMO',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO-MODERNO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684529',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PNT',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO NATUREZA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001097',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PPT',
+          modelo: 'PHR003 OMEGA REDONDO',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO-PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684567',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BFR',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-FRUTA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000182',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BGA',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-GALINHA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000199',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BCA',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-CAFÉ',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000410',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BCL',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-CLASSICO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000311',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BCO',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-CORUJA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000434',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BPE',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA BRANCO-PET (DOG)',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000212',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PCA',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-CAFÉ',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000618',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PCL',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-CLASSICO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684901',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PCO',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-CORUJA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000649',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PFR',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-FRUTA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000557',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PGA',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-GALINHA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000236',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PPE',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELÓGIO GAMA PRETO-PET (DOG)',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000243',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PBS',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELOGIO OITAVADO GAMA PRETO BASILICA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001493',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BBS',
+          modelo: 'PHR007 GAMA OITAVADO',
+          produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001509',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PSC',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELOGIO REDONDO OMEGA SANTA CEIA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001370',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PBS',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELOGIO REDONDO OMEGA PRETO BASILICA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001479',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PJS',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO-JESUS CRISTO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684550',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR003-PNS',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELÓGIO REDONDO OMEGA PRETO NOSSA SENHORA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001103',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BBS',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001509',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BFI',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELÓGIO GAMA BRANCO-FILIPENSES',
+          unidade: 'PC',
+          codNcm: '91052901',
+          codigoBarras: '7898672000366',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-BSA',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELÓGIO GAMA BRANCO-SALMOS',
+          unidade: 'PC',
+          codNcm: '91052902',
+          codigoBarras: '7898672000403',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR007-PSA',
+          modelo: 'RELIGIOSOS DIVERSOS',
+          produto: 'RELÓGIO GAMA PRETO-SALMOS',
+          unidade: 'PC',
+          codNcm: '91052903',
+          codigoBarras: '7898672000595',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 13,45',
+          peso: '0,300 GR',
+        },
+        {
+          codigo: 'PHR002-PCL',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO CLÁSSICO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001004',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-PFR',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO FRUTA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684376',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-PMO',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO MODERNO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000984',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-PPT',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000939',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-PPA',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO - PARIS',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684338',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-PVA',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA PRETO VACA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000991',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-BPT',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA BRANCO  PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000823',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR002-BVD',
+          modelo: 'PHR002 ALPHA QUADRADO',
+          produto: 'RELÓGIO QUADRADO ALPHA BRANCO  VERDE',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000816',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PCA',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - CAFÉ',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000779',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PCR',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - CARRO ANTIGO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000038',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PRK',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - ROCK',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000717',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PRO',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - ROUTE 66',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000144',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PLA',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - LAMBORGHINI',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000076',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-PCP',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA PRETO - CARRO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000724',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-BPR',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA BRANCO - PRAIA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684987',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR008-BFR',
+          modelo: 'PHR008 BETHA QUADRADO',
+          produto: 'RELÓGIO BETA BRANCO - FRUTA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672000700',
+          medidas: '28 X 26 X 5 CM',
+          valor: 'R$ 18,33',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR062-CZ',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO CINZA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001431',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR062-VD',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO VERDE',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001424',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR062-AZ',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO AZUL',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001417',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR062-RS',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO ROSA',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001400',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR062-BR',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001394',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR062-PT',
+          modelo: 'PHR062 SIGMA DOURADO REDONDO',
+          produto: 'RELÓGIO 3D SIGMA DOURADO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001387',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 16,42',
+          peso: '0,220 GR',
+        },
+        {
+          codigo: 'PHR063-PGT',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001752',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-BGT',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001745',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-PJS',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001738',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-BJS',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001721',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-BR',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001714',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-PT',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001707',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR063-1',
+          modelo: 'PHR063 SIGMA DOURADO QUADRADO',
+          produto: 'RELÓGIO 3D SIGMA QUADRADO SORTIDOS',
+          unidade: 'CX',
+          codNcm: '91052900',
+          codigoBarras: '7898672001707',
+          medidas: '24 X 24 X 4 CM',
+          valor: 'R$ 17,95',
+          peso: '0,250 GR',
+        },
+        {
+          codigo: 'PHR001-AM',
+          modelo: 'PHR001 DELTA 3D',
+          produto: 'RELOGIO DELTA MASTER AMARELO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898954684017',
+          medidas: '30 X 30 X 5 CM',
+          valor: 'R$ 16,51',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR001-AZ',
+          modelo: 'PHR001 DELTA 3D',
+          produto: 'RELOGIO DELTA MASTER AZUL',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001158',
+          medidas: '30 X 30 X 5 CM',
+          valor: 'R$ 16,51',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR001-BR',
+          modelo: 'PHR001 DELTA 3D',
+          produto: 'RELOGIO DELTA MASTER BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001165',
+          medidas: '30 X 30 X 5 CM',
+          valor: 'R$ 16,51',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR001-PT',
+          modelo: 'PHR001 DELTA 3D',
+          produto: 'RELOGIO DELTA MASTER PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001172',
+          medidas: '30 X 30 X 5 CM',
+          valor: 'R$ 16,51',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR001-VM',
+          modelo: 'PHR001 DELTA 3D',
+          produto: 'RELOGIO DELTA MASTER VERMELHO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001196',
+          medidas: '30 X 30 X 5 CM',
+          valor: 'R$ 16,51',
+          peso: '0,420 GR',
+        },
+        {
+          codigo: 'PHR011-BR',
+          modelo: 'DESPERTADORES',
+          produto: 'DESPERTADOR REDONDO BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001554',
+          medidas: '10 X 10 X 4 CM',
+          valor: 'R$ 15,50',
+          peso: '0,100 GR',
+        },
+        {
+          codigo: 'PHR011-PT',
+          modelo: 'DESPERTADORES',
+          produto: 'DESPERTADOR REDODNDO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001547',
+          medidas: '10 X 10 X 4 CM',
+          valor: 'R$ 15,50',
+          peso: '0,100 GR',
+        },
+        {
+          codigo: 'PHR012-BR',
+          modelo: 'DESPERTADORES',
+          produto: 'DESPERTADOR QUADRADO BRANCO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001530',
+          medidas: '10 X 10 X 4 CM',
+          valor: 'R$ 15,50',
+          peso: '0,100 GR',
+        },
+        {
+          codigo: 'PHR012-PT',
+          modelo: 'DESPERTADORES',
+          produto: 'DESPERTADOR QUADRADO PRETO',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001523',
+          medidas: '10 X 10 X 4 CM',
+          valor: 'R$ 15,50',
+          peso: '0,100 GR',
+        },
+        {
+          codigo: 'PHR064-PCL',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE REDONDO CLASSICO PRETO 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001844',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-BCL',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE REDONDO CLASSICO BRANCO 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001851',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-PVD',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE REDONDO PRETO VERDE 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001868',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-BVD',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO VERDE 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001875',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-BMA',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO MADEIRA 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001882',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-PMA',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO MADEIRA 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001899',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-PPT',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO PRETO 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001905',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
+        {
+          codigo: 'PHR064-BPT',
+          modelo: 'PHR064 KAPPA REDONDO 28 CM',
+          produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO PRETO 28 CM',
+          unidade: 'PC',
+          codNcm: '91052900',
+          codigoBarras: '7898672001912',
+          medidas: '28 X 28 X 5 CM',
+          valor: 'R$ 18,95',
+          peso: '0,350 GR',
+        },
       ]
       const MONTADORES_INICIAIS = [
         {
@@ -2271,7 +3686,8 @@
           uf: 'PE',
         },
         {
-          razaoSocial: 'CABO FRIO UTILIDADES E MAGAZINE LTDA (LJ NOVA DINIZ COMERCIA',
+          razaoSocial:
+            'CABO FRIO UTILIDADES E MAGAZINE LTDA (LJ NOVA DINIZ COMERCIA',
           cnpj: '52.427.892/0001-05',
           cidade: 'CABO FRIO',
           uf: 'RJ',
@@ -2565,7 +3981,8 @@
           uf: 'MG',
         },
         {
-          razaoSocial: 'FENIX NOVIDADES COMERCIO ATACADISTA E VAREJISTA DE MERCADORI',
+          razaoSocial:
+            'FENIX NOVIDADES COMERCIO ATACADISTA E VAREJISTA DE MERCADORI',
           cnpj: '27.570.750/0001-55',
           cidade: 'VALPARAÍSO DE GOIÁS',
           uf: 'GO',
@@ -2631,7 +4048,8 @@
           uf: 'RS',
         },
         {
-          razaoSocial: 'GM DISTRIBUIDORA DE MATERIAIS ODONTOLOGICOS, MEDICOS E HOSPI',
+          razaoSocial:
+            'GM DISTRIBUIDORA DE MATERIAIS ODONTOLOGICOS, MEDICOS E HOSPI',
           cnpj: '33.521.966/0001-23',
           cidade: 'CATANDUVA',
           uf: 'SP',
@@ -3027,7 +4445,8 @@
           uf: 'MG',
         },
         {
-          razaoSocial: 'MAURICIO NASCIMENTO DOS SANTOS COMERCIO DE BRINDES LTDA',
+          razaoSocial:
+            'MAURICIO NASCIMENTO DOS SANTOS COMERCIO DE BRINDES LTDA',
           cnpj: '41.281.309/0001-84',
           cidade: 'CURITIBA',
           uf: 'PR',
@@ -3099,7 +4518,8 @@
           uf: 'SP',
         },
         {
-          razaoSocial: 'MUNDO DAS UTILIDADES DE ITABORAI BAZAR E ARMARINHO LTDA',
+          razaoSocial:
+            'MUNDO DAS UTILIDADES DE ITABORAI BAZAR E ARMARINHO LTDA',
           cnpj: '10.791.519/0001-99',
           cidade: 'ITABORAÍ',
           uf: 'RJ',
@@ -3231,7 +4651,8 @@
           uf: 'PR',
         },
         {
-          razaoSocial: 'PEN TECH COMERCIO DE COMPONENTES ELETRONICOS EIRELI - EPP',
+          razaoSocial:
+            'PEN TECH COMERCIO DE COMPONENTES ELETRONICOS EIRELI - EPP',
           cnpj: '02.717.149/0001-11',
           cidade: 'SÃO PAULO',
           uf: 'SP',
@@ -3315,7 +4736,8 @@
           uf: 'SP',
         },
         {
-          razaoSocial: 'REAL COMERCIO DE RELOGIOS E APARELHOS ELETRONICOS LTDA - ME',
+          razaoSocial:
+            'REAL COMERCIO DE RELOGIOS E APARELHOS ELETRONICOS LTDA - ME',
           cnpj: '05.069.459/0001-65',
           cidade: 'SÃO PAULO',
           uf: 'SP',
@@ -3429,7 +4851,8 @@
           uf: 'MG',
         },
         {
-          razaoSocial: 'SHOPPING DO REAL COMERCIO DE ARTIGOS DE ARMARINHO EIRELI',
+          razaoSocial:
+            'SHOPPING DO REAL COMERCIO DE ARTIGOS DE ARMARINHO EIRELI',
           cnpj: '33.282.520/0001-93',
           cidade: 'BELÉM',
           uf: 'PA',
@@ -3501,7 +4924,8 @@
           uf: 'SP',
         },
         {
-          razaoSocial: 'UNIVERSO DO 1,99 COMERCIO DE UTILIDADES DOMESTICAS LTDA',
+          razaoSocial:
+            'UNIVERSO DO 1,99 COMERCIO DE UTILIDADES DOMESTICAS LTDA',
           cnpj: '16.654.967/0001-27',
           cidade: 'SÃO PAULO',
           uf: 'SP',
@@ -3598,9 +5022,11 @@
           materiasPrimas: [],
           produtores: [],
           produtosSemiacabados: [],
+          produtos: [],
           montadores: [],
           clientes: [],
           modelosRelogio: [],
+          funcionarios: [],
           pedidosCompra: [],
           ordensProducao: [],
           ordensMontagem: [],
@@ -3611,6 +5037,7 @@
           estoqueAcabados: {},
           historico: [],
           ajustes: [],
+          retiradasMateriaPrima: [],
         }
       }
       function seedFornecedores(data) {
@@ -3669,8 +5096,8 @@
           : []
 
         if (existentes.length === 0) {
-          data.fornecedoresMateriaPrima = FORNECEDORES_MATERIA_PRIMA_INICIAIS.map(
-            (item) => ({
+          data.fornecedoresMateriaPrima =
+            FORNECEDORES_MATERIA_PRIMA_INICIAIS.map((item) => ({
               id: uid(),
               fornecedor: item.fornecedor,
               cnpj: item.cnpj,
@@ -3678,8 +5105,7 @@
               nome: item.contato,
               contato: item.contato,
               produto: item.produto,
-            })
-          )
+            }))
         } else {
           data.fornecedoresMateriaPrima = existentes
         }
@@ -3791,6 +5217,45 @@
         })
 
         data.produtosSemiacabados = lista
+        return data
+      }
+      function seedProdutos(data) {
+        const existentes = Array.isArray(data?.produtos) ? data.produtos : []
+        const vistos = new Set()
+        const lista = []
+
+        existentes.forEach((item) => {
+          const key = String(item?.codigo || '')
+            .trim()
+            .toLowerCase()
+          if (!vistos.has(key)) {
+            vistos.add(key)
+            lista.push(item)
+          }
+        })
+
+        PRODUTOS_INICIAIS.forEach((item) => {
+          const key = String(item.codigo || '')
+            .trim()
+            .toLowerCase()
+          if (!vistos.has(key)) {
+            vistos.add(key)
+            lista.push({
+              id: uid(),
+              codigo: item.codigo,
+              modelo: item.modelo,
+              produto: item.produto,
+              unidade: item.unidade,
+              codNcm: item.codNcm,
+              codigoBarras: item.codigoBarras,
+              medidas: item.medidas,
+              valor: item.valor,
+              peso: item.peso,
+            })
+          }
+        })
+
+        data.produtos = lista
         return data
       }
       function seedMontadores(data) {
@@ -3914,12 +5379,14 @@
         try {
           const data = seedClientes(
             seedMontadores(
-              seedProdutosInjetados(
-                seedProdutores(
-                  seedFornecedoresMateriaPrima(
-                    parsed
-                      ? seedFornecedores(parsed)
-                      : seedFornecedores(defaultDB())
+              seedProdutos(
+                seedProdutosInjetados(
+                  seedProdutores(
+                    seedFornecedoresMateriaPrima(
+                      parsed
+                        ? seedFornecedores(parsed)
+                        : seedFornecedores(defaultDB())
+                    )
                   )
                 )
               )
@@ -3936,6 +5403,8 @@
               JSON.stringify(parsed?.produtores || []) ||
             JSON.stringify(data.produtosSemiacabados) !==
               JSON.stringify(parsed?.produtosSemiacabados || []) ||
+            JSON.stringify(data.produtos) !==
+              JSON.stringify(parsed?.produtos || []) ||
             JSON.stringify(data.montadores) !==
               JSON.stringify(parsed?.montadores || []) ||
             JSON.stringify(data.clientes) !==
@@ -3964,9 +5433,11 @@
         } catch (e) {
           const data = seedClientes(
             seedMontadores(
-              seedProdutosInjetados(
-                seedProdutores(
-                  seedFornecedoresMateriaPrima(seedFornecedores(defaultDB()))
+              seedProdutos(
+                seedProdutosInjetados(
+                  seedProdutores(
+                    seedFornecedoresMateriaPrima(seedFornecedores(defaultDB()))
+                  )
                 )
               )
             )
@@ -4476,6 +5947,19 @@
         toast('Pedido excluído.')
         renderCompras()
       }
+      function recebidoPorFieldHTML() {
+        const funcionarios = db.funcionarios || []
+        if (!funcionarios.length) {
+          return `<label>Recebido por</label><input id="modal-recebido-por" placeholder="Nome do funcionário">`
+        }
+        const options = funcionarios
+          .map((f) => {
+            const nomeCompleto = [f.nome, f.sobrenome].filter(Boolean).join(' ')
+            return `<option value="${escapeHtml(nomeCompleto)}">${escapeHtml(nomeCompleto)}${f.setor ? ' — ' + escapeHtml(f.setor) : ''}</option>`
+          })
+          .join('')
+        return `<label>Recebido por</label><select id="modal-recebido-por"><option value="">Selecione o funcionário</option>${options}</select>`
+      }
       function confirmarRecebimento(id) {
         const p = db.pedidosCompra.find((x) => x.id === id)
         if (!p) return
@@ -4483,7 +5967,7 @@
           'Confirmar Recebimento',
           `
     <p class="hint">${p.quantidade} de <b>${materiaLabel(p.materiaId)}</b> — Fornecedor: ${fornecedorLabel(p.fornecedorId)}</p>
-    <label>Recebido por</label><input id="modal-recebido-por" placeholder="Nome do funcionário">
+    ${recebidoPorFieldHTML()}
     <div class="btn-row"><button class="btn-primary" onclick="finalizarRecebimento('${id}')">Confirmar</button></div>
   `
         )
@@ -4633,6 +6117,34 @@
           status: 'aberta',
           dataCriacao: nowISO(),
         })
+        const produtoInjetado = db.produtosSemiacabados.find(
+          (x) => x.id === produtoId
+        )
+        if (produtoInjetado && produtoInjetado.mpUtilizadas) {
+          const consumoPorUnidade =
+            parseFloat(
+              String(produtoInjetado.quantidade || '').replace(',', '.')
+            ) || 0
+          const consumoTotal = +(consumoPorUnidade * quantidade).toFixed(3)
+          if (consumoTotal > 0) {
+            const materiaId = resolveMateriaId(produtoInjetado.mpUtilizadas)
+            addStock('materiaPrima', materiaId, -consumoTotal)
+            db.retiradasMateriaPrima.push({
+              id: uid(),
+              materiaId,
+              quantidade: consumoTotal,
+              dataHora: nowISO(),
+            })
+            addHistorico(
+              'Estoque',
+              'Retirada de matéria-prima: ' +
+                consumoTotal +
+                ' de ' +
+                materiaLabel(materiaId) +
+                ' (Ordem de Produção)'
+            )
+          }
+        }
         addHistorico(
           'Produção',
           'Ordem criada: ' +
@@ -4645,7 +6157,7 @@
         document.getElementById('op-quantidade').value = ''
         save()
         toast('Ordem de produção criada.')
-        renderProducao()
+        renderAll()
       }
       function registrarEntregaProducao(id) {
         const o = db.ordensProducao.find((x) => x.id === id)
@@ -5029,14 +6541,15 @@
       }
 
       /* ============================= ESTOQUES / RELATÓRIOS ============================= */
-      function terceirosPendentesRows() {
+      function terceirosPendentesRows(incluirData) {
         const abertas = db.ordensProducao.filter((o) => o.status === 'aberta')
+        const colspan = incluirData ? 4 : 3
         if (!abertas.length)
-          return `<tr class="empty-row"><td colspan="3">Nenhuma produção pendente em terceiros.</td></tr>`
+          return `<tr class="empty-row"><td colspan="${colspan}">Nenhuma produção pendente em terceiros.</td></tr>`
         return abertas
           .map(
             (o) =>
-              `<tr><td>${nome(db.produtosSemiacabados, o.produtoId)}</td><td>${nome(db.produtores, o.produtorId)}</td><td class="mono">${o.quantidadeSolicitada - o.quantidadeRecebida}</td></tr>`
+              `<tr><td>${nome(db.produtosSemiacabados, o.produtoId)}</td><td>${nome(db.produtores, o.produtorId)}</td><td class="mono">${o.quantidadeSolicitada - o.quantidadeRecebida}</td>${incluirData ? `<td class="mono">${fmtDate(o.dataCriacao)}</td>` : ''}</tr>`
           )
           .join('')
       }
@@ -5077,14 +6590,19 @@
           const linhas = recebidos
             .map((p) => ({
               nome: materiaLabel(p.materiaId),
-              valorUnitario: p.valor != null && p.valor !== '' ? Number(p.valor) : null,
+              valorUnitario:
+                p.valor != null && p.valor !== '' ? Number(p.valor) : null,
               quantidade: Number(p.quantidade) || 0,
               data: p.dataRecebimento,
             }))
             .sort((a, b) =>
-              String(a.nome || '').localeCompare(String(b.nome || ''), 'pt-BR', {
-                sensitivity: 'base',
-              })
+              String(a.nome || '').localeCompare(
+                String(b.nome || ''),
+                'pt-BR',
+                {
+                  sensitivity: 'base',
+                }
+              )
             )
           let html = ''
           let i = 0
@@ -5114,7 +6632,13 @@
               j++
             }
             if (j - i > 1) {
-              html += `<tr style="font-weight:700;background:var(--surface-2);"><td>Total — ${linhas[i].nome}</td><td class="mono">—</td><td class="mono">${somaQtd}</td><td class="mono">${temTotal ? fmtMoney(somaTotal) : '—'}</td><td class="mono">—</td></tr>`
+              html += `<tr style="font-weight:700;background:var(--surface-2);">
+  <td style="color:#2563EB !important;">Total — ${linhas[i].nome}</td>
+  <td class="mono" style="color:#2563EB !important;">${somaQtd ? fmtMoney(somaTotal / somaQtd) : ''}</td>
+  <td class="mono" style="color:#2563EB !important;">${somaQtd}</td>
+  <td class="mono" style="color:#2563EB !important;">${temTotal ? fmtMoney(somaTotal) : ''}</td>
+  <td class="mono" style="color:#2563EB !important;"></td>
+</tr>`
             }
             i = j
           }
@@ -5124,13 +6648,13 @@
           ? db.materiasPrimas
               .map((m) => {
                 const quantidade = getStock('materiaPrima', m.id)
-                const valorUnitario = getValorUnitarioMateria(m.id)
-                const total =
-                  valorUnitario != null ? quantidade * valorUnitario : null
-                return `<tr><td>${m.nome}</td><td class="mono">${valorUnitario != null ? fmtMoney(valorUnitario) : '—'}</td><td class="mono">${total != null ? fmtMoney(total) : '—'}</td><td class="mono">${quantidade}</td></tr>`
+                const atualizadoEm =
+                  db.estoqueMateriaPrimaAtualizadoEm &&
+                  db.estoqueMateriaPrimaAtualizadoEm[m.id]
+                return `<tr><td>${m.nome}</td><td class="mono">${quantidade}</td><td class="mono">${atualizadoEm ? fmtDate(atualizadoEm) : '—'}</td></tr>`
               })
               .join('')
-          : `<tr class="empty-row"><td colspan="4">Nenhuma matéria-prima cadastrada.</td></tr>`
+          : `<tr class="empty-row"><td colspan="3">Nenhuma matéria-prima cadastrada.</td></tr>`
         const sRows = db.produtosSemiacabados.length
           ? db.produtosSemiacabados
               .map(
@@ -5147,18 +6671,29 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="3">Nenhum modelo cadastrado.</td></tr>`
-        const tRows = terceirosPendentesRows()
         document.getElementById('tbl-est-materia').innerHTML = mRowsEst
         document.getElementById('rel-materia').innerHTML = mRows
+        const retiradasRows = (db.retiradasMateriaPrima || []).length
+          ? [...db.retiradasMateriaPrima]
+              .sort((a, b) => new Date(b.dataHora) - new Date(a.dataHora))
+              .map(
+                (r) =>
+                  `<tr><td>${materiaLabel(r.materiaId)}</td><td class="mono">${r.quantidade}</td><td class="mono">${fmtDate(r.dataHora)}</td></tr>`
+              )
+              .join('')
+          : `<tr class="empty-row"><td colspan="3">Nenhuma retirada registrada ainda.</td></tr>`
+        document.getElementById('rel-retiradas-materia').innerHTML =
+          retiradasRows
         ;['tbl-est-semi', 'rel-semi'].forEach(
           (id) => (document.getElementById(id).innerHTML = sRows)
         )
         ;['tbl-est-acabados', 'rel-acabados'].forEach(
           (id) => (document.getElementById(id).innerHTML = aRows)
         )
-        ;['tbl-est-terceiros', 'rel-terceiros'].forEach(
-          (id) => (document.getElementById(id).innerHTML = tRows)
-        )
+        document.getElementById('tbl-est-terceiros').innerHTML =
+          terceirosPendentesRows(true)
+        document.getElementById('rel-terceiros').innerHTML =
+          terceirosPendentesRows(false)
         const hist = db.historico.slice(0, 300)
         document.getElementById('rel-historico').innerHTML = hist.length
           ? hist
@@ -5393,17 +6928,51 @@
             { key: 'preco', label: 'Preco', type: 'text' },
           ],
         },
+        produtos: {
+          label: 'Produtos',
+          fields: [
+            { key: 'codigo', label: 'CODIGO', type: 'text', required: true },
+            { key: 'modelo', label: 'Modelo', type: 'text' },
+            { key: 'produto', label: 'Produto', type: 'text' },
+            { key: 'unidade', label: 'Unidade', type: 'text' },
+            { key: 'codNcm', label: 'COD NCM', type: 'text' },
+            { key: 'codigoBarras', label: 'CODIGO BARRAS', type: 'text' },
+            { key: 'medidas', label: 'MEDIDAS', type: 'text' },
+            { key: 'valor', label: 'VALOR', type: 'text' },
+            { key: 'peso', label: 'PESO', type: 'text' },
+          ],
+        },
         clientes: {
           label: 'Clientes',
           showId: true,
           fields: [
-            { key: 'razaoSocial', label: 'Razão Social', type: 'text', required: true },
+            {
+              key: 'razaoSocial',
+              label: 'Razão Social',
+              type: 'text',
+              required: true,
+            },
             { key: 'cnpj', label: 'CNPJ', type: 'text' },
             { key: 'cidade', label: 'Cidade', type: 'text' },
             { key: 'uf', label: 'UF', type: 'text' },
           ],
         },
         modelosRelogio: { label: 'Modelos + Composição', custom: true },
+        funcionarios: {
+          label: 'Funcionarios',
+          fields: [
+            { key: 'nome', label: 'Nome', type: 'text', required: true },
+            { key: 'sobrenome', label: 'Sobre Nome', type: 'text' },
+            { key: 'setor', label: 'Setor', type: 'text' },
+            {
+              key: 'criadoEm',
+              label: 'Data e Hora',
+              type: 'datetime',
+              auto: true,
+              autoType: 'timestamp',
+            },
+          ],
+        },
       }
       let cadAtivo = 'fornecedores'
       let cadBusca = ''
@@ -5423,7 +6992,24 @@
       }
       function buscarCadastros(valor) {
         cadBusca = valor || ''
+        const activeEl = document.activeElement
+        const preserveFocus = activeEl && activeEl.id === 'cad-busca'
+        const selectionStart = preserveFocus ? activeEl.selectionStart : null
+        const selectionEnd = preserveFocus ? activeEl.selectionEnd : null
         renderCadastros()
+        if (preserveFocus) {
+          requestAnimationFrame(() => {
+            const input = document.getElementById('cad-busca')
+            if (input) {
+              input.focus()
+              if (selectionStart != null) {
+                const start = Math.min(selectionStart, input.value.length)
+                const end = Math.min(selectionEnd ?? start, input.value.length)
+                input.setSelectionRange(start, end)
+              }
+            }
+          })
+        }
       }
       function escapeHtml(value) {
         return String(value ?? '')
@@ -5484,7 +7070,7 @@
           ? rows
               .map(
                 (item) => `
-        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${item[f.key] || '—'}</td>`).join('')}
+        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${f.type === 'datetime' && item[f.key] ? fmtDate(item[f.key]) : item[f.key] || '—'}</td>`).join('')}
         <td>
           <button class="btn-ghost btn-sm" title="Editar" onclick="editarCadastro('${item.id}')">✏️</button>
           <button class="btn-danger btn-sm" title="Excluir" onclick="confirmarExclusaoCadastro('${item.id}')">🗑️</button>
@@ -5508,7 +7094,10 @@
         let ok = true
         cfg.fields.forEach((f) => {
           if (f.auto) {
-            obj[f.key] = proximoValorAuto(db[cadAtivo], f.key)
+            obj[f.key] =
+              f.autoType === 'timestamp'
+                ? nowISO()
+                : proximoValorAuto(db[cadAtivo], f.key)
             return
           }
           const v = document.getElementById('cad-f-' + f.key).value.trim()
@@ -5643,7 +7232,11 @@
         })
         return `
     <div class="card"><h3>Novo Modelo de Relógio</h3>
-      <label>Nome do Modelo</label><input id="modelo-nome" placeholder="Ex: Relógio Ômega">
+      <label>Nome do Modelo</label>
+      <div class="autocomplete-wrap">
+        <input id="modelo-nome" placeholder="Ex: Relógio Ômega" autocomplete="off" oninput="filtrarSugestoesModeloNome(this.value)" onfocus="filtrarSugestoesModeloNome(this.value)" onblur="setTimeout(fecharSugestoesModeloNome, 150)">
+        <div id="modelo-nome-sugestoes" class="autocomplete-list"></div>
+      </div>
       <div class="divider"></div>
       <h3>Composição (BOM)</h3>
       <div class="bom-row">
@@ -5685,10 +7278,72 @@
         </tbody></table></div>
     </div>`
       }
+      let modeloNomeSugestoesAtual = []
+      function filtrarSugestoesModeloNome(v) {
+        const termo = (v || '').trim().toLowerCase()
+        const el = document.getElementById('modelo-nome-sugestoes')
+        if (!el) return
+        if (!termo) {
+          modeloNomeSugestoesAtual = []
+          el.classList.remove('show')
+          el.innerHTML = ''
+          return
+        }
+        modeloNomeSugestoesAtual = (db.produtos || [])
+          .filter((p) =>
+            [p.codigo, p.modelo, p.produto].some((f) =>
+              (f || '').toString().toLowerCase().includes(termo)
+            )
+          )
+          .slice(0, 8)
+        if (!modeloNomeSugestoesAtual.length) {
+          el.classList.remove('show')
+          el.innerHTML = ''
+          return
+        }
+        el.innerHTML = modeloNomeSugestoesAtual
+          .map(
+            (p, idx) =>
+              `<div class="autocomplete-item" onmousedown="selecionarSugestaoModeloNome(${idx})">${escapeHtml(p.produto || '—')}<small>${escapeHtml(p.codigo || '')}${p.modelo ? ' — ' + escapeHtml(p.modelo) : ''}</small></div>`
+          )
+          .join('')
+        el.classList.add('show')
+      }
+      function selecionarSugestaoModeloNome(idx) {
+        const p = modeloNomeSugestoesAtual[idx]
+        if (!p) return
+        const input = document.getElementById('modelo-nome')
+        if (input) input.value = p.produto || ''
+        fecharSugestoesModeloNome()
+      }
+      function fecharSugestoesModeloNome() {
+        const el = document.getElementById('modelo-nome-sugestoes')
+        if (el) {
+          el.classList.remove('show')
+          el.innerHTML = ''
+        }
+      }
       function filtrarModelos(v) {
         modeloBusca = v
+        const activeEl = document.activeElement
+        const preserveFocus = activeEl && activeEl.id === 'modelo-busca'
+        const selectionStart = preserveFocus ? activeEl.selectionStart : null
+        const selectionEnd = preserveFocus ? activeEl.selectionEnd : null
         const el = document.getElementById('cad-content')
         if (el) el.innerHTML = modeloCadastroHTML()
+        if (preserveFocus) {
+          requestAnimationFrame(() => {
+            const input = document.getElementById('modelo-busca')
+            if (input) {
+              input.focus()
+              if (selectionStart != null) {
+                const start = Math.min(selectionStart, input.value.length)
+                const end = Math.min(selectionEnd ?? start, input.value.length)
+                input.setSelectionRange(start, end)
+              }
+            }
+          })
+        }
       }
       function renderBomTempList() {
         if (!bomTemp.length)
@@ -6314,15 +7969,18 @@
           'materiasPrimas',
           'produtores',
           'produtosSemiacabados',
+          'produtos',
           'montadores',
           'clientes',
           'modelosRelogio',
+          'funcionarios',
           'pedidosCompra',
           'ordensProducao',
           'ordensMontagem',
           'expedicoes',
           'historico',
           'ajustes',
+          'retiradasMateriaPrima',
         ]
         listKeys.forEach((k) => {
           if (!Array.isArray(incoming[k])) return
@@ -6369,15 +8027,21 @@
           ['Matérias-Primas', db.materiasPrimas.length],
           ['Produtores', db.produtores.length],
           ['Produtos Injetados', db.produtosSemiacabados.length],
+          ['Produtos', (db.produtos || []).length],
           ['Montadores', db.montadores.length],
           ['Clientes', db.clientes.length],
           ['Modelos de Relógio', db.modelosRelogio.length],
+          ['Funcionarios', (db.funcionarios || []).length],
           ['Pedidos de Compra', db.pedidosCompra.length],
           ['Ordens de Produção', db.ordensProducao.length],
           ['Ordens de Montagem', db.ordensMontagem.length],
           ['Expedições', db.expedicoes.length],
           ['Histórico', db.historico.length],
           ['Ajustes', db.ajustes.length],
+          [
+            'Retiradas de Matéria-Prima',
+            (db.retiradasMateriaPrima || []).length,
+          ],
         ]
         tb.innerHTML = rows
           .map(
