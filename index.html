@@ -868,7 +868,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.2.7</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.8</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -900,7 +900,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.2.7</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.8</span>
       </div>
       <button
         class="menu-btn"
@@ -1758,7 +1758,7 @@
           fornecedor: 'JT EMBALAGEM',
           cnpj: '',
           contato: 'ROGERIO',
-          produto: 'CAIXA COLETORA',
+          produto: 'CAIXA COLETIVA',
         },
         {
           fornecedor: 'JT EMBALAGEM',
@@ -1770,7 +1770,7 @@
           fornecedor: 'DJA EMBALAGEM',
           cnpj: '',
           contato: 'EVERTON',
-          produto: 'CAIXA COLETORA',
+          produto: 'CAIXA COLETIVA',
         },
         {
           fornecedor: 'DJA EMBALAGEM',
@@ -6118,6 +6118,36 @@
           quantidade: consumoTotal,
         }
       }
+      function registrarBaixaMateriaPrima({
+        materiaId,
+        quantidade,
+        origem,
+        ordemId,
+        descricao,
+      }) {
+        if (!materiaId || !quantidade || quantidade <= 0) return false
+        const jaRegistrada = (db.retiradasMateriaPrima || []).some((r) => {
+          if (origem && r.origem === origem && r.ordemId === ordemId)
+            return true
+          return (
+            r.materiaId === materiaId &&
+            Number(r.quantidade || 0) === Number(quantidade) &&
+            r.origem === origem &&
+            r.ordemId === ordemId
+          )
+        })
+        if (jaRegistrada) return false
+        db.retiradasMateriaPrima.push({
+          id: uid(),
+          materiaId,
+          quantidade: Number(quantidade),
+          dataHora: nowISO(),
+          origem,
+          ordemId,
+          descricao,
+        })
+        return true
+      }
       function criarOrdemProducao() {
         const produtorId = document.getElementById('op-produtor').value
         const produtoId = document.getElementById('op-produto').value
@@ -6143,7 +6173,7 @@
             )
             return
           }
-          db.ordensProducao.push({
+          const ordem = {
             id: uid(),
             produtorId,
             produtoId,
@@ -6152,22 +6182,26 @@
             entregas: [],
             status: 'aberta',
             dataCriacao: nowISO(),
-          })
-          addStock('materiaPrima', materiaId, -consumo.quantidade)
-          db.retiradasMateriaPrima.push({
-            id: uid(),
+          }
+          db.ordensProducao.push(ordem)
+          const baixaRegistrada = registrarBaixaMateriaPrima({
             materiaId,
             quantidade: consumo.quantidade,
-            dataHora: nowISO(),
+            origem: 'producao',
+            ordemId: ordem.id,
+            descricao: 'Ordem de Produção',
           })
-          addHistorico(
-            'Estoque',
-            'Retirada de matéria-prima: ' +
-              consumo.quantidade +
-              ' de ' +
-              materiaLabel(materiaId) +
-              ' (Ordem de Produção)'
-          )
+          if (baixaRegistrada) {
+            addStock('materiaPrima', materiaId, -consumo.quantidade)
+            addHistorico(
+              'Estoque',
+              'Retirada de matéria-prima: ' +
+                consumo.quantidade +
+                ' de ' +
+                materiaLabel(materiaId) +
+                ' (Ordem de Produção)'
+            )
+          }
         } else {
           toast('Não há estoque de material cadastrado para este produto.')
           return
@@ -6353,10 +6387,7 @@
           )
             return
         }
-        modelo.bom.forEach((b) => {
-          addStock(b.tipo, b.itemId, -(b.qtd * quantidade))
-        })
-        db.ordensMontagem.push({
+        const ordem = {
           id: uid(),
           montadorId,
           modeloId,
@@ -6366,6 +6397,22 @@
           status: 'enviada',
           dataEnvio: nowISO(),
           dataRecebimento: null,
+        }
+        db.ordensMontagem.push(ordem)
+        modelo.bom.forEach((b) => {
+          const qtdBaixa = b.qtd * quantidade
+          addStock(b.tipo, b.itemId, -qtdBaixa)
+          const materiaId =
+            b.tipo === 'materiaPrima'
+              ? b.itemId
+              : resolveMateriaId(itemNomeGeral(b.tipo, b.itemId))
+          registrarBaixaMateriaPrima({
+            materiaId,
+            quantidade: qtdBaixa,
+            origem: 'montagem',
+            ordemId: ordem.id,
+            descricao: itemNomeGeral(b.tipo, b.itemId),
+          })
         })
         addHistorico(
           'Montagem',
@@ -7278,6 +7325,41 @@
       /* Modelos + BOM */
       let bomTemp = []
       let modeloBusca = ''
+      function normalizeModeloLookup(value) {
+        return String(value || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, ' ')
+          .trim()
+          .toLowerCase()
+      }
+      function encontrarProdutoPorModelo(modeloNome) {
+        const termo = normalizeModeloLookup(modeloNome)
+        if (!termo) return null
+        return (db.produtos || []).find((p) => {
+          const candidatos = [p.modelo, p.produto, p.codigo, p.codigoBarras]
+          return candidatos.some((valor) => {
+            const valorNormalizado = normalizeModeloLookup(valor)
+            return (
+              valorNormalizado &&
+              (valorNormalizado === termo ||
+                valorNormalizado.includes(termo) ||
+                termo.includes(valorNormalizado))
+            )
+          })
+        })
+      }
+      function completarModeloComProduto(modelo) {
+        const produtoRef = encontrarProdutoPorModelo(modelo?.nome)
+        return {
+          ...modelo,
+          codigoRef: modelo?.codigoRef || produtoRef?.codigo || '—',
+          codigoBarras: modelo?.codigoBarras || produtoRef?.codigoBarras || '—',
+          ncm: modelo?.ncm || produtoRef?.codNcm || '—',
+          valor: modelo?.valor ?? produtoRef?.valor ?? '—',
+          peso: modelo?.peso ?? produtoRef?.peso ?? '—',
+        }
+      }
       function modeloCadastroHTML() {
         const itemOptions = [
           ...db.materiasPrimas.map(
@@ -7321,25 +7403,28 @@
       </div>
       <input id="modelo-busca" placeholder="Buscar por nome, código ref. ou código de barras..." value="${modeloBusca || ''}" oninput="filtrarModelos(this.value)" style="margin-top:10px;">
       <div class="table-wrap" style="margin-top:10px;"><table>
-        <thead><tr><th>Cód. Ref</th><th>Descrição</th><th>Cód. Barras</th><th>NCM</th><th>Valor</th><th>Peso</th><th>Composição (BOM)</th><th></th></tr></thead>
+        <thead><tr><th>Cód. Ref</th><th>Descrição</th><th>Cód. Barras</th><th>NCM</th><th>Valor</th><th>Peso</th><th></th></tr></thead>
         <tbody>${
           lista.length
             ? lista
-                .map(
-                  (m) => `
+                .map((m) => {
+                  const modeloCompleto = completarModeloComProduto(m)
+                  return `
           <tr>
-            <td class="serial">${m.codigoRef || '—'}</td>
-            <td>${m.nome}</td>
-            <td class="mono">${m.codigoBarras || '—'}</td>
-            <td class="mono">${m.ncm || '—'}</td>
-            <td class="mono">${m.valor ? fmtMoney(m.valor) : '—'}</td>
-            <td>${m.peso || '—'}</td>
-            <td><span class="hint" style="margin:0;">${m.bom && m.bom.length ? m.bom.map((b) => `${b.qtd}x ${itemNomeGeral(b.tipo, b.itemId)}`).join(', ') : 'Sem composição'}</span></td>
+            <td class="serial">${escapeHtml(modeloCompleto.codigoRef || '—')}</td>
+            <td>
+              <div>${escapeHtml(modeloCompleto.nome || '—')}</div>
+              <div class="hint" style="margin-top:4px;">${modeloCompleto.bom && modeloCompleto.bom.length ? `Composição (BOM): ${modeloCompleto.bom.map((b) => `${b.qtd}x ${itemNomeGeral(b.tipo, b.itemId)}`).join(', ')}` : 'Sem composição'}</div>
+            </td>
+            <td class="mono">${escapeHtml(modeloCompleto.codigoBarras || '—')}</td>
+            <td class="mono">${escapeHtml(modeloCompleto.ncm || '—')}</td>
+            <td class="mono">${modeloCompleto.valor && modeloCompleto.valor !== '—' ? fmtMoney(modeloCompleto.valor) : '—'}</td>
+            <td>${escapeHtml(modeloCompleto.peso || '—')}</td>
             <td><button class="btn-danger btn-sm" onclick="excluirModelo('${m.id}')">excluir</button></td>
           </tr>`
-                )
+                })
                 .join('')
-            : `<tr class="empty-row"><td colspan="8">Nenhum modelo encontrado.</td></tr>`
+            : `<tr class="empty-row"><td colspan="7">Nenhum modelo encontrado.</td></tr>`
         }
         </tbody></table></div>
     </div>`
@@ -7445,10 +7530,16 @@
           toast('Informe o nome do modelo.')
           return
         }
+        const produtoRef = encontrarProdutoPorModelo(nomeModelo)
         db.modelosRelogio.push({
           id: uid(),
           nome: nomeModelo,
           bom: [...bomTemp],
+          codigoRef: produtoRef?.codigo || '',
+          codigoBarras: produtoRef?.codigoBarras || '',
+          ncm: produtoRef?.codNcm || '',
+          valor: produtoRef?.valor || '',
+          peso: produtoRef?.peso || '',
         })
         addHistorico('Cadastro', 'Novo modelo cadastrado: ' + nomeModelo)
         bomTemp = []
