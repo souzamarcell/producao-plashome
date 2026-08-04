@@ -7414,7 +7414,7 @@
             <td class="serial">${escapeHtml(modeloCompleto.codigoRef || '—')}</td>
             <td>
               <div>${escapeHtml(modeloCompleto.nome || '—')}</div>
-              <div class="hint" style="margin-top:4px;">${modeloCompleto.bom && modeloCompleto.bom.length ? `Composição (BOM): ${modeloCompleto.bom.map((b) => `${b.qtd}x ${itemNomeGeral(b.tipo, b.itemId)}`).join(', ')}` : 'Sem composição'}</div>
+              <div class="hint" style="margin-top:4px;">${modeloCompleto.bom && modeloCompleto.bom.length ? modeloCompleto.bom.map((b) => `${b.qtd}x ${itemNomeGeral(b.tipo, b.itemId)}`).join('<br>') : 'Sem composição'}</div>
             </td>
             <td class="mono">${escapeHtml(modeloCompleto.codigoBarras || '—')}</td>
             <td class="mono">${escapeHtml(modeloCompleto.ncm || '—')}</td>
