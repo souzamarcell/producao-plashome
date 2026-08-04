@@ -868,7 +868,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.2.6</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.7</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -900,7 +900,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.2.6</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.7</span>
       </div>
       <button
         class="menu-btn"
@@ -1374,7 +1374,9 @@
         <div class="subtabs" id="est-subtabs"></div>
 
         <div class="est-subview" id="est-sub-materia">
-          <div class="section-title"><h2>Matéria-Prima</h2></div>
+          <div class="section-title">
+            <h2>Matéria-Prima & Componentes (Entradas)</h2>
+          </div>
           <div class="card">
             <div class="table-wrap">
               <table>
@@ -1503,7 +1505,9 @@
 
       <!-- RELATÓRIOS -->
       <section class="view" id="view-relatorios">
-        <div class="section-title"><h2>Estoque de Matéria-Prima</h2></div>
+        <div class="section-title">
+          <h2>Estoque de Matéria-Prima & Componentes (Saldos)</h2>
+        </div>
         <div class="card">
           <div class="table-wrap">
             <table>
@@ -5635,6 +5639,16 @@
           })
           .join('')
       }
+      function optListProdutosInjetados(arr, selected) {
+        return arr
+          .map((i) => {
+            const label = i.nome
+              ? `${i.nome}${i.mpUtilizadas ? ' - ' + i.mpUtilizadas : ''}`
+              : ''
+            return `<option value="${i.id}" ${i.id === selected ? 'selected' : ''}>${label}</option>`
+          })
+          .join('')
+      }
       function nome(arr, id) {
         const f = arr.find((x) => x.id === id)
         if (!f) return '—'
@@ -6114,25 +6128,35 @@
           toast('Preencha todos os campos.')
           return
         }
-        db.ordensProducao.push({
-          id: uid(),
-          produtorId,
-          produtoId,
-          quantidadeSolicitada: quantidade,
-          quantidadeRecebida: 0,
-          entregas: [],
-          status: 'aberta',
-          dataCriacao: nowISO(),
-        })
         const produtoInjetado = db.produtosSemiacabados.find(
           (x) => x.id === produtoId
         )
         const consumo = calcularConsumoMateriaPrima(produtoInjetado, quantidade)
         if (consumo) {
-          addStock('materiaPrima', consumo.materiaId, -consumo.quantidade)
+          const materiaId = consumo.materiaId
+          const estoqueMateria = getStock('materiaPrima', materiaId)
+          if (estoqueMateria <= 0) {
+            toast(
+              'Não há estoque de material cadastrado para ' +
+                materiaLabel(materiaId) +
+                '.'
+            )
+            return
+          }
+          db.ordensProducao.push({
+            id: uid(),
+            produtorId,
+            produtoId,
+            quantidadeSolicitada: quantidade,
+            quantidadeRecebida: 0,
+            entregas: [],
+            status: 'aberta',
+            dataCriacao: nowISO(),
+          })
+          addStock('materiaPrima', materiaId, -consumo.quantidade)
           db.retiradasMateriaPrima.push({
             id: uid(),
-            materiaId: consumo.materiaId,
+            materiaId,
             quantidade: consumo.quantidade,
             dataHora: nowISO(),
           })
@@ -6141,9 +6165,12 @@
             'Retirada de matéria-prima: ' +
               consumo.quantidade +
               ' de ' +
-              materiaLabel(consumo.materiaId) +
+              materiaLabel(materiaId) +
               ' (Ordem de Produção)'
           )
+        } else {
+          toast('Não há estoque de material cadastrado para este produto.')
+          return
         }
         addHistorico(
           'Produção',
@@ -6253,9 +6280,8 @@
         document.getElementById('op-produtor').innerHTML = optList(
           db.produtores
         )
-        document.getElementById('op-produto').innerHTML = optList(
-          db.produtosSemiacabados
-        )
+        document.getElementById('op-produto').innerHTML =
+          optListProdutosInjetados(db.produtosSemiacabados)
         const abertas = db.ordensProducao.filter((o) => o.status === 'aberta')
         document.getElementById('tbl-op-abertas').innerHTML = abertas.length
           ? abertas
@@ -6555,7 +6581,7 @@
       }
       /* ============================= ESTOQUES ============================= */
       const estConfig = {
-        materia: { label: 'Matéria-Prima' },
+        materia: { label: 'Matéria-Prima & Componentes' },
         terceiros: { label: 'Produção em Terceiros (pendente)' },
         semi: { label: 'Produtos Injetados' },
         acabados: { label: 'Produtos Acabados' },
