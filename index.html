@@ -13,6 +13,14 @@
       rel="stylesheet"
     />
     <style>
+      /* =====================================================================
+         FOLHA DE ESTILOS — Flow PlasHome
+         Organizada em seções: Tokens de design → Reset/Base → Tipografia →
+         Header/Menu → Drawer (menu lateral) → Login → Navegação (abas) →
+         Cards → Formulários/Botões → Tabelas → Badges → Dashboard →
+         BOM builder → Toast → Subtabs → Modal → Importação Excel.
+         ===================================================================== */
+      /* ===== Design Tokens (cores, sombras neumórficas, raio de borda) ===== */
       :root {
         --bg: #171513;
         --bg-2: #1d1b18;
@@ -34,6 +42,7 @@
         --shadow-sm: 3px 3px 6px #100f0d, -3px -3px 6px #242119;
         --radius: 14px;
       }
+      /* ===== Reset & Base ===== */
       * {
         box-sizing: border-box;
         margin: 0;
@@ -51,6 +60,7 @@
         background: var(--brass-dim);
         color: #111;
       }
+      /* ===== Tipografia ===== */
       h1,
       h2,
       h3 {
@@ -175,6 +185,7 @@
         display: flex;
         flex-direction: column;
         box-shadow: -8px 0 20px rgba(0, 0, 0, 0.4);
+        overflow-y: auto; /* antes era uma regra .drawer duplicada e separada — unificada aqui */
       }
       .drawer.show {
         transform: translateX(0);
@@ -233,9 +244,6 @@
         height: 1px;
         background: var(--line);
         margin: 4px 0 6px;
-      }
-      .drawer {
-        overflow-y: auto;
       }
       .drawer-user {
         padding: 12px 18px;
@@ -473,6 +481,7 @@
         background-size: 5px 5px;
         background-repeat: no-repeat;
       }
+      /* ===== Autocomplete (campos de busca com sugestões) ===== */
       .autocomplete-wrap {
         position: relative;
       }
@@ -525,6 +534,7 @@
         transition: 0.12s;
         letter-spacing: 0.01em;
       }
+      /* ===== Botões ===== */
       .btn-primary {
         background: var(--brass);
         color: #1a1510;
@@ -593,6 +603,7 @@
         padding: 22px;
       }
 
+      /* ===== Badges (rótulos de status) ===== */
       .badge {
         display: inline-block;
         padding: 3px 9px;
@@ -726,6 +737,7 @@
         text-decoration: none;
       }
 
+      /* ===== Toast (notificação temporária) ===== */
       .toast {
         position: fixed;
         bottom: 20px;
@@ -750,6 +762,7 @@
         transform: translateX(-50%) translateY(0);
       }
 
+      /* ===== Subtabs (sub-navegação dentro de uma view, ex.: Estoques) ===== */
       .subtabs {
         display: flex;
         gap: 6px;
@@ -779,6 +792,7 @@
         display: block;
       }
 
+      /* ===== Modal ===== */
       .modal-backdrop {
         position: fixed;
         inset: 0;
@@ -868,7 +882,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.2.8</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.9</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -900,7 +914,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.2.8</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.9</span>
       </div>
       <button
         class="menu-btn"
@@ -1506,7 +1520,7 @@
       <!-- RELATÓRIOS -->
       <section class="view" id="view-relatorios">
         <div class="section-title">
-          <h2>Estoque de Matéria-Prima & Componentes (Saldos)</h2>
+          <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
         </div>
         <div class="card">
           <div class="table-wrap">
@@ -1728,6 +1742,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
+      /* =========================================================================
+         Flow PlasHome — Controle de Produção
+         Aplicativo single-file: todo o estado fica em `db` (objeto em memória)
+         e é persistido no localStorage do navegador (ver DB_KEY). Não há backend.
+
+         Mapa das seções deste arquivo (busque pelos títulos "====="):
+           DB                    → chaves de storage, validação, dados iniciais
+                                    (seed) de cada cadastro, funções de
+                                    carregar/gravar/backup automático
+           LOGIN / AUTENTICAÇÃO  → login local e controle de sessão
+           NAV / DRAWER          → troca de views e menu lateral
+           HELPERS               → formatação, estoque, listas de <option>, etc.
+           COMPRAS                → pedidos de compra de matéria-prima
+           PRODUÇÃO               → ordens de produção (injetados)
+           MONTAGEM                → ordens de montagem (produto final)
+           EXPEDIÇÃO               → saída/envio de produtos acabados
+           ESTOQUES / RELATÓRIOS  → posições de estoque e relatórios
+           DASHBOARD               → indicadores gerais
+           AJUSTES                 → correções manuais de estoque
+           CADASTROS                → CRUD de fornecedores, clientes, modelos...
+           IMPORTAÇÃO EXCEL         → importação de catálogo/código de barras
+           MODAL                    → utilitário genérico de modal
+           BACKUP / RESTORE         → exportar/importar/mesclar backup em JSON
+           RENDER ALL               → função que redesenha a tela inteira
+
+         Convenção de dados: cada cadastro (fornecedores, clientes, produtos...)
+         é um array de objetos com `id` único (ver uid()). Os arrays
+         "*_INICIAIS" logo abaixo são apenas a carga inicial (seed) usada na
+         primeira execução em um dispositivo novo — depois disso, quem manda é
+         o que está salvo no localStorage.
+         ========================================================================= */
+
       /* ============================= DB ============================= */
       const DB_KEY = 'chronoflow_db_v1'
       const DB_BACKUP_KEY = 'chronoflow_db_v1_backup'
@@ -1749,10 +1795,14 @@
         'ajustes',
         'retiradasMateriaPrima',
       ]
+      // Verifica se um objeto tem o formato mínimo esperado de um banco válido
+      // (todas as listas em DB_REQUIRED_ARRAYS presentes e são arrays).
       function isValidDB(obj) {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false
         return DB_REQUIRED_ARRAYS.every((k) => Array.isArray(obj[k]))
       }
+      /* ----- Dados iniciais (seed) — usados só na 1ª execução em um dispositivo novo ----- */
+      // Fornecedores de embalagens/materiais gráficos (caixas, solapas, etc.)
       const FORNECEDORES_INICIAIS = [
         {
           fornecedor: 'JT EMBALAGEM',
@@ -2145,6 +2195,7 @@
           produto: 'PVC PLÁSTICO',
         },
       ]
+      // Fornecedores de matéria-prima (plástico, insumos de injeção)
       const FORNECEDORES_MATERIA_PRIMA_INICIAIS = [
         {
           fornecedor: 'POLYSITE',
@@ -2244,6 +2295,7 @@
           produto: 'PP NATURAL',
         },
       ]
+      // Produtores terceirizados que fazem a injeção das peças
       const PRODUTORES_INICIAIS = [
         {
           tipoMateria: 'INJEÇÃO',
@@ -2344,6 +2396,7 @@
           produto: 'LENTE OMEGA',
         },
       ]
+      // Catálogo de produtos injetados (peças semiacabadas, antes da montagem)
       const PRODUTOS_INJETADOS_INICIAIS = [
         {
           codigo: '1',
@@ -2506,6 +2559,7 @@
           preco: '',
         },
       ]
+      // Catálogo de produtos acabados (item final vendido ao cliente)
       const PRODUTOS_INICIAIS = [
         {
           codigo: 'PHR003-BCL',
@@ -3388,6 +3442,7 @@
           peso: '0,350 GR',
         },
       ]
+      // Montadores terceirizados que fazem a montagem final do produto
       const MONTADORES_INICIAIS = [
         {
           tipoMateria: 'MONTAGEM',
@@ -3418,6 +3473,7 @@
           produto: 'RELOGIOS',
         },
       ]
+      // Carteira de clientes (razão social, CNPJ, cidade/UF)
       const CLIENTES_INICIAIS = [
         {
           razaoSocial: 'ELIANA OLIVEIRA MORAES GOMES (SR FRANCISCO)',
@@ -5001,6 +5057,8 @@
           uf: 'SP',
         },
       ]
+      /* ----- Funções núcleo do banco: estrutura padrão, seed, leitura, gravação ----- */
+      // Monta a estrutura vazia/inicial do banco, já populada com o seed de cadastros.
       function defaultDB() {
         return {
           fornecedores: [],
@@ -5336,6 +5394,7 @@
         return data
       }
       let db = load()
+      // Lê uma chave do localStorage e retorna o objeto só se for um DB válido; senão null.
       function readAndValidate(key) {
         try {
           const raw = localStorage.getItem(key)
@@ -5347,6 +5406,8 @@
           return { raw: null, parsed: null }
         }
       }
+      // Carrega o banco do localStorage. Se os dados principais estiverem corrompidos,
+      // tenta recuperar a partir do backup automático antes de usar o padrão.
       function load() {
         let recoveredFromBackup = false
         let corrupted = false
@@ -5439,6 +5500,7 @@
           return data
         }
       }
+      // Grava o banco no localStorage e atualiza também a cópia de backup automático.
       function save(data) {
         const toSave = data === undefined ? db : data
         let json
@@ -5468,6 +5530,7 @@
           )
         }
       }
+      // JSON.parse que nunca lança exceção — retorna null em caso de erro.
       function safeParse(raw) {
         try {
           return JSON.parse(raw)
@@ -5475,12 +5538,15 @@
           return null
         }
       }
+      // Gera um ID único simples para novos registros.
       function uid() {
         return 'ID' + Math.random().toString(36).slice(2, 7).toUpperCase()
       }
+      // Data/hora atual em formato ISO 8601.
       function nowISO() {
         return new Date().toISOString()
       }
+      // Formata uma data ISO para exibição no padrão brasileiro.
       function fmtDate(iso) {
         if (!iso) return '—'
         const d = new Date(iso)
@@ -5490,12 +5556,14 @@
           d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
         )
       }
+      // Formata um número como valor monetário em R$.
       function fmtMoney(v) {
         return (v || 0).toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         })
       }
+      // Registra uma entrada no histórico de auditoria (quem fez o quê e quando).
       function addHistorico(tipo, desc) {
         db.historico.unshift({
           id: uid(),
@@ -5506,6 +5574,7 @@
         })
         save()
       }
+      // Mostra uma notificação temporária (toast) na tela.
       function toast(msg) {
         const t = document.getElementById('toast')
         t.textContent = msg
@@ -5515,11 +5584,13 @@
       }
 
       /* ============================= LOGIN / AUTENTICAÇÃO ============================= */
+      // Login local simples (sem servidor) + controle de sessão no localStorage.
       const AUTH_KEY = 'chronoflow_auth_v1'
       const APP_USUARIO = 'Rodrigo'
       const APP_SENHA = '123'
       let currentUser = null
 
+      // Verifica se há sessão de login ativa; se não houver, exibe a tela de login.
       function checkAuth() {
         try {
           const raw = sessionStorage.getItem(AUTH_KEY)
@@ -5535,6 +5606,7 @@
         document.getElementById('login-overlay').style.display = 'flex'
         return false
       }
+      // Valida usuário/senha informados no formulário de login.
       function tentarLogin() {
         const usuario = document.getElementById('login-usuario').value.trim()
         const senha = document.getElementById('login-senha').value
@@ -5568,6 +5640,7 @@
         localStorage.removeItem(BACKUP_META_KEY)
         location.reload()
       }
+      // Encerra a sessão do usuário atual.
       function fazerLogout() {
         if (!confirm('Deseja realmente sair?')) return
         addHistorico('Acesso', 'Logout realizado')
@@ -5588,6 +5661,8 @@
         })
 
       /* ============================= NAV ============================= */
+      // Alterna qual "view" (tela) principal está visível.
+      // Troca a view (tela) principal exibida.
       function switchView(viewName) {
         document
           .querySelectorAll('.tab-btn')
@@ -5616,6 +5691,8 @@
       })
 
       /* ============================= DRAWER ============================= */
+      // Abre/fecha o menu lateral (drawer) de navegação no mobile.
+      // Abre/fecha o menu lateral (drawer).
       function toggleDrawer() {
         document.getElementById('drawer').classList.toggle('show')
         document.getElementById('drawer-backdrop').classList.toggle('show')
@@ -5626,6 +5703,10 @@
       }
 
       /* ============================= HELPERS ============================= */
+      // Funções utilitárias reaproveitadas por várias telas: formatação de
+      // datas/valores, montagem de <option> de selects, leitura/escrita de
+      // estoque por tipo de item, e resolução de nomes/labels a partir de IDs.
+      // Gera as <option> de um <select> a partir de um array de registros.
       function optList(arr, selected) {
         return arr
           .map((i) => {
@@ -5675,6 +5756,7 @@
           )
           .join('')
       }
+      // Retorna a quantidade em estoque de um item, dado seu tipo e ID.
       function getStock(tipo, id) {
         const map =
           tipo === 'materiaPrima'
@@ -5684,6 +5766,7 @@
               : db.estoqueAcabados
         return map[id] || 0
       }
+      // Define a quantidade em estoque de um item.
       function setStock(tipo, id, val) {
         const map =
           tipo === 'materiaPrima'
@@ -5698,6 +5781,7 @@
           db.estoqueMateriaPrimaAtualizadoEm[id] = nowISO()
         }
       }
+      // Soma (ou subtrai, se delta negativo) uma quantidade ao estoque de um item.
       function addStock(tipo, id, delta) {
         setStock(tipo, id, +(getStock(tipo, id) + delta).toFixed(3))
       }
@@ -5722,6 +5806,8 @@
       }
 
       /* ============================= COMPRAS ============================= */
+      // Fluxo de Pedidos de Compra de matéria-prima: criar, editar, excluir,
+      // confirmar recebimento (com baixa/entrada em estoque) e gerar PDF.
       function fornecedorDisplayName(item) {
         return item?.fornecedor || item?.nome || item?.contato || '—'
       }
@@ -5743,7 +5829,24 @@
           .replace(/\s+/g, ' ')
           .toUpperCase()
       }
-      function resolveMateriaId(value) {
+      // Descobre o tipoMateria (INJEÇÃO / MONTAGEM) olhando se o nome do
+      // fornecedor bate com um cadastro em Produtores ou Montadores.
+      function getTipoMateriaPorFornecedor(fornecedorNome) {
+        const nome = String(fornecedorNome || '')
+          .trim()
+          .toLowerCase()
+        if (!nome) return null
+        const produtor = db.produtores.find(
+          (p) => String(p.fornecedor || '').trim().toLowerCase() === nome
+        )
+        if (produtor) return produtor.tipoMateria || null
+        const montador = db.montadores.find(
+          (m) => String(m.fornecedor || '').trim().toLowerCase() === nome
+        )
+        if (montador) return montador.tipoMateria || null
+        return null
+      }
+      function resolveMateriaId(value, fornecedorNome) {
         if (!value) return null
         const normalized = normalizeMateriaName(value)
         const byId = db.materiasPrimas.find((x) => x.id === value)
@@ -5752,13 +5855,23 @@
           (x) => normalizeMateriaName(x.nome) === normalized
         )
         if (byName) return byName.id
+        // Categoria do novo material vem do tipoMateria do fornecedor/produtor
+        // vinculado: INJEÇÃO → Matéria-Prima; qualquer outro caso (ou sem
+        // vínculo encontrado) → Insumos/Componentes. "Matéria-Prima" nunca é
+        // mais usado como padrão fixo.
+        const tipoMateria = getTipoMateriaPorFornecedor(fornecedorNome)
         const created = {
           id: uid(),
           nome: normalized || String(value).trim(),
           unidade: '—',
+          categoria: tipoMateria === 'INJEÇÃO' ? 'materiaPrima' : 'insumoComponente',
         }
         db.materiasPrimas.push(created)
         return created.id
+      }
+      function getMateriaCategoria(materiaId) {
+        const item = db.materiasPrimas.find((x) => x.id === materiaId)
+        return item?.categoria || 'insumoComponente'
       }
       function materiaLabel(value) {
         if (!value) return '—'
@@ -5769,6 +5882,19 @@
           (x) => normalizeMateriaName(x.nome) === normalized
         )
         return byName ? byName.nome : String(value)
+      }
+      // Quando a Montagem baixa um item "Injetado" (produto semiacabado) da
+      // composição, é criado um registro "sombra" em materiasPrimas só para
+      // constar no histórico de retiradas (ver criarOrdemMontagem). Esse
+      // helper identifica esses registros pelo nome, para que o relatório de
+      // Matéria-Prima/Insumos & Componentes não liste produtos Injetados —
+      // eles já têm seu próprio controle de estoque em Produtos Injetados.
+      function isMateriaProdutoInjetado(materiaId) {
+        if (!materiaId) return false
+        const nomeNormalizado = normalizeMateriaName(materiaLabel(materiaId))
+        return db.produtosSemiacabados.some(
+          (p) => normalizeMateriaName(p.nome) === nomeNormalizado
+        )
       }
       function getFornecedoresUnicos() {
         const grupos = []
@@ -5846,7 +5972,7 @@
           toast('Preencha fornecedor, material e quantidade.')
           return
         }
-        const materiaId = resolveMateriaId(materiaNome)
+        const materiaId = resolveMateriaId(materiaNome, fornecedorNome)
         db.pedidosCompra.push({
           id: uid(),
           fornecedorId: fornecedorNome,
@@ -5909,7 +6035,7 @@
           return
         }
         p.fornecedorId = fornecedorNome
-        p.materiaId = resolveMateriaId(materiaNome)
+        p.materiaId = resolveMateriaId(materiaNome, fornecedorNome)
         p.quantidade = quantidade
         p.valor = valor || 0
         save()
@@ -6101,6 +6227,8 @@
       }
 
       /* ============================= PRODUÇÃO ============================= */
+      // Ordens de Produção (injeção): consumo de matéria-prima, entrega do
+      // produtor e entrada dos produtos injetados no estoque.
       function calcularConsumoMateriaPrima(produtoInjetado, quantidade) {
         if (!produtoInjetado) return null
         const materiaNome = String(produtoInjetado.mpUtilizadas || '').trim()
@@ -6126,16 +6254,18 @@
         descricao,
       }) {
         if (!materiaId || !quantidade || quantidade <= 0) return false
-        const jaRegistrada = (db.retiradasMateriaPrima || []).some((r) => {
-          if (origem && r.origem === origem && r.ordemId === ordemId)
-            return true
-          return (
+        // Considera "já registrada" apenas quando é o MESMO material na
+        // mesma ordem/origem — antes essa checagem ignorava o materiaId e
+        // bloqueava o 2º item em diante de uma ordem com vários itens
+        // (ex.: Montagem com composição de mais de uma peça), fazendo com
+        // que só o primeiro item da ordem fosse gravado no histórico de
+        // retiradas (o estoque era baixado certo, só o registro é que sumia).
+        const jaRegistrada = (db.retiradasMateriaPrima || []).some(
+          (r) =>
             r.materiaId === materiaId &&
-            Number(r.quantidade || 0) === Number(quantidade) &&
             r.origem === origem &&
             r.ordemId === ordemId
-          )
-        })
+        )
         if (jaRegistrada) return false
         db.retiradasMateriaPrima.push({
           id: uid(),
@@ -6340,6 +6470,8 @@
       }
 
       /* ============================= MONTAGEM ============================= */
+      // Ordens de Montagem: envio de produtos injetados para montadores
+      // terceiros e retorno como produto acabado em estoque.
       function previewBOM() {
         const modeloId = document.getElementById('om-modelo').value
         const modelo = db.modelosRelogio.find((m) => m.id === modeloId)
@@ -6507,6 +6639,7 @@
       }
 
       /* ============================= EXPEDIÇÃO ============================= */
+      // Saída/expedição de produtos acabados para clientes.
       let expedicaoItens = []
       function adicionarItemExpedicao() {
         const modeloId = document.getElementById('ex-modelo').value
@@ -6614,6 +6747,7 @@
       }
 
       /* ============================= ESTOQUES / RELATÓRIOS ============================= */
+      // Consolidação de estoques (matéria-prima, injetados, acabados) para relatórios.
       function terceirosPendentesRows(incluirData) {
         const abertas = db.ordensProducao.filter((o) => o.status === 'aberta')
         const colspan = incluirData ? 4 : 3
@@ -6627,6 +6761,7 @@
           .join('')
       }
       /* ============================= ESTOQUES ============================= */
+      // Telas de estoque por categoria, com navegação por sub-abas (subtabs).
       const estConfig = {
         materia: { label: 'Matéria-Prima & Componentes' },
         terceiros: { label: 'Produção em Terceiros (pendente)' },
@@ -6720,65 +6855,81 @@
         const movimentacoes = []
         ;(db.pedidosCompra || [])
           .filter((p) => p.status === 'entregue')
+          .filter((p) => !isMateriaProdutoInjetado(p.materiaId))
           .forEach((p) => {
             const nome = normalizeMateriaName(materiaLabel(p.materiaId))
             movimentacoes.push({
               nome,
+              materiaId: p.materiaId,
+              categoria: getMateriaCategoria(p.materiaId),
               quantidade: Number(p.quantidade || 0),
               dataHora: p.dataRecebimento || p.dataPedido,
               tipo: 'entrada',
             })
           })
-        ;(db.retiradasMateriaPrima || []).forEach((r) => {
-          const nome = normalizeMateriaName(materiaLabel(r.materiaId))
-          movimentacoes.push({
-            nome,
-            quantidade: -(Number(r.quantidade || 0) || 0),
-            dataHora: r.dataHora,
-            tipo: 'retirada',
+        ;(db.retiradasMateriaPrima || [])
+          .filter((r) => !isMateriaProdutoInjetado(r.materiaId))
+          .forEach((r) => {
+            const nome = normalizeMateriaName(materiaLabel(r.materiaId))
+            movimentacoes.push({
+              nome,
+              materiaId: r.materiaId,
+              categoria: getMateriaCategoria(r.materiaId),
+              quantidade: -(Number(r.quantidade || 0) || 0),
+              dataHora: r.dataHora,
+              tipo: 'retirada',
+            })
           })
-        })
-        const mRows = movimentacoes.length
-          ? (() => {
-              const agrupadas = new Map()
-              movimentacoes.forEach((item) => {
-                const entrada = agrupadas.get(item.nome) || {
-                  nome: item.nome,
-                  total: 0,
-                  linhas: [],
-                }
-                entrada.total = +(entrada.total + item.quantidade).toFixed(3)
-                entrada.linhas.push(item)
-                agrupadas.set(item.nome, entrada)
+        // Agrupa as movimentações por material e monta as linhas da tabela
+        // de saldos (matéria-prima + insumos/componentes, produtos
+        // Injetados já foram filtrados acima).
+        function renderMovimentacoesAgrupadasHTML(lista, mensagemVazia) {
+          if (!lista.length)
+            return `<tr class="empty-row"><td colspan="3">${mensagemVazia}</td></tr>`
+          const agrupadas = new Map()
+          lista.forEach((item) => {
+            const entrada = agrupadas.get(item.nome) || {
+              nome: item.nome,
+              materiaId: item.materiaId,
+              categoria: item.categoria,
+              total: 0,
+              linhas: [],
+            }
+            entrada.total = +(entrada.total + item.quantidade).toFixed(3)
+            entrada.linhas.push(item)
+            agrupadas.set(item.nome, entrada)
+          })
+          return [...agrupadas.values()]
+            .sort((a, b) =>
+              String(a.nome).localeCompare(String(b.nome), 'pt-BR', {
+                sensitivity: 'base',
               })
-              return [...agrupadas.values()]
-                .sort((a, b) =>
-                  String(a.nome).localeCompare(String(b.nome), 'pt-BR', {
-                    sensitivity: 'base',
-                  })
+            )
+            .map((row) => {
+              const linhasHtml = row.linhas
+                .sort(
+                  (a, b) =>
+                    new Date(b.dataHora || 0) - new Date(a.dataHora || 0)
                 )
-                .map((row) => {
-                  const linhasHtml = row.linhas
-                    .sort(
-                      (a, b) =>
-                        new Date(b.dataHora || 0) - new Date(a.dataHora || 0)
-                    )
-                    .map((item) => {
-                      const valor = item.quantidade
-                      const valorText = `${valor < 0 ? '-' : ''}${Math.abs(valor)}`
-                      const classe =
-                        item.tipo === 'retirada'
-                          ? 'style="color:#dc2626 !important;"'
-                          : ''
-                      return `<tr ${item.tipo === 'retirada' ? 'style="background:rgba(220,38,38,0.08);"' : ''}><td>${row.nome}</td><td class="mono" ${classe}>${valorText}</td><td class="mono">${fmtDate(item.dataHora)}</td></tr>`
-                    })
-                    .join('')
-                  const saldoAtualizado = row.total
-                  return `${linhasHtml}<tr style="font-weight:700;background:var(--surface-2);"><td style="color:#2563EB !important;">Saldo atualizado — ${row.nome}</td><td class="mono" style="color:#2563EB !important;">${saldoAtualizado}</td><td class="mono" style="color:#2563EB !important;">—</td></tr>`
+                .map((item) => {
+                  const valor = item.quantidade
+                  const valorText = `${valor < 0 ? '-' : ''}${Math.abs(valor)}`
+                  const classe =
+                    item.tipo === 'retirada'
+                      ? 'style="color:#dc2626 !important;"'
+                      : ''
+                  return `<tr ${item.tipo === 'retirada' ? 'style="background:rgba(220,38,38,0.08);"' : ''}><td>${row.nome}</td><td class="mono" ${classe}>${valorText}</td><td class="mono">${fmtDate(item.dataHora)}</td></tr>`
                 })
                 .join('')
-            })()
-          : `<tr class="empty-row"><td colspan="3">Nenhuma movimentação registrada.</td></tr>`
+              const saldoAtualizado = row.total
+              return `${linhasHtml}<tr style="font-weight:700;background:var(--surface-2);"><td style="color:#2563EB !important;">Saldo atualizado — ${row.nome}</td><td class="mono" style="color:#2563EB !important;">${saldoAtualizado}</td><td class="mono" style="color:#2563EB !important;">—</td></tr>`
+            })
+            .join('')
+        }
+        const mRows = renderMovimentacoesAgrupadasHTML(
+          movimentacoes,
+          'Nenhuma movimentação registrada.'
+        )
         const sRows = db.produtosSemiacabados.length
           ? db.produtosSemiacabados
               .map(
@@ -6819,6 +6970,7 @@
       }
 
       /* ============================= DASHBOARD ============================= */
+      // Painel inicial com indicadores gerais do sistema.
       function renderDashboard() {
         document.getElementById('dash-date').textContent =
           new Date().toLocaleDateString('pt-BR', {
@@ -6895,6 +7047,7 @@
       }
 
       /* ============================= AJUSTES ============================= */
+      // Correções manuais de quantidade em estoque, com registro no histórico.
       function popularItensAjuste() {
         const tipo = document.getElementById('aj-tipo').value
         const arr =
@@ -6967,6 +7120,8 @@
       }
 
       /* ============================= CADASTROS ============================= */
+      // CRUD (criar/editar/excluir) dos cadastros base: fornecedores, produtores,
+      // montadores, clientes, produtos, modelos de relógio e funcionários.
       const cadConfig = {
         fornecedores: {
           label: 'Fornecedores Insumos & Componentes',
@@ -7361,16 +7516,23 @@
         }
       }
       function modeloCadastroHTML() {
+        // Lista única de "Peça / Material" para a Composição (BOM): junta
+        // matéria-prima e produtos injetados num só grupo, ordenado por
+        // nome, sem categorizar/rotular por tipo na tela. Os dois estoques
+        // continuam separados por baixo dos panos (getStock/addStock usam
+        // o tipo guardado no value da option) — só a exibição foi unificada.
+        // Só entram itens com saldo em estoque (> 0) no momento.
         const itemOptions = [
-          ...db.materiasPrimas.map(
-            (m) =>
-              `<option value="materiaPrima:${m.id}">[Matéria-Prima] ${m.nome}</option>`
-          ),
-          ...db.produtosSemiacabados.map(
-            (m) =>
-              `<option value="semiacabado:${m.id}">[Injetado] ${m.nome}</option>`
-          ),
-        ].join('')
+          ...db.materiasPrimas
+            .filter((m) => getStock('materiaPrima', m.id) > 0)
+            .map((m) => ({ tipo: 'materiaPrima', id: m.id, nome: m.nome })),
+          ...db.produtosSemiacabados
+            .filter((m) => getStock('semiacabado', m.id) > 0)
+            .map((m) => ({ tipo: 'semiacabado', id: m.id, nome: m.nome })),
+        ]
+          .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+          .map((p) => `<option value="${p.tipo}:${p.id}">${p.nome}</option>`)
+          .join('')
         const termo = (modeloBusca || '').toLowerCase().trim()
         const lista = db.modelosRelogio.filter((m) => {
           if (!termo) return true
@@ -7388,7 +7550,7 @@
       <div class="divider"></div>
       <h3>Composição (BOM)</h3>
       <div class="bom-row">
-        <div><label>Peça / Material</label><select id="bom-item">${itemOptions || '<option value="">Cadastre materiais/injetados primeiro</option>'}</select></div>
+        <div><label>Peça / Material</label><select id="bom-item">${itemOptions || '<option value="">Nenhuma matéria-prima/injetado com saldo em estoque</option>'}</select></div>
         <div><label>Qtd por unidade</label><input id="bom-qtd" type="number" min="0" step="0.01" value="1"></div>
         <div></div>
         <button class="btn-ghost btn-sm" onclick="addBomTemp()">+ Peça</button>
@@ -7563,6 +7725,8 @@
       function bindModeloEvents() {}
 
       /* ============================= IMPORTAÇÃO EXCEL (CATÁLOGO / CÓDIGO DE BARRAS) ============================= */
+      // Importa uma planilha Excel para atualizar o catálogo de modelos/código
+      // de barras em massa, com opção de desfazer a última importação.
       const IMPORT_SNAPSHOT_KEY = 'chronoflow_import_snapshot_v1'
       const IMPORT_HEADER_MAP = {
         'CODIGO REF': 'codigoRef',
@@ -8004,6 +8168,8 @@
       }
 
       /* ============================= MODAL ============================= */
+      // Utilitário genérico para abrir/fechar a caixa de diálogo (modal) usada
+      // por várias telas do sistema.
       function openModal(title, bodyHTML) {
         document.getElementById('modal-content').innerHTML = `
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;">
@@ -8023,6 +8189,8 @@
         })
 
       /* ============================= BACKUP / RESTORE ============================= */
+      // Exporta todo o banco (`db`) para um arquivo .json e permite restaurar,
+      // seja substituindo tudo ou mesclando com os dados atuais.
       const BACKUP_META_KEY = 'chronoflow_backup_meta_v1'
 
       function exportarBackup() {
@@ -8209,6 +8377,7 @@
       }
 
       /* ============================= RENDER ALL ============================= */
+      // Redesenha todas as telas — chamado após qualquer alteração de dados.
       function renderAll() {
         renderDashboard()
         renderCompras()
