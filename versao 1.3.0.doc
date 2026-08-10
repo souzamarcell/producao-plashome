@@ -1,0 +1,25 @@
+
+
+
+diff --git a/C:\sys\app\Projetos\Rodrigo\Plashome-Relogio\appSys-dados-v6\app\index.html b/C:\sys\app\Projetos\Rodrigo\Plashome-Relogio\appSys-dados-v6\app\index.html
+--- a/C:\sys\app\Projetos\Rodrigo\Plashome-Relogio\appSys-dados-v6\app\index.html
++++ b/C:\sys\app\Projetos\Rodrigo\Plashome-Relogio\appSys-dados-v6\app\index.html
+
+
+@@ -610,2 +610,11 @@
+       }
++      .report-balance-row td {
++        background: #173b59 !important;
++        border-top-color: #2b668e;
++        border-bottom: 1px solid #2b668e;
++        color: #dbeeff !important;
++      }
++      .report-balance-row:hover td {
++        background: #1d4b6f !important;
++      }
+
+@@ -6930,3 +6939,3 @@
+               const saldoAtualizado = row.total
+-              return `${linhasHtml}<tr style="font-weight:700;background:var(--surface-2);"><td style="color:#2563EB !important;">Saldo atualizado — ${row.nome}</td><td class="mono" style="color:#2563EB !important;">${saldoAtualizado}</td><td class="mono" style="color:#2563EB !important;">—</td></tr><tr class="report-group-spacer" aria-hidden="true"><td colspan="3"></td></tr>`
++              return `${linhasHtml}<tr class="report-balance-row" style="font-weight:700;"><td>Saldo atualizado — ${row.nome}</td><td class="mono">${saldoAtualizado}</td><td class="mono">—</td></tr><tr class="report-group-spacer" aria-hidden="true"><td colspan="3"></td></tr>`
+             })
