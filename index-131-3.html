@@ -602,7 +602,7 @@
         text-align: center;
         padding: 22px;
       }
-      .report-group-spacer td {
+      .report-group-spacer td { 
         height: 10px;
         padding: 0;
         border: 0;
@@ -897,7 +897,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.1</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.9</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -929,7 +929,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.1</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.9</span>
       </div>
       <button
         class="menu-btn"
@@ -1631,24 +1631,14 @@
           <h2>Histórico Completo de Movimentações</h2>
         </div>
         <div class="card">
-          <div
-            style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;"
-          >
-            <input
-              type="text"
-              id="rel-historico-busca"
-              placeholder="Buscar por tipo, descrição ou usuário..."
-              value=""
-              oninput="filtrarHistoricoRelatorio(this.value)"
-              style="flex:1;min-width:220px;margin-bottom:0;"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarHistoricoRelatorioPDF()"
-            >
-              📄 Exportar PDF
-            </button>
-          </div>
+          <input
+            type="text"
+            id="rel-historico-busca"
+            placeholder="Buscar por tipo, descrição ou usuário..."
+            value=""
+            oninput="filtrarHistoricoRelatorio(this.value)"
+            style="margin-bottom:10px;"
+          />
           <div class="table-wrap">
             <table>
               <thead>
@@ -6972,106 +6962,6 @@
         relHistoricoBusca = valor || ''
         renderEstoquesReports()
       }
-      function filtrarListaHistoricoRelatorio() {
-        const buscaHist = (relHistoricoBusca || '').toLowerCase().trim()
-        if (!buscaHist) return db.historico
-        return db.historico.filter((h) =>
-          [fmtDate(h.data), h.tipo, h.desc, h.usuario].some((v) =>
-            String(v || '')
-              .toLowerCase()
-              .includes(buscaHist)
-          )
-        )
-      }
-      function exportarHistoricoRelatorioPDF() {
-        const lista = filtrarListaHistoricoRelatorio()
-        if (!lista.length) {
-          toast('Nenhuma movimentação para exportar.')
-          return
-        }
-        const { jsPDF } = window.jspdf
-        const doc = new jsPDF()
-        const pageWidth = doc.internal.pageSize.getWidth()
-        const pageHeight = doc.internal.pageSize.getHeight()
-        const marginLeft = 14
-        const marginRight = 14
-        const colData = 14
-        const colTipo = 42
-        const colDesc = 72
-        const colUsuario = 162
-        const descWidth = colUsuario - colDesc - 4
-        const buscaAtiva = (relHistoricoBusca || '').trim()
-        const agora = new Date()
-        let y = 0
-
-        function desenharCabecalho() {
-          doc.setFontSize(16)
-          doc.setFont(undefined, 'bold')
-          doc.text('Histórico Completo de Movimentações', marginLeft, 18)
-          doc.setFontSize(10)
-          doc.setFont(undefined, 'normal')
-          doc.text('Gerado em: ' + fmtDate(agora.toISOString()), marginLeft, 25)
-          y = 31
-          if (buscaAtiva) {
-            doc.text('Filtro aplicado: "' + buscaAtiva + '"', marginLeft, y)
-            y += 6
-          }
-          doc.text(lista.length + ' registro(s) encontrado(s).', marginLeft, y)
-          y += 9
-          desenharCabecalhoTabela()
-        }
-        function desenharCabecalhoTabela() {
-          doc.setFontSize(9)
-          doc.setFont(undefined, 'bold')
-          doc.text('Data', colData, y)
-          doc.text('Tipo', colTipo, y)
-          doc.text('Descrição', colDesc, y)
-          doc.text('Usuário', colUsuario, y)
-          y += 2
-          doc.setLineWidth(0.2)
-          doc.line(marginLeft, y, pageWidth - marginRight, y)
-          y += 5
-          doc.setFont(undefined, 'normal')
-        }
-
-        desenharCabecalho()
-        lista.forEach((h) => {
-          const descLinhas = doc.splitTextToSize(
-            String(h.desc || ''),
-            descWidth
-          )
-          const tipoLinhas = doc.splitTextToSize(String(h.tipo || ''), 26)
-          const numLinhas = Math.max(descLinhas.length, tipoLinhas.length, 1)
-          const alturaLinha = numLinhas * 4.5 + 2
-          if (y + alturaLinha > pageHeight - 14) {
-            doc.addPage()
-            y = 20
-            desenharCabecalhoTabela()
-          }
-          doc.setFontSize(9)
-          doc.text(fmtDate(h.data), colData, y)
-          doc.text(tipoLinhas, colTipo, y)
-          doc.text(descLinhas, colDesc, y)
-          doc.text(String(h.usuario || '—'), colUsuario, y)
-          y += alturaLinha
-        })
-
-        const dataArquivo =
-          String(agora.getDate()).padStart(2, '0') +
-          '-' +
-          String(agora.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          agora.getFullYear()
-        const horaArquivo =
-          String(agora.getHours()).padStart(2, '0') +
-          '-' +
-          String(agora.getMinutes()).padStart(2, '0')
-        const sufixoFiltro = buscaAtiva
-          ? '_filtro-' + slugifyArquivo(buscaAtiva)
-          : ''
-        const nomeArquivo = `Historico_Movimentacoes${sufixoFiltro}_${dataArquivo}_${horaArquivo}.pdf`
-        doc.save(nomeArquivo)
-      }
       function renderEstoquesReports() {
         renderEstSubtabs()
         const mRowsEst = (() => {
@@ -7243,7 +7133,16 @@
           terceirosPendentesRows(true)
         document.getElementById('rel-terceiros').innerHTML =
           terceirosPendentesRows(false)
-        const histFiltrado = filtrarListaHistoricoRelatorio()
+        const buscaHist = (relHistoricoBusca || '').toLowerCase().trim()
+        const histFiltrado = buscaHist
+          ? db.historico.filter((h) =>
+              [fmtDate(h.data), h.tipo, h.desc, h.usuario].some((v) =>
+                String(v || '')
+                  .toLowerCase()
+                  .includes(buscaHist)
+              )
+            )
+          : db.historico
         const hist = histFiltrado.slice(0, 300)
         document.getElementById('rel-historico').innerHTML = hist.length
           ? hist
@@ -7252,7 +7151,7 @@
                   `<tr><td>${fmtDate(h.data)}</td><td><span class="badge badge-pending">${h.tipo}</span></td><td>${h.desc}</td><td>${h.usuario || '—'}</td></tr>`
               )
               .join('')
-          : `<tr class="empty-row"><td colspan="4">${relHistoricoBusca.trim() ? 'Nenhuma movimentação encontrada para a busca.' : 'Sem movimentações.'}</td></tr>`
+          : `<tr class="empty-row"><td colspan="4">${buscaHist ? 'Nenhuma movimentação encontrada para a busca.' : 'Sem movimentações.'}</td></tr>`
       }
 
       /* ============================= DASHBOARD ============================= */
