@@ -602,7 +602,7 @@
         text-align: center;
         padding: 22px;
       }
-      .report-group-spacer td {
+      .report-group-spacer td { 
         height: 10px;
         padding: 0;
         border: 0;
@@ -897,7 +897,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.1</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.2.9</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -929,7 +929,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.1</span>
+        <span>Controle de Produção · Relógios · Versão 1.2.9</span>
       </div>
       <button
         class="menu-btn"
@@ -7053,7 +7053,7 @@
         const buscaHist = (relHistoricoBusca || '').toLowerCase().trim()
         const histFiltrado = buscaHist
           ? db.historico.filter((h) =>
-              [fmtDate(h.data), h.tipo, h.desc, h.usuario].some((v) =>
+              [h.tipo, h.desc, h.usuario].some((v) =>
                 String(v || '')
                   .toLowerCase()
                   .includes(buscaHist)
