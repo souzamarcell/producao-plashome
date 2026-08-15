@@ -897,7 +897,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.2</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.3</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -929,7 +929,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.2</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.3</span>
       </div>
       <button
         class="menu-btn"
@@ -1098,7 +1098,7 @@
             placeholder="Buscar por tipo, descrição ou usuário..."
             value=""
             oninput="filtrarHistoricoDashboard(this.value)"
-            style="margin-bottom:10px;"
+            style="margin-bottom: 10px"
           />
           <div class="table-wrap">
             <table>
@@ -1191,7 +1191,7 @@
             placeholder="Buscar por fornecedor, material, status ou recebido por..."
             value=""
             oninput="filtrarHistoricoCompras(this.value)"
-            style="margin-bottom:10px;"
+            style="margin-bottom: 10px"
           />
           <div class="table-wrap">
             <table>
@@ -1405,7 +1405,7 @@
             placeholder="Buscar por cliente ou itens..."
             value=""
             oninput="filtrarHistoricoExpedicoes(this.value)"
-            style="margin-bottom:10px;"
+            style="margin-bottom: 10px"
           />
           <div class="table-wrap">
             <table>
@@ -1632,7 +1632,13 @@
         </div>
         <div class="card">
           <div
-            style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px;"
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
           >
             <input
               type="text"
@@ -1640,7 +1646,7 @@
               placeholder="Buscar por tipo, descrição ou usuário..."
               value=""
               oninput="filtrarHistoricoRelatorio(this.value)"
-              style="flex:1;min-width:220px;margin-bottom:0;"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
@@ -1705,7 +1711,7 @@
             placeholder="Buscar por estoque, item, motivo ou usuário..."
             value=""
             oninput="filtrarHistoricoAjustes(this.value)"
-            style="margin-bottom:10px;"
+            style="margin-bottom: 10px"
           />
           <div class="table-wrap">
             <table>
@@ -2629,6 +2635,7 @@
       const PRODUTOS_INICIAIS = [
         {
           codigo: 'PHR003-BCL',
+          codigo_v: '758',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-CLASSICO',
           unidade: 'PC',
@@ -2637,7 +2644,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2646,6 +2652,7 @@
         },
         {
           codigo: 'PHR003-BFR',
+          codigo_v: '760',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-FRUTAS',
           unidade: 'PC',
@@ -2654,7 +2661,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2663,6 +2669,7 @@
         },
         {
           codigo: 'PHR003-BLO',
+          codigo_v: '2016',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO LONDRES',
           unidade: 'PC',
@@ -2671,7 +2678,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2680,6 +2686,7 @@
         },
         {
           codigo: 'PHR003-BMO',
+          codigo_v: '762',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-MODERNO',
           unidade: 'PC',
@@ -2688,7 +2695,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2697,6 +2703,7 @@
         },
         {
           codigo: 'PHR003-BNT',
+          codigo_v: '763',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO NATUREZA',
           unidade: 'PC',
@@ -2705,7 +2712,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2714,6 +2720,7 @@
         },
         {
           codigo: 'PHR003-BPT',
+          codigo_v: '770',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-PRETO',
           unidade: 'PC',
@@ -2722,7 +2729,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2731,6 +2737,7 @@
         },
         {
           codigo: 'PHR003-PCL',
+          codigo_v: '789',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-CLASSICO',
           unidade: 'PC',
@@ -2739,7 +2746,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2748,6 +2754,7 @@
         },
         {
           codigo: 'PHR003-PFR',
+          codigo_v: '791',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-FRUTA',
           unidade: 'PC',
@@ -2756,7 +2763,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2765,6 +2771,7 @@
         },
         {
           codigo: 'PHR003-PLO',
+          codigo_v: '2015',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO LONDRES',
           unidade: 'PC',
@@ -2773,7 +2780,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2782,6 +2788,7 @@
         },
         {
           codigo: 'PHR003-PMO',
+          codigo_v: '793',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-MODERNO',
           unidade: 'PC',
@@ -2790,7 +2797,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2799,6 +2805,7 @@
         },
         {
           codigo: 'PHR003-PNT',
+          codigo_v: '794',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO NATUREZA',
           unidade: 'PC',
@@ -2807,7 +2814,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2816,6 +2822,7 @@
         },
         {
           codigo: 'PHR003-PPT',
+          codigo_v: '801',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-PRETO',
           unidade: 'PC',
@@ -2824,7 +2831,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2833,6 +2839,7 @@
         },
         {
           codigo: 'PHR007-BFR',
+          codigo_v: '2078',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-FRUTA',
           unidade: 'PC',
@@ -2841,7 +2848,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2850,6 +2856,7 @@
         },
         {
           codigo: 'PHR007-BGA',
+          codigo_v: '2079',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-GALINHA',
           unidade: 'PC',
@@ -2858,7 +2865,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2867,6 +2873,7 @@
         },
         {
           codigo: 'PHR007-BCA',
+          codigo_v: '2072',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CAFÉ',
           unidade: 'PC',
@@ -2875,7 +2882,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2884,6 +2890,7 @@
         },
         {
           codigo: 'PHR007-BCL',
+          codigo_v: '2314',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CLASSICO',
           unidade: 'PC',
@@ -2892,7 +2899,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2901,6 +2907,7 @@
         },
         {
           codigo: 'PHR007-BCO',
+          codigo_v: '2068',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CORUJA',
           unidade: 'PC',
@@ -2909,7 +2916,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2918,6 +2924,7 @@
         },
         {
           codigo: 'PHR007-BPE',
+          codigo_v: '2071',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-PET (DOG)',
           unidade: 'PC',
@@ -2926,7 +2933,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2935,6 +2941,7 @@
         },
         {
           codigo: 'PHR007-PCA',
+          codigo_v: '2106',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CAFÉ',
           unidade: 'PC',
@@ -2943,7 +2950,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2952,6 +2958,7 @@
         },
         {
           codigo: 'PHR007-PCL',
+          codigo_v: '2316',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CLASSICO',
           unidade: 'PC',
@@ -2960,7 +2967,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2969,6 +2975,7 @@
         },
         {
           codigo: 'PHR007-PCO',
+          codigo_v: '2102',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CORUJA',
           unidade: 'PC',
@@ -2977,7 +2984,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -2986,6 +2992,7 @@
         },
         {
           codigo: 'PHR007-PFR',
+          codigo_v: '2112',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-FRUTA',
           unidade: 'PC',
@@ -2994,7 +3001,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3003,6 +3009,7 @@
         },
         {
           codigo: 'PHR007-PGA',
+          codigo_v: '2113',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-GALINHA',
           unidade: 'PC',
@@ -3011,7 +3018,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3020,6 +3026,7 @@
         },
         {
           codigo: 'PHR007-PPE',
+          codigo_v: '2105',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-PET (DOG)',
           unidade: 'PC',
@@ -3028,7 +3035,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3037,6 +3043,7 @@
         },
         {
           codigo: 'PHR007-PBS',
+          codigo_v: '3546',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELOGIO OITAVADO GAMA PRETO BASILICA',
           unidade: 'PC',
@@ -3045,7 +3052,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3054,6 +3060,7 @@
         },
         {
           codigo: 'PHR007-BBS',
+          codigo_v: '3547',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
           unidade: 'PC',
@@ -3062,7 +3069,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3071,6 +3077,7 @@
         },
         {
           codigo: 'PHR003-PSC',
+          codigo_v: '3530',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO REDONDO OMEGA SANTA CEIA',
           unidade: 'PC',
@@ -3079,7 +3086,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3088,6 +3094,7 @@
         },
         {
           codigo: 'PHR003-PBS',
+          codigo_v: '3544',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO REDONDO OMEGA PRETO BASILICA',
           unidade: 'PC',
@@ -3096,7 +3103,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3105,6 +3111,7 @@
         },
         {
           codigo: 'PHR003-PJS',
+          codigo_v: '795',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-JESUS CRISTO',
           unidade: 'PC',
@@ -3113,7 +3120,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3122,6 +3128,7 @@
         },
         {
           codigo: 'PHR003-PNS',
+          codigo_v: '796',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO REDONDO OMEGA PRETO NOSSA SENHORA',
           unidade: 'PC',
@@ -3130,7 +3137,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3139,6 +3145,7 @@
         },
         {
           codigo: 'PHR007-BBS',
+          codigo_v: '3547',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
           unidade: 'PC',
@@ -3147,7 +3154,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3156,6 +3162,7 @@
         },
         {
           codigo: 'PHR007-BFI',
+          codigo_v: '2080',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA BRANCO-FILIPENSES',
           unidade: 'PC',
@@ -3164,7 +3171,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3173,6 +3179,7 @@
         },
         {
           codigo: 'PHR007-BSA',
+          codigo_v: '2074',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA BRANCO-SALMOS',
           unidade: 'PC',
@@ -3181,7 +3188,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3190,6 +3196,7 @@
         },
         {
           codigo: 'PHR007-PSA',
+          codigo_v: '2108',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA PRETO-SALMOS',
           unidade: 'PC',
@@ -3198,7 +3205,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 13,45',
           peso: '0,300 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3207,6 +3213,7 @@
         },
         {
           codigo: 'PHR002-PCL',
+          codigo_v: '743',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO CLÁSSICO',
           unidade: 'PC',
@@ -3215,7 +3222,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3224,6 +3230,7 @@
         },
         {
           codigo: 'PHR002-PFR',
+          codigo_v: '745',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO FRUTA',
           unidade: 'PC',
@@ -3232,7 +3239,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3241,6 +3247,7 @@
         },
         {
           codigo: 'PHR002-PMO',
+          codigo_v: '747',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO MODERNO',
           unidade: 'PC',
@@ -3249,7 +3256,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3258,6 +3264,7 @@
         },
         {
           codigo: 'PHR002-PPT',
+          codigo_v: '755',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO PRETO',
           unidade: 'PC',
@@ -3266,7 +3273,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3275,6 +3281,7 @@
         },
         {
           codigo: 'PHR002-PPA',
+          codigo_v: '2020',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO - PARIS',
           unidade: 'PC',
@@ -3283,7 +3290,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3292,6 +3298,7 @@
         },
         {
           codigo: 'PHR002-PVA',
+          codigo_v: '746',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO VACA',
           unidade: 'PC',
@@ -3300,7 +3307,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3309,6 +3315,7 @@
         },
         {
           codigo: 'PHR002-BPT',
+          codigo_v: '725',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA BRANCO  PRETO',
           unidade: 'PC',
@@ -3317,7 +3324,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3326,6 +3332,7 @@
         },
         {
           codigo: 'PHR002-BVD',
+          codigo_v: '726',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA BRANCO  VERDE',
           unidade: 'PC',
@@ -3334,7 +3341,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3343,6 +3349,7 @@
         },
         {
           codigo: 'PHR008-PCA',
+          codigo_v: '1979',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - CAFÉ',
           unidade: 'PC',
@@ -3351,7 +3358,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3360,6 +3366,7 @@
         },
         {
           codigo: 'PHR008-PCR',
+          codigo_v: '2000',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - CARRO ANTIGO',
           unidade: 'PC',
@@ -3368,7 +3375,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3377,6 +3383,7 @@
         },
         {
           codigo: 'PHR008-PRK',
+          codigo_v: '2002',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - ROCK',
           unidade: 'PC',
@@ -3385,7 +3392,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3394,6 +3400,7 @@
         },
         {
           codigo: 'PHR008-PRO',
+          codigo_v: '1977',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - ROUTE 66',
           unidade: 'PC',
@@ -3402,7 +3409,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3411,6 +3417,7 @@
         },
         {
           codigo: 'PHR008-PLA',
+          codigo_v: '1986',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - LAMBORGHINI',
           unidade: 'PC',
@@ -3419,7 +3426,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3428,6 +3434,7 @@
         },
         {
           codigo: 'PHR008-PCP',
+          codigo_v: '1998',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA PRETO - CARRO PRETO',
           unidade: 'PC',
@@ -3436,7 +3443,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3445,6 +3451,7 @@
         },
         {
           codigo: 'PHR008-BPR',
+          codigo_v: '1983',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA BRANCO - PRAIA',
           unidade: 'PC',
@@ -3453,7 +3460,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3462,6 +3468,7 @@
         },
         {
           codigo: 'PHR008-BFR',
+          codigo_v: '1981',
           modelo: 'PHR008 BETHA QUADRADO',
           produto: 'RELÓGIO BETA BRANCO - FRUTA',
           unidade: 'PC',
@@ -3470,7 +3477,6 @@
           medidas: '28 X 26 X 5 CM',
           valor: 'R$ 18,33',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3479,6 +3485,7 @@
         },
         {
           codigo: 'PHR062-CZ',
+          codigo_v: '3538',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO CINZA',
           unidade: 'PC',
@@ -3487,7 +3494,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3496,6 +3502,7 @@
         },
         {
           codigo: 'PHR062-VD',
+          codigo_v: '3539',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO VERDE',
           unidade: 'PC',
@@ -3504,7 +3511,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3513,6 +3519,7 @@
         },
         {
           codigo: 'PHR062-AZ',
+          codigo_v: '3540',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO AZUL',
           unidade: 'PC',
@@ -3521,7 +3528,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3530,6 +3536,7 @@
         },
         {
           codigo: 'PHR062-RS',
+          codigo_v: '3541',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO ROSA',
           unidade: 'PC',
@@ -3538,7 +3545,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3547,6 +3553,7 @@
         },
         {
           codigo: 'PHR062-BR',
+          codigo_v: '3542',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO BRANCO',
           unidade: 'PC',
@@ -3555,7 +3562,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3564,6 +3570,7 @@
         },
         {
           codigo: 'PHR062-PT',
+          codigo_v: '3534',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO PRETO',
           unidade: 'PC',
@@ -3572,7 +3579,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 16,42',
           peso: '0,220 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3581,6 +3587,7 @@
         },
         {
           codigo: 'PHR063-PGT',
+          codigo_v: '3568',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO PRETO',
           unidade: 'PC',
@@ -3589,7 +3596,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3598,6 +3604,7 @@
         },
         {
           codigo: 'PHR063-BGT',
+          codigo_v: '3569',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO BRANCO',
           unidade: 'PC',
@@ -3606,7 +3613,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3615,6 +3621,7 @@
         },
         {
           codigo: 'PHR063-PJS',
+          codigo_v: '3570',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS PRETO',
           unidade: 'PC',
@@ -3623,7 +3630,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3632,6 +3638,7 @@
         },
         {
           codigo: 'PHR063-BJS',
+          codigo_v: '3571',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS BRANCO',
           unidade: 'PC',
@@ -3640,7 +3647,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3649,6 +3655,7 @@
         },
         {
           codigo: 'PHR063-BR',
+          codigo_v: '3572',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO BRANCO',
           unidade: 'PC',
@@ -3657,7 +3664,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3666,6 +3672,7 @@
         },
         {
           codigo: 'PHR063-PT',
+          codigo_v: '3566',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO PRETO',
           unidade: 'PC',
@@ -3674,7 +3681,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3683,6 +3689,7 @@
         },
         {
           codigo: 'PHR063-1',
+          codigo_v: '3573',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO SORTIDOS',
           unidade: 'CX',
@@ -3691,7 +3698,6 @@
           medidas: '24 X 24 X 4 CM',
           valor: 'R$ 17,95',
           peso: '0,250 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3700,6 +3706,7 @@
         },
         {
           codigo: 'PHR001-AM',
+          codigo_v: '711',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER AMARELO',
           unidade: 'PC',
@@ -3708,7 +3715,6 @@
           medidas: '30 X 30 X 5 CM',
           valor: 'R$ 16,51',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3717,6 +3723,7 @@
         },
         {
           codigo: 'PHR001-AZ',
+          codigo_v: '712',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER AZUL',
           unidade: 'PC',
@@ -3725,7 +3732,6 @@
           medidas: '30 X 30 X 5 CM',
           valor: 'R$ 16,51',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3734,6 +3740,7 @@
         },
         {
           codigo: 'PHR001-BR',
+          codigo_v: '706',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER BRANCO',
           unidade: 'PC',
@@ -3742,7 +3749,6 @@
           medidas: '30 X 30 X 5 CM',
           valor: 'R$ 16,51',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3751,6 +3757,7 @@
         },
         {
           codigo: 'PHR001-PT',
+          codigo_v: '707',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER PRETO',
           unidade: 'PC',
@@ -3759,7 +3766,6 @@
           medidas: '30 X 30 X 5 CM',
           valor: 'R$ 16,51',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3768,6 +3774,7 @@
         },
         {
           codigo: 'PHR001-VM',
+          codigo_v: '709',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER VERMELHO',
           unidade: 'PC',
@@ -3776,7 +3783,6 @@
           medidas: '30 X 30 X 5 CM',
           valor: 'R$ 16,51',
           peso: '0,420 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3853,6 +3859,7 @@
         },
         {
           codigo: 'PHR064-PCL',
+          codigo_v: '3593',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO CLASSICO PRETO 28 CM',
           unidade: 'PC',
@@ -3861,7 +3868,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3870,6 +3876,7 @@
         },
         {
           codigo: 'PHR064-BCL',
+          codigo_v: '3594',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO CLASSICO BRANCO 28 CM',
           unidade: 'PC',
@@ -3878,7 +3885,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3887,6 +3893,7 @@
         },
         {
           codigo: 'PHR064-PVD',
+          codigo_v: '3595',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO PRETO VERDE 28 CM',
           unidade: 'PC',
@@ -3895,7 +3902,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3904,6 +3910,7 @@
         },
         {
           codigo: 'PHR064-BVD',
+          codigo_v: '3596',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO VERDE 28 CM',
           unidade: 'PC',
@@ -3912,7 +3919,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3921,6 +3927,7 @@
         },
         {
           codigo: 'PHR064-BMA',
+          codigo_v: '3597',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO MADEIRA 28 CM',
           unidade: 'PC',
@@ -3929,7 +3936,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3938,6 +3944,7 @@
         },
         {
           codigo: 'PHR064-PMA',
+          codigo_v: '3598',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO MADEIRA 28 CM',
           unidade: 'PC',
@@ -3946,7 +3953,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3955,6 +3961,7 @@
         },
         {
           codigo: 'PHR064-PPT',
+          codigo_v: '3599',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO PRETO 28 CM',
           unidade: 'PC',
@@ -3963,7 +3970,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -3972,6 +3978,7 @@
         },
         {
           codigo: 'PHR064-BPT',
+          codigo_v: '3600',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO PRETO 28 CM',
           unidade: 'PC',
@@ -3980,7 +3987,6 @@
           medidas: '28 X 28 X 5 CM',
           valor: 'R$ 18,95',
           peso: '0,350 GR',
-          codigo_v: '',
           mecanismo: '1',
           pvc: '0,015',
           embalagem_individual: '1',
@@ -5833,6 +5839,7 @@
             lista.push({
               id: uid(),
               codigo: item.codigo,
+              codigo_v: item.codigo_v,
               modelo: item.modelo,
               produto: item.produto,
               unidade: item.unidade,
@@ -5841,6 +5848,11 @@
               medidas: item.medidas,
               valor: item.valor,
               peso: item.peso,
+              mecanismo: item.mecanismo,
+              pvc: item.pvc,
+              embalagem_individual: item.embalagem_individual,
+              solapa: item.solapa,
+              caixa_coletiva: item.caixa_coletiva,
             })
           }
         })
@@ -5943,7 +5955,12 @@
       // ainda não possuem, mantendo a sequência numérica por prefixo.
       function migrarCodigosCadastro(data) {
         const alvos = [
-          { key: 'fornecedores', campo: 'codigo', prefixo: 'FIC-F', digitos: 3 },
+          {
+            key: 'fornecedores',
+            campo: 'codigo',
+            prefixo: 'FIC-F',
+            digitos: 3,
+          },
           {
             key: 'fornecedoresMateriaPrima',
             campo: 'codigo',
@@ -5951,7 +5968,12 @@
             digitos: 3,
           },
           { key: 'produtores', campo: 'codigo', prefixo: 'FIN-F', digitos: 3 },
-          { key: 'funcionarios', campo: 'codigo', prefixo: 'FUNC-', digitos: 3 },
+          {
+            key: 'funcionarios',
+            campo: 'codigo',
+            prefixo: 'FUNC-',
+            digitos: 3,
+          },
         ]
         alvos.forEach(({ key, campo, prefixo, digitos }) => {
           const lista = Array.isArray(data[key]) ? data[key] : []
@@ -6417,11 +6439,17 @@
           .toLowerCase()
         if (!nome) return null
         const produtor = db.produtores.find(
-          (p) => String(p.fornecedor || '').trim().toLowerCase() === nome
+          (p) =>
+            String(p.fornecedor || '')
+              .trim()
+              .toLowerCase() === nome
         )
         if (produtor) return produtor.tipoMateria || null
         const montador = db.montadores.find(
-          (m) => String(m.fornecedor || '').trim().toLowerCase() === nome
+          (m) =>
+            String(m.fornecedor || '')
+              .trim()
+              .toLowerCase() === nome
         )
         if (montador) return montador.tipoMateria || null
         return null
@@ -6444,7 +6472,8 @@
           id: uid(),
           nome: normalized || String(value).trim(),
           unidade: '—',
-          categoria: tipoMateria === 'INJEÇÃO' ? 'materiaPrima' : 'insumoComponente',
+          categoria:
+            tipoMateria === 'INJEÇÃO' ? 'materiaPrima' : 'insumoComponente',
         }
         db.materiasPrimas.push(created)
         return created.id
@@ -6756,17 +6785,17 @@
               )
             )
           : all
-        document.getElementById('tbl-pc-historico').innerHTML = allFiltrado
-          .length
-          ? allFiltrado
-              .map(
-                (p) => `
+        document.getElementById('tbl-pc-historico').innerHTML =
+          allFiltrado.length
+            ? allFiltrado
+                .map(
+                  (p) => `
     <tr><td class="serial">${p.id}</td><td>${fornecedorLabel(p.fornecedorId)}</td><td>${materiaLabel(p.materiaId)}</td>
     <td class="mono">${p.quantidade}</td><td class="mono">${fmtMoney(p.valor || 0)}</td><td class="mono">${fmtMoney((p.quantidade || 0) * (p.valor || 0))}</td><td><span class="badge ${p.status === 'entregue' ? 'badge-done' : 'badge-pending'}">${p.status}</span></td>
     <td>${p.recebidoPor || '—'}</td><td>${fmtDate(p.dataPedido)}</td><td>${fmtDate(p.dataRecebimento)}</td></tr>`
-              )
-              .join('')
-          : `<tr class="empty-row"><td colspan="7">${buscaPcHist ? 'Nenhum pedido encontrado para a busca.' : 'Nenhum pedido registrado.'}</td></tr>`
+                )
+                .join('')
+            : `<tr class="empty-row"><td colspan="7">${buscaPcHist ? 'Nenhum pedido encontrado para a busca.' : 'Nenhum pedido registrado.'}</td></tr>`
       }
       const ICON_PDF = `<svg width="18" height="18" viewBox="0 0 384 512" style="vertical-align:middle" xmlns="http://www.w3.org/2000/svg">
         <path fill="#e2e5e7" d="M369.9 97.9L286 14C282 10 276.5 8 271 8H88c-13.3 0-24 10.7-24 24v456c0 13.3 10.7 24 24 24h272c13.3 0 24-10.7 24-24V113.9c0-5.5-2-10.9-6.1-16z"/>
@@ -7420,16 +7449,19 @@
                     barcodeModelo(i.modeloId)
                 )
                 .join(', ')
-              return [e.id, nome(db.clientes, e.clienteId), itensTxt, fmtDate(e.data)].some(
-                (v) =>
-                  String(v || '')
-                    .toLowerCase()
-                    .includes(buscaExp)
+              return [
+                e.id,
+                nome(db.clientes, e.clienteId),
+                itensTxt,
+                fmtDate(e.data),
+              ].some((v) =>
+                String(v || '')
+                  .toLowerCase()
+                  .includes(buscaExp)
               )
             })
           : all
-        document.getElementById('tbl-expedicoes').innerHTML = allFiltrado
-          .length
+        document.getElementById('tbl-expedicoes').innerHTML = allFiltrado.length
           ? allFiltrado
               .map(
                 (e) => `
@@ -8064,6 +8096,7 @@
           label: 'Produtos',
           fields: [
             { key: 'codigo', label: 'CODIGO', type: 'text', required: true },
+            { key: 'codigo_v', label: 'CÓDIGO VD', type: 'text' },
             { key: 'modelo', label: 'Modelo', type: 'text' },
             { key: 'produto', label: 'Produto', type: 'text' },
             { key: 'unidade', label: 'Unidade', type: 'text' },
@@ -8072,7 +8105,6 @@
             { key: 'medidas', label: 'MEDIDAS', type: 'text' },
             { key: 'valor', label: 'VALOR', type: 'text' },
             { key: 'peso', label: 'PESO', type: 'text' },
-            { key: 'codigo_v', label: 'CÓDIGO V', type: 'text' },
             { key: 'mecanismo', label: 'MECANISMO', type: 'text' },
             { key: 'pvc', label: 'PVC', type: 'text' },
             {
