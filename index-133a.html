@@ -564,59 +564,6 @@
         margin-top: 12px;
         flex-wrap: wrap;
       }
-      /* ===== Botão "Subir Venda" ===== */
-      .btn-upload-venda {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0;
-        padding: 9px 16px 9px 12px;
-        border-radius: 9px;
-        cursor: pointer;
-        white-space: nowrap;
-        background: linear-gradient(
-          160deg,
-          var(--brass-bright),
-          var(--brass) 65%,
-          var(--brass-dim)
-        );
-        color: #1a1510;
-        font-family: 'Inter';
-        font-weight: 700;
-        font-size: 13px;
-        letter-spacing: 0.01em;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        transition:
-          transform 0.12s,
-          box-shadow 0.12s,
-          filter 0.12s;
-      }
-      .btn-upload-venda:hover {
-        filter: brightness(1.08);
-        box-shadow:
-          var(--shadow-sm),
-          0 0 0 3px rgba(201, 161, 93, 0.18);
-      }
-      .btn-upload-venda:active {
-        transform: scale(0.97);
-        filter: brightness(0.97);
-      }
-      .btn-upload-venda .icon-upload-circle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: rgba(26, 21, 16, 0.14);
-        flex: none;
-      }
-      .btn-upload-venda .icon-upload-circle svg {
-        width: 13px;
-        height: 13px;
-        display: block;
-      }
 
       /* ===== Tables ===== */
       .table-wrap {
@@ -950,7 +897,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.4</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.3</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -982,7 +929,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.4</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.3</span>
       </div>
       <button
         class="menu-btn"
@@ -1452,26 +1399,18 @@
 
         <div class="section-title">
           <h2>Histórico de Expedições</h2>
-          <label class="btn-upload-venda" title="Importar pedido de venda (.txt)">
-            <span class="icon-upload-circle">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 16V4M12 4L7 9M12 4L17 9"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M5 16V18.5C5 19.8807 6.11929 21 7.5 21H16.5C17.8807 21 19 19.8807 19 18.5V16"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            Subir Venda
+          <label
+            class="btn-primary"
+            style="
+              cursor: pointer;
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              white-space: nowrap;
+              margin: 0;
+            "
+          >
+            📤 Subir Venda
             <input
               type="file"
               id="import-venda-input"

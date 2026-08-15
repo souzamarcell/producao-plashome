@@ -564,59 +564,6 @@
         margin-top: 12px;
         flex-wrap: wrap;
       }
-      /* ===== Botão "Subir Venda" ===== */
-      .btn-upload-venda {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0;
-        padding: 9px 16px 9px 12px;
-        border-radius: 9px;
-        cursor: pointer;
-        white-space: nowrap;
-        background: linear-gradient(
-          160deg,
-          var(--brass-bright),
-          var(--brass) 65%,
-          var(--brass-dim)
-        );
-        color: #1a1510;
-        font-family: 'Inter';
-        font-weight: 700;
-        font-size: 13px;
-        letter-spacing: 0.01em;
-        box-shadow: var(--shadow-sm);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        transition:
-          transform 0.12s,
-          box-shadow 0.12s,
-          filter 0.12s;
-      }
-      .btn-upload-venda:hover {
-        filter: brightness(1.08);
-        box-shadow:
-          var(--shadow-sm),
-          0 0 0 3px rgba(201, 161, 93, 0.18);
-      }
-      .btn-upload-venda:active {
-        transform: scale(0.97);
-        filter: brightness(0.97);
-      }
-      .btn-upload-venda .icon-upload-circle {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        background: rgba(26, 21, 16, 0.14);
-        flex: none;
-      }
-      .btn-upload-venda .icon-upload-circle svg {
-        width: 13px;
-        height: 13px;
-        display: block;
-      }
 
       /* ===== Tables ===== */
       .table-wrap {
@@ -950,7 +897,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.4</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.3</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -982,7 +929,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.4</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.3</span>
       </div>
       <button
         class="menu-btn"
@@ -1450,42 +1397,12 @@
           </div>
         </div>
 
-        <div class="section-title">
-          <h2>Histórico de Expedições</h2>
-          <label class="btn-upload-venda" title="Importar pedido de venda (.txt)">
-            <span class="icon-upload-circle">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 16V4M12 4L7 9M12 4L17 9"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M5 16V18.5C5 19.8807 6.11929 21 7.5 21H16.5C17.8807 21 19 19.8807 19 18.5V16"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            Subir Venda
-            <input
-              type="file"
-              id="import-venda-input"
-              accept=".txt"
-              style="display: none"
-              onchange="handleImportVendaTxt(event)"
-            />
-          </label>
-        </div>
+        <div class="section-title"><h2>Histórico de Expedições</h2></div>
         <div class="card">
           <input
             type="text"
             id="expedicoes-busca"
-            placeholder="Buscar por pedido, cliente, CNPJ ou produto..."
+            placeholder="Buscar por cliente ou itens..."
             value=""
             oninput="filtrarHistoricoExpedicoes(this.value)"
             style="margin-bottom: 10px"
@@ -1494,15 +1411,10 @@
             <table>
               <thead>
                 <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Itens</th>
                   <th>Data</th>
-                  <th>Pedido</th>
-                  <th>CNPJ</th>
-                  <th>Nome Cliente</th>
-                  <th>Código VD</th>
-                  <th>Produto</th>
-                  <th>Qtde</th>
-                  <th>R$ Líq</th>
-                  <th>R$ Total</th>
                 </tr>
               </thead>
               <tbody id="tbl-expedicoes"></tbody>
@@ -7515,40 +7427,6 @@
         expedicoesBusca = valor || ''
         renderExpedicao()
       }
-      // Converte uma expedição (nova, importada de venda) numa lista de linhas de tabela,
-      // uma linha por item vendido no pedido. Expedições antigas (manuais, por modelo)
-      // caem no formato legado — exibidas com os campos disponíveis.
-      function linhasExpedicao(e) {
-        if (Array.isArray(e.itensVenda)) {
-          return e.itensVenda.map((it) => ({
-            data: fmtDataPedido(e.dataPedido) || fmtDate(e.data),
-            pedido: e.pedido || '—',
-            cnpj: e.cnpj || '—',
-            clienteNome: e.clienteNome || '—',
-            codigoVd: it.codigoVd || '—',
-            produto: it.produto || '—',
-            qtde: it.qtde != null ? it.qtde : '—',
-            rLiq: it.rLiq != null ? fmtMoney(it.rLiq) : '—',
-            rTotal: it.rTotal != null ? fmtMoney(it.rTotal) : '—',
-          }))
-        }
-        // Formato legado (expedição manual por modelo, sem dados de venda importados)
-        return (e.itens || []).map((i) => ({
-          data: fmtDate(e.data),
-          pedido: '—',
-          cnpj: '—',
-          clienteNome: nome(db.clientes, e.clienteId),
-          codigoVd: '—',
-          produto:
-            nomeModeloComCodigo(i.modeloId) +
-            ' (' +
-            barcodeModelo(i.modeloId) +
-            ')',
-          qtde: i.quantidade,
-          rLiq: '—',
-          rTotal: '—',
-        }))
-      }
       function renderExpedicao() {
         document.getElementById('ex-cliente').innerHTML = optList(db.clientes)
         document.getElementById('ex-modelo').innerHTML = optListModelos(
@@ -7559,182 +7437,39 @@
           (a, b) => new Date(b.data) - new Date(a.data)
         )
         const buscaExp = (expedicoesBusca || '').toLowerCase().trim()
-        let linhas = []
-        all.forEach((e) => linhas.push(...linhasExpedicao(e)))
-        const linhasFiltradas = buscaExp
-          ? linhas.filter((l) =>
-              [
-                l.data,
-                l.pedido,
-                l.cnpj,
-                l.clienteNome,
-                l.codigoVd,
-                l.produto,
+        const allFiltrado = buscaExp
+          ? all.filter((e) => {
+              const itensTxt = e.itens
+                .map(
+                  (i) =>
+                    i.quantidade +
+                    'x ' +
+                    nomeModeloComCodigo(i.modeloId) +
+                    ' ' +
+                    barcodeModelo(i.modeloId)
+                )
+                .join(', ')
+              return [
+                e.id,
+                nome(db.clientes, e.clienteId),
+                itensTxt,
+                fmtDate(e.data),
               ].some((v) =>
                 String(v || '')
                   .toLowerCase()
                   .includes(buscaExp)
               )
-            )
-          : linhas
-        document.getElementById('tbl-expedicoes').innerHTML =
-          linhasFiltradas.length
-            ? linhasFiltradas
-                .map(
-                  (l) => `
-    <tr><td class="mono">${l.data}</td><td class="serial">${escapeHtml(String(l.pedido))}</td><td class="mono">${escapeHtml(String(l.cnpj))}</td>
-    <td>${escapeHtml(String(l.clienteNome))}</td><td class="serial">${escapeHtml(String(l.codigoVd))}</td><td>${escapeHtml(String(l.produto))}</td>
-    <td class="mono">${escapeHtml(String(l.qtde))}</td><td class="mono">${escapeHtml(String(l.rLiq))}</td><td class="mono">${escapeHtml(String(l.rTotal))}</td></tr>`
-                )
-                .join('')
-            : `<tr class="empty-row"><td colspan="9">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
-      }
-
-      /* ------- Importação de venda a partir de arquivo .txt (Pedido) ------- */
-      // Formata uma data no padrão dd/mm/aa (como vem no .txt do pedido) para dd/mm/aaaa.
-      function fmtDataPedido(d) {
-        if (!d) return ''
-        const m = String(d)
-          .trim()
-          .match(/^(\d{2})\/(\d{2})\/(\d{2,4})$/)
-        if (!m) return d
-        let [, dd, mm, aa] = m
-        if (aa.length === 2) aa = (aa >= '70' ? '19' : '20') + aa
-        return `${dd}/${mm}/${aa}`
-      }
-      // Lê o conteúdo textual de um Pedido (.txt) e extrai cabeçalho + itens vendidos.
-      function parseVendaTxt(texto) {
-        const linhas = texto.split(/\r?\n/)
-        let pedido = null,
-          dataPedido = null,
-          cnpj = null,
-          clienteNome = null
-        const itensBrutos = []
-        linhas.forEach((linhaOriginal) => {
-          const linha = linhaOriginal.trim()
-          if (!pedido) {
-            const mPedido = linha.match(
-              /PEDIDO\s*:?\s*(\d+)\s+(\d{2}\/\d{2}\/\d{2,4})/i
-            )
-            if (mPedido) {
-              pedido = mPedido[1].replace(/^0+(?=\d)/, '')
-              dataPedido = mPedido[2]
-              return
-            }
-          }
-          if (!clienteNome || !cnpj) {
-            const mCliente = linha.match(
-              /CLIENTE\.*\s*:\s*\d+\s*-\s*(.*?)\s*CPF\/CNPJ\s*:\s*([\d./-]+)/i
-            )
-            if (mCliente) {
-              clienteNome = mCliente[1].trim()
-              cnpj = mCliente[2].trim()
-              return
-            }
-          }
-          // Linha de item: CODIGO ...DESCRICAO... UN QTDE R$UN R$DESC R$LIQ R$TOTAL
-          const mItem = linha.match(
-            /^(\d{4,6})\s+.+?\s+([A-Za-z]{1,4})\s+(\d+)\s+([\d.,]+)\s+([\d.,]+)\s+([\d.,]+)\s+([\d.,]+)\s*$/
-          )
-          if (mItem) {
-            itensBrutos.push({
-              codigoVd: mItem[1].replace(/^0+(?=\d)/, ''),
-              qtde: parseFloat(mItem[3].replace(',', '.')),
-              rLiq: parseFloat(mItem[6].replace('.', '').replace(',', '.')),
-              rTotal: parseFloat(mItem[7].replace('.', '').replace(',', '.')),
             })
-          }
-        })
-        const itens = itensBrutos.map((it) => {
-          const prod = (db.produtos || []).find(
-            (p) => String(p.codigo_v || '').replace(/^0+(?=\d)/, '') === it.codigoVd
-          )
-          return {
-            codigoVd: it.codigoVd,
-            produto: prod ? prod.produto : '⚠ não encontrado no cadastro',
-            qtde: it.qtde,
-            rLiq: it.rLiq,
-            rTotal: it.rTotal,
-          }
-        })
-        return { pedido, dataPedido, cnpj, clienteNome, itens }
-      }
-      let vendaImportadaPendente = null
-      function handleImportVendaTxt(event) {
-        const file = event.target.files && event.target.files[0]
-        if (!file) return
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          const texto = String(e.target.result || '')
-          const venda = parseVendaTxt(texto)
-          event.target.value = ''
-          if (!venda.pedido || !venda.itens.length) {
-            toast(
-              'Não foi possível ler o pedido neste arquivo. Confira o formato do .txt.'
-            )
-            return
-          }
-          vendaImportadaPendente = venda
-          abrirPreviaVendaImportada(venda)
-        }
-        reader.onerror = () => toast('Erro ao ler o arquivo.')
-        reader.readAsText(file, 'latin1')
-      }
-      function abrirPreviaVendaImportada(venda) {
-        const naoEncontrados = venda.itens.filter((i) =>
-          i.produto.includes('não encontrado')
-        ).length
-        const body = `
-    <p class="hint">Pedido <b>${escapeHtml(venda.pedido)}</b> — ${escapeHtml(fmtDataPedido(venda.dataPedido))}</p>
-    <p><b>Cliente:</b> ${escapeHtml(venda.clienteNome || '—')}</p>
-    <p><b>CNPJ:</b> ${escapeHtml(venda.cnpj || '—')}</p>
-    ${naoEncontrados ? `<p class="hint" style="color:var(--danger,#c0392b)">⚠ ${naoEncontrados} item(ns) com Código VD não encontrado em Cadastros &gt; Produtos.</p>` : ''}
-    <div class="table-wrap" style="margin-top:10px">
-      <table>
-        <thead><tr><th>Código VD</th><th>Produto</th><th>Qtde</th><th>R$ Líq</th><th>R$ Total</th></tr></thead>
-        <tbody>
-          ${venda.itens
-            .map(
-              (i) => `
-      <tr><td class="serial">${escapeHtml(i.codigoVd)}</td><td>${escapeHtml(i.produto)}</td><td class="mono">${i.qtde}</td><td class="mono">${fmtMoney(i.rLiq)}</td><td class="mono">${fmtMoney(i.rTotal)}</td></tr>`
-            )
-            .join('')}
-        </tbody>
-      </table>
-    </div>
-    <div class="btn-row" style="margin-top:14px">
-      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn-primary" onclick="confirmarImportacaoVenda()">Confirmar e Adicionar ao Histórico</button>
-    </div>`
-        openModal('Prévia da Venda Importada', body)
-      }
-      function confirmarImportacaoVenda() {
-        const venda = vendaImportadaPendente
-        if (!venda) return
-        db.expedicoes.push({
-          id: uid(),
-          pedido: venda.pedido,
-          dataPedido: venda.dataPedido,
-          cnpj: venda.cnpj,
-          clienteNome: venda.clienteNome,
-          itensVenda: venda.itens,
-          data: nowISO(),
-        })
-        addHistorico(
-          'Expedição',
-          'Venda importada — Pedido ' +
-            venda.pedido +
-            ' (' +
-            venda.clienteNome +
-            '): ' +
-            venda.itens.length +
-            ' item(ns)'
-        )
-        vendaImportadaPendente = null
-        save()
-        closeModal()
-        toast('Venda importada e adicionada ao Histórico de Expedições.')
-        renderAll()
+          : all
+        document.getElementById('tbl-expedicoes').innerHTML = allFiltrado.length
+          ? allFiltrado
+              .map(
+                (e) => `
+    <tr><td class="serial">${e.id}</td><td>${nome(db.clientes, e.clienteId)}</td>
+    <td>${e.itens.map((i) => i.quantidade + 'x ' + nomeModeloComCodigo(i.modeloId) + ' <span class="hint">(' + barcodeModelo(i.modeloId) + ')</span>').join(', ')}</td><td>${fmtDate(e.data)}</td></tr>`
+              )
+              .join('')
+          : `<tr class="empty-row"><td colspan="4">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
       }
 
       /* ============================= ESTOQUES / RELATÓRIOS ============================= */
