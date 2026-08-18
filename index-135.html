@@ -564,6 +564,59 @@
         margin-top: 12px;
         flex-wrap: wrap;
       }
+      /* ===== Botão "Subir Venda" ===== */
+      .btn-upload-venda {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 9px 16px 9px 12px;
+        border-radius: 9px;
+        cursor: pointer;
+        white-space: nowrap;
+        background: linear-gradient(
+          160deg,
+          var(--brass-bright),
+          var(--brass) 65%,
+          var(--brass-dim)
+        );
+        color: #1a1510;
+        font-family: 'Inter';
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.01em;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s,
+          filter 0.12s;
+      }
+      .btn-upload-venda:hover {
+        filter: brightness(1.08);
+        box-shadow:
+          var(--shadow-sm),
+          0 0 0 3px rgba(201, 161, 93, 0.18);
+      }
+      .btn-upload-venda:active {
+        transform: scale(0.97);
+        filter: brightness(0.97);
+      }
+      .btn-upload-venda .icon-upload-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(26, 21, 16, 0.14);
+        flex: none;
+      }
+      .btn-upload-venda .icon-upload-circle svg {
+        width: 13px;
+        height: 13px;
+        display: block;
+      }
 
       /* ===== Tables ===== */
       .table-wrap {
@@ -897,7 +950,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.3</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.5</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -929,7 +982,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.3</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.5</span>
       </div>
       <button
         class="menu-btn"
@@ -1092,14 +1145,30 @@
 
         <div class="section-title"><h2>Últimas Movimentações</h2></div>
         <div class="card">
-          <input
-            type="text"
-            id="dash-historico-busca"
-            placeholder="Buscar por tipo, descrição ou usuário..."
-            value=""
-            oninput="filtrarHistoricoDashboard(this.value)"
-            style="margin-bottom: 10px"
-          />
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="dash-historico-busca"
+              placeholder="Buscar por tipo, descrição ou usuário..."
+              value=""
+              oninput="filtrarHistoricoDashboard(this.value)"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('dash-historico','Últimas Movimentações','Ultimas_Movimentacoes','dash-historico-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1164,6 +1233,30 @@
 
         <div class="section-title"><h2>Pedidos Pendentes</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="pc-pendentes-busca"
+              placeholder="Buscar por fornecedor, material ou data..."
+              value=""
+              oninput="buscaGenericaTabela(this,'tbl-pc-pendentes')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-pc-pendentes','Pedidos Pendentes','Pedidos_Pendentes','pc-pendentes-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1185,14 +1278,30 @@
 
         <div class="section-title"><h2>Histórico de Compras</h2></div>
         <div class="card">
-          <input
-            type="text"
-            id="pc-historico-busca"
-            placeholder="Buscar por fornecedor, material, status ou recebido por..."
-            value=""
-            oninput="filtrarHistoricoCompras(this.value)"
-            style="margin-bottom: 10px"
-          />
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="pc-historico-busca"
+              placeholder="Buscar por fornecedor, material, status ou recebido por..."
+              value=""
+              oninput="filtrarHistoricoCompras(this.value)"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-pc-historico','Histórico de Compras','Historico_Compras','pc-historico-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1246,6 +1355,30 @@
 
         <div class="section-title"><h2>Ordens Abertas</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="op-abertas-busca"
+              placeholder="Buscar por produtor ou produto..."
+              value=""
+              oninput="buscaGenericaTabela(this,'tbl-op-abertas')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-op-abertas','Ordens Abertas — Produção','Producao_Ordens_Abertas','op-abertas-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1266,6 +1399,30 @@
 
         <div class="section-title"><h2>Ordens Concluídas</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="op-concluidas-busca"
+              placeholder="Buscar por produtor ou produto..."
+              value=""
+              oninput="buscaGenericaTabela(this,'tbl-op-concluidas')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-op-concluidas','Ordens Concluídas — Produção','Producao_Ordens_Concluidas','op-concluidas-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1317,6 +1474,30 @@
           <h2>Ordens Enviadas (aguardando retorno)</h2>
         </div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="om-abertas-busca"
+              placeholder="Buscar por montador, modelo ou cód. barras..."
+              value=""
+              oninput="buscaGenericaTabela(this,'tbl-om-abertas')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-om-abertas','Ordens Enviadas (aguardando retorno) — Montagem','Montagem_Ordens_Enviadas','om-abertas-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1338,6 +1519,30 @@
 
         <div class="section-title"><h2>Ordens Concluídas</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="om-concluidas-busca"
+              placeholder="Buscar por montador, modelo ou cód. barras..."
+              value=""
+              oninput="buscaGenericaTabela(this,'tbl-om-concluidas')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-om-concluidas','Ordens Concluídas — Montagem','Montagem_Ordens_Concluidas','om-concluidas-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1397,12 +1602,50 @@
           </div>
         </div>
 
-        <div class="section-title"><h2>Histórico de Expedições</h2></div>
+        <div class="section-title">
+          <h2>Histórico de Expedições</h2>
+          <div style="display: flex; align-items: center; gap: 10px">
+          <button
+            class="btn-ghost btn-sm"
+            onclick="exportarTabelaGenericaPDF('tbl-expedicoes','Histórico de Expedições','Historico_Expedicoes','expedicoes-busca')"
+          >
+            📄 Exportar PDF
+          </button>
+          <label class="btn-upload-venda" title="Importar pedido de venda (.txt)">
+            <span class="icon-upload-circle">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 16V4M12 4L7 9M12 4L17 9"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M5 16V18.5C5 19.8807 6.11929 21 7.5 21H16.5C17.8807 21 19 19.8807 19 18.5V16"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            Subir Venda
+            <input
+              type="file"
+              id="import-venda-input"
+              accept=".txt"
+              style="display: none"
+              onchange="handleImportVendaTxt(event)"
+            />
+          </label>
+          </div>
+        </div>
         <div class="card">
           <input
             type="text"
             id="expedicoes-busca"
-            placeholder="Buscar por cliente ou itens..."
+            placeholder="Buscar por pedido, cliente, CNPJ ou produto..."
             value=""
             oninput="filtrarHistoricoExpedicoes(this.value)"
             style="margin-bottom: 10px"
@@ -1411,10 +1654,15 @@
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Cliente</th>
-                  <th>Itens</th>
                   <th>Data</th>
+                  <th>Pedido</th>
+                  <th>CNPJ</th>
+                  <th>Nome Cliente</th>
+                  <th>Código VD</th>
+                  <th>Produto</th>
+                  <th>Qtde</th>
+                  <th>R$ Líq</th>
+                  <th>R$ Total</th>
                 </tr>
               </thead>
               <tbody id="tbl-expedicoes"></tbody>
@@ -1432,6 +1680,30 @@
             <h2>Matéria-Prima & Componentes (Entradas)</h2>
           </div>
           <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="est-materia-busca"
+                placeholder="Buscar por material..."
+                value=""
+                oninput="buscaGenericaTabela(this,'tbl-est-materia')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarTabelaGenericaPDF('tbl-est-materia','Matéria-Prima & Componentes (Entradas)','Estoque_Materia_Prima_Entradas','est-materia-busca')"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1454,6 +1726,30 @@
             <h2>Produção em Terceiros (pendente)</h2>
           </div>
           <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="est-terceiros-busca"
+                placeholder="Buscar por produto ou produtor..."
+                value=""
+                oninput="buscaGenericaTabela(this,'tbl-est-terceiros')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarTabelaGenericaPDF('tbl-est-terceiros','Produção em Terceiros (pendente)','Estoque_Producao_Terceiros_Pendente','est-terceiros-busca')"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1473,6 +1769,30 @@
         <div class="est-subview" id="est-sub-semi">
           <div class="section-title"><h2>Produtos Injetados</h2></div>
           <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="est-semi-busca"
+                placeholder="Buscar por produto..."
+                value=""
+                oninput="buscaGenericaTabela(this,'tbl-est-semi')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarTabelaGenericaPDF('tbl-est-semi','Produtos Injetados','Estoque_Produtos_Injetados','est-semi-busca')"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1491,6 +1811,30 @@
         <div class="est-subview" id="est-sub-acabados">
           <div class="section-title"><h2>Produtos Acabados</h2></div>
           <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="est-acabados-busca"
+                placeholder="Buscar por modelo ou cód. barras..."
+                value=""
+                oninput="buscaGenericaTabela(this,'tbl-est-acabados')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarTabelaGenericaPDF('tbl-est-acabados','Produtos Acabados','Estoque_Produtos_Acabados','est-acabados-busca')"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
@@ -1563,6 +1907,30 @@
           <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
         </div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="rel-materia-busca"
+              placeholder="Buscar por material..."
+              value=""
+              oninput="buscaGenericaTabela(this,'rel-materia')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('rel-materia','Estoque de Matéria-Prima e Insumos & Componentes (Saldos)','Estoque_Materia_Prima_Saldos','rel-materia-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1581,6 +1949,30 @@
           <h2>Estoque em Produção (terceiros)</h2>
         </div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="rel-terceiros-busca"
+              placeholder="Buscar por produto ou produtor..."
+              value=""
+              oninput="buscaGenericaTabela(this,'rel-terceiros')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('rel-terceiros','Estoque em Produção (terceiros)','Estoque_Producao_Terceiros','rel-terceiros-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1597,6 +1989,30 @@
 
         <div class="section-title"><h2>Estoque de Injetados</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="rel-semi-busca"
+              placeholder="Buscar por produto..."
+              value=""
+              oninput="buscaGenericaTabela(this,'rel-semi')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('rel-semi','Estoque de Injetados','Estoque_Injetados','rel-semi-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1613,6 +2029,30 @@
 
         <div class="section-title"><h2>Estoque de Produtos Acabados</h2></div>
         <div class="card">
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="rel-acabados-busca"
+              placeholder="Buscar por modelo ou cód. barras..."
+              value=""
+              oninput="buscaGenericaTabela(this,'rel-acabados')"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('rel-acabados','Estoque de Produtos Acabados','Estoque_Produtos_Acabados','rel-acabados-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -1705,14 +2145,30 @@
 
         <div class="section-title"><h2>Histórico de Ajustes</h2></div>
         <div class="card">
-          <input
-            type="text"
-            id="ajustes-busca"
-            placeholder="Buscar por estoque, item, motivo ou usuário..."
-            value=""
-            oninput="filtrarHistoricoAjustes(this.value)"
-            style="margin-bottom: 10px"
-          />
+          <div
+            style="
+              display: flex;
+              gap: 10px;
+              align-items: center;
+              flex-wrap: wrap;
+              margin-bottom: 10px;
+            "
+          >
+            <input
+              type="text"
+              id="ajustes-busca"
+              placeholder="Buscar por estoque, item, motivo ou usuário..."
+              value=""
+              oninput="filtrarHistoricoAjustes(this.value)"
+              style="flex: 1; min-width: 220px; margin-bottom: 0"
+            />
+            <button
+              class="btn-ghost btn-sm"
+              onclick="exportarTabelaGenericaPDF('tbl-ajustes','Histórico de Ajustes','Historico_Ajustes','ajustes-busca')"
+            >
+              📄 Exportar PDF
+            </button>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -6796,6 +7252,7 @@
                 )
                 .join('')
             : `<tr class="empty-row"><td colspan="7">${buscaPcHist ? 'Nenhum pedido encontrado para a busca.' : 'Nenhum pedido registrado.'}</td></tr>`
+        reaplicarBuscasGenericas()
       }
       const ICON_PDF = `<svg width="18" height="18" viewBox="0 0 384 512" style="vertical-align:middle" xmlns="http://www.w3.org/2000/svg">
         <path fill="#e2e5e7" d="M369.9 97.9L286 14C282 10 276.5 8 271 8H88c-13.3 0-24 10.7-24 24v456c0 13.3 10.7 24 24 24h272c13.3 0 24-10.7 24-24V113.9c0-5.5-2-10.9-6.1-16z"/>
@@ -6858,6 +7315,189 @@
 
         doc.save(nomeArquivo)
       }
+
+      /* ================= BUSCA & EXPORTAÇÃO PDF (GENÉRICO) ================= */
+      // Utilitários genéricos usados pelas telas de listagem (Estoque,
+      // Relatórios, Compras, Produção, Montagem, Expedição, Cadastros etc.)
+      // para adicionar campo de busca e botão "Exportar PDF" sem duplicar
+      // lógica de filtro/exportação em cada tela.
+      const buscaGenericaRegistro = []
+      function registrarBuscaGenerica(inputId, tbodyId) {
+        if (!buscaGenericaRegistro.some((r) => r.inputId === inputId)) {
+          buscaGenericaRegistro.push({ inputId, tbodyId })
+        }
+      }
+      function buscaGenericaTabela(inputEl, tbodyId) {
+        const termo = (inputEl.value || '').toLowerCase().trim()
+        const tbody = document.getElementById(tbodyId)
+        if (!tbody) return
+        Array.from(tbody.rows).forEach((tr) => {
+          if (tr.classList.contains('empty-row')) return
+          const texto = tr.textContent.toLowerCase()
+          tr.style.display = !termo || texto.includes(termo) ? '' : 'none'
+        })
+      }
+      // Reaplica todas as buscas genéricas registradas — necessário porque o
+      // innerHTML das tabelas é recriado a cada render, perdendo o estado das
+      // linhas ocultadas pela busca.
+      function reaplicarBuscasGenericas() {
+        buscaGenericaRegistro.forEach(({ inputId, tbodyId }) => {
+          const input = document.getElementById(inputId)
+          if (input) buscaGenericaTabela(input, tbodyId)
+        })
+      }
+      function coletarDadosTabelaPDF(tbodyId) {
+        const tbody = document.getElementById(tbodyId)
+        if (!tbody) return { headers: [], rows: [] }
+        const table = tbody.closest('table')
+        const headersOriginais = Array.from(
+          table.querySelectorAll('thead th')
+        ).map((th) => th.textContent.trim())
+        // Ignora colunas de ações (sem cabeçalho de texto ou rotuladas "Ações").
+        const colunasIgnoradas = headersOriginais.reduce((arr, h, i) => {
+          if (!h || /^a[çc][ãa]o(es)?$/i.test(h)) arr.push(i)
+          return arr
+        }, [])
+        const headers = headersOriginais.filter(
+          (_, i) => !colunasIgnoradas.includes(i)
+        )
+        const rows = Array.from(tbody.rows)
+          .filter(
+            (tr) =>
+              tr.style.display !== 'none' && !tr.classList.contains('empty-row')
+          )
+          .map((tr) =>
+            Array.from(tr.cells)
+              .filter((_, i) => !colunasIgnoradas.includes(i))
+              .map((td) => td.textContent.trim())
+          )
+        return { headers, rows }
+      }
+      function gerarPDFGenericoTabela(
+        titulo,
+        headers,
+        rows,
+        prefixoArquivo,
+        filtro
+      ) {
+        if (!rows.length) {
+          toast('Nenhum registro para exportar.')
+          return
+        }
+        const { jsPDF } = window.jspdf
+        const numCols = Math.max(headers.length, 1)
+        const orientacao = numCols > 5 ? 'l' : 'p'
+        const doc = new jsPDF({
+          orientation: orientacao,
+          unit: 'mm',
+          format: 'a4',
+        })
+        const pageWidth = doc.internal.pageSize.getWidth()
+        const pageHeight = doc.internal.pageSize.getHeight()
+        const marginLeft = 10
+        const marginRight = 10
+        const usableWidth = pageWidth - marginLeft - marginRight
+        const colWidth = usableWidth / numCols
+        const fontSize =
+          numCols <= 4
+            ? 9
+            : numCols <= 6
+              ? 8
+              : numCols <= 9
+                ? 7
+                : numCols <= 13
+                  ? 6
+                  : 5.5
+        const agora = new Date()
+        let y = 0
+        function desenharCabecalhoTabela() {
+          doc.setFontSize(fontSize)
+          doc.setFont(undefined, 'bold')
+          headers.forEach((h, i) => {
+            const linhas = doc.splitTextToSize(h, colWidth - 2)
+            doc.text(linhas, marginLeft + i * colWidth, y)
+          })
+          y += Math.max(fontSize * 0.42 + 3, 5)
+          doc.setLineWidth(0.2)
+          doc.line(marginLeft, y - 2, pageWidth - marginRight, y - 2)
+          doc.setFont(undefined, 'normal')
+        }
+        function desenharCabecalho() {
+          doc.setFontSize(14)
+          doc.setFont(undefined, 'bold')
+          doc.text(titulo, marginLeft, 15)
+          doc.setFontSize(9)
+          doc.setFont(undefined, 'normal')
+          doc.text('Gerado em: ' + fmtDate(agora.toISOString()), marginLeft, 21)
+          y = 26
+          if (filtro) {
+            doc.text('Filtro aplicado: "' + filtro + '"', marginLeft, y)
+            y += 6
+          }
+          doc.text(rows.length + ' registro(s) encontrado(s).', marginLeft, y)
+          y += 7
+          desenharCabecalhoTabela()
+        }
+        desenharCabecalho()
+        rows.forEach((linha) => {
+          const celulasLinhas = linha.map((celula) =>
+            doc.splitTextToSize(String(celula ?? '') || '—', colWidth - 2)
+          )
+          const numLinhas = Math.max(...celulasLinhas.map((l) => l.length), 1)
+          const alturaLinha = numLinhas * (fontSize * 0.42) + 2
+          if (y + alturaLinha > pageHeight - 12) {
+            doc.addPage()
+            y = 16
+            desenharCabecalhoTabela()
+          }
+          doc.setFontSize(fontSize)
+          celulasLinhas.forEach((cl, i) => {
+            doc.text(cl, marginLeft + i * colWidth, y)
+          })
+          y += alturaLinha
+        })
+        const dataArquivo =
+          String(agora.getDate()).padStart(2, '0') +
+          '-' +
+          String(agora.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          agora.getFullYear()
+        const horaArquivo =
+          String(agora.getHours()).padStart(2, '0') +
+          '-' +
+          String(agora.getMinutes()).padStart(2, '0')
+        const sufixoFiltro = filtro ? '_filtro-' + slugifyArquivo(filtro) : ''
+        doc.save(
+          `${prefixoArquivo}${sufixoFiltro}_${dataArquivo}_${horaArquivo}.pdf`
+        )
+      }
+      function exportarTabelaGenericaPDF(
+        tbodyId,
+        titulo,
+        prefixoArquivo,
+        inputBuscaId
+      ) {
+        const { headers, rows } = coletarDadosTabelaPDF(tbodyId)
+        const filtro = inputBuscaId
+          ? (document.getElementById(inputBuscaId)?.value || '').trim()
+          : ''
+        gerarPDFGenericoTabela(titulo, headers, rows, prefixoArquivo, filtro)
+      }
+      // Registro das buscas genéricas (input de busca -> tbody da tabela).
+      registrarBuscaGenerica('expedicoes-busca', 'tbl-expedicoes')
+      registrarBuscaGenerica('rel-materia-busca', 'rel-materia')
+      registrarBuscaGenerica('rel-terceiros-busca', 'rel-terceiros')
+      registrarBuscaGenerica('rel-semi-busca', 'rel-semi')
+      registrarBuscaGenerica('rel-acabados-busca', 'rel-acabados')
+      registrarBuscaGenerica('est-materia-busca', 'tbl-est-materia')
+      registrarBuscaGenerica('est-terceiros-busca', 'tbl-est-terceiros')
+      registrarBuscaGenerica('est-semi-busca', 'tbl-est-semi')
+      registrarBuscaGenerica('est-acabados-busca', 'tbl-est-acabados')
+      registrarBuscaGenerica('om-abertas-busca', 'tbl-om-abertas')
+      registrarBuscaGenerica('om-concluidas-busca', 'tbl-om-concluidas')
+      registrarBuscaGenerica('op-abertas-busca', 'tbl-op-abertas')
+      registrarBuscaGenerica('op-concluidas-busca', 'tbl-op-concluidas')
+      registrarBuscaGenerica('pc-pendentes-busca', 'tbl-pc-pendentes')
 
       /* ============================= PRODUÇÃO ============================= */
       // Ordens de Produção (injeção): consumo de matéria-prima, entrega do
@@ -7100,6 +7740,7 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="5">Nenhuma ordem concluída ainda.</td></tr>`
+        reaplicarBuscasGenericas()
       }
 
       /* ============================= MONTAGEM ============================= */
@@ -7332,6 +7973,7 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhuma ordem concluída ainda.</td></tr>`
+        reaplicarBuscasGenericas()
       }
 
       /* ============================= EXPEDIÇÃO ============================= */
@@ -7427,6 +8069,40 @@
         expedicoesBusca = valor || ''
         renderExpedicao()
       }
+      // Converte uma expedição (nova, importada de venda) numa lista de linhas de tabela,
+      // uma linha por item vendido no pedido. Expedições antigas (manuais, por modelo)
+      // caem no formato legado — exibidas com os campos disponíveis.
+      function linhasExpedicao(e) {
+        if (Array.isArray(e.itensVenda)) {
+          return e.itensVenda.map((it) => ({
+            data: fmtDataPedido(e.dataPedido) || fmtDate(e.data),
+            pedido: e.pedido || '—',
+            cnpj: e.cnpj || '—',
+            clienteNome: e.clienteNome || '—',
+            codigoVd: it.codigoVd || '—',
+            produto: it.produto || '—',
+            qtde: it.qtde != null ? it.qtde : '—',
+            rLiq: it.rLiq != null ? fmtMoney(it.rLiq) : '—',
+            rTotal: it.rTotal != null ? fmtMoney(it.rTotal) : '—',
+          }))
+        }
+        // Formato legado (expedição manual por modelo, sem dados de venda importados)
+        return (e.itens || []).map((i) => ({
+          data: fmtDate(e.data),
+          pedido: '—',
+          cnpj: '—',
+          clienteNome: nome(db.clientes, e.clienteId),
+          codigoVd: '—',
+          produto:
+            nomeModeloComCodigo(i.modeloId) +
+            ' (' +
+            barcodeModelo(i.modeloId) +
+            ')',
+          qtde: i.quantidade,
+          rLiq: '—',
+          rTotal: '—',
+        }))
+      }
       function renderExpedicao() {
         document.getElementById('ex-cliente').innerHTML = optList(db.clientes)
         document.getElementById('ex-modelo').innerHTML = optListModelos(
@@ -7437,39 +8113,183 @@
           (a, b) => new Date(b.data) - new Date(a.data)
         )
         const buscaExp = (expedicoesBusca || '').toLowerCase().trim()
-        const allFiltrado = buscaExp
-          ? all.filter((e) => {
-              const itensTxt = e.itens
-                .map(
-                  (i) =>
-                    i.quantidade +
-                    'x ' +
-                    nomeModeloComCodigo(i.modeloId) +
-                    ' ' +
-                    barcodeModelo(i.modeloId)
-                )
-                .join(', ')
-              return [
-                e.id,
-                nome(db.clientes, e.clienteId),
-                itensTxt,
-                fmtDate(e.data),
+        let linhas = []
+        all.forEach((e) => linhas.push(...linhasExpedicao(e)))
+        const linhasFiltradas = buscaExp
+          ? linhas.filter((l) =>
+              [
+                l.data,
+                l.pedido,
+                l.cnpj,
+                l.clienteNome,
+                l.codigoVd,
+                l.produto,
               ].some((v) =>
                 String(v || '')
                   .toLowerCase()
                   .includes(buscaExp)
               )
+            )
+          : linhas
+        document.getElementById('tbl-expedicoes').innerHTML =
+          linhasFiltradas.length
+            ? linhasFiltradas
+                .map(
+                  (l) => `
+    <tr><td class="mono">${l.data}</td><td class="serial">${escapeHtml(String(l.pedido))}</td><td class="mono">${escapeHtml(String(l.cnpj))}</td>
+    <td>${escapeHtml(String(l.clienteNome))}</td><td class="serial">${escapeHtml(String(l.codigoVd))}</td><td>${escapeHtml(String(l.produto))}</td>
+    <td class="mono">${escapeHtml(String(l.qtde))}</td><td class="mono">${escapeHtml(String(l.rLiq))}</td><td class="mono">${escapeHtml(String(l.rTotal))}</td></tr>`
+                )
+                .join('')
+            : `<tr class="empty-row"><td colspan="9">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
+        reaplicarBuscasGenericas()
+      }
+
+      /* ------- Importação de venda a partir de arquivo .txt (Pedido) ------- */
+      // Formata uma data no padrão dd/mm/aa (como vem no .txt do pedido) para dd/mm/aaaa.
+      function fmtDataPedido(d) {
+        if (!d) return ''
+        const m = String(d)
+          .trim()
+          .match(/^(\d{2})\/(\d{2})\/(\d{2,4})$/)
+        if (!m) return d
+        let [, dd, mm, aa] = m
+        if (aa.length === 2) aa = (aa >= '70' ? '19' : '20') + aa
+        return `${dd}/${mm}/${aa}`
+      }
+      // Lê o conteúdo textual de um Pedido (.txt) e extrai cabeçalho + itens vendidos.
+      function parseVendaTxt(texto) {
+        const linhas = texto.split(/\r?\n/)
+        let pedido = null,
+          dataPedido = null,
+          cnpj = null,
+          clienteNome = null
+        const itensBrutos = []
+        linhas.forEach((linhaOriginal) => {
+          const linha = linhaOriginal.trim()
+          if (!pedido) {
+            const mPedido = linha.match(
+              /PEDIDO\s*:?\s*(\d+)\s+(\d{2}\/\d{2}\/\d{2,4})/i
+            )
+            if (mPedido) {
+              pedido = mPedido[1].replace(/^0+(?=\d)/, '')
+              dataPedido = mPedido[2]
+              return
+            }
+          }
+          if (!clienteNome || !cnpj) {
+            const mCliente = linha.match(
+              /CLIENTE\.*\s*:\s*\d+\s*-\s*(.*?)\s*CPF\/CNPJ\s*:\s*([\d./-]+)/i
+            )
+            if (mCliente) {
+              clienteNome = mCliente[1].trim()
+              cnpj = mCliente[2].trim()
+              return
+            }
+          }
+          // Linha de item: CODIGO ...DESCRICAO... UN QTDE R$UN R$DESC R$LIQ R$TOTAL
+          const mItem = linha.match(
+            /^(\d{4,6})\s+.+?\s+([A-Za-z]{1,4})\s+(\d+)\s+([\d.,]+)\s+([\d.,]+)\s+([\d.,]+)\s+([\d.,]+)\s*$/
+          )
+          if (mItem) {
+            itensBrutos.push({
+              codigoVd: mItem[1].replace(/^0+(?=\d)/, ''),
+              qtde: parseFloat(mItem[3].replace(',', '.')),
+              rLiq: parseFloat(mItem[6].replace('.', '').replace(',', '.')),
+              rTotal: parseFloat(mItem[7].replace('.', '').replace(',', '.')),
             })
-          : all
-        document.getElementById('tbl-expedicoes').innerHTML = allFiltrado.length
-          ? allFiltrado
-              .map(
-                (e) => `
-    <tr><td class="serial">${e.id}</td><td>${nome(db.clientes, e.clienteId)}</td>
-    <td>${e.itens.map((i) => i.quantidade + 'x ' + nomeModeloComCodigo(i.modeloId) + ' <span class="hint">(' + barcodeModelo(i.modeloId) + ')</span>').join(', ')}</td><td>${fmtDate(e.data)}</td></tr>`
-              )
-              .join('')
-          : `<tr class="empty-row"><td colspan="4">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
+          }
+        })
+        const itens = itensBrutos.map((it) => {
+          const prod = (db.produtos || []).find(
+            (p) => String(p.codigo_v || '').replace(/^0+(?=\d)/, '') === it.codigoVd
+          )
+          return {
+            codigoVd: it.codigoVd,
+            produto: prod ? prod.produto : '⚠ não encontrado no cadastro',
+            qtde: it.qtde,
+            rLiq: it.rLiq,
+            rTotal: it.rTotal,
+          }
+        })
+        return { pedido, dataPedido, cnpj, clienteNome, itens }
+      }
+      let vendaImportadaPendente = null
+      function handleImportVendaTxt(event) {
+        const file = event.target.files && event.target.files[0]
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          const texto = String(e.target.result || '')
+          const venda = parseVendaTxt(texto)
+          event.target.value = ''
+          if (!venda.pedido || !venda.itens.length) {
+            toast(
+              'Não foi possível ler o pedido neste arquivo. Confira o formato do .txt.'
+            )
+            return
+          }
+          vendaImportadaPendente = venda
+          abrirPreviaVendaImportada(venda)
+        }
+        reader.onerror = () => toast('Erro ao ler o arquivo.')
+        reader.readAsText(file, 'latin1')
+      }
+      function abrirPreviaVendaImportada(venda) {
+        const naoEncontrados = venda.itens.filter((i) =>
+          i.produto.includes('não encontrado')
+        ).length
+        const body = `
+    <p class="hint">Pedido <b>${escapeHtml(venda.pedido)}</b> — ${escapeHtml(fmtDataPedido(venda.dataPedido))}</p>
+    <p><b>Cliente:</b> ${escapeHtml(venda.clienteNome || '—')}</p>
+    <p><b>CNPJ:</b> ${escapeHtml(venda.cnpj || '—')}</p>
+    ${naoEncontrados ? `<p class="hint" style="color:var(--danger,#c0392b)">⚠ ${naoEncontrados} item(ns) com Código VD não encontrado em Cadastros &gt; Produtos.</p>` : ''}
+    <div class="table-wrap" style="margin-top:10px">
+      <table>
+        <thead><tr><th>Código VD</th><th>Produto</th><th>Qtde</th><th>R$ Líq</th><th>R$ Total</th></tr></thead>
+        <tbody>
+          ${venda.itens
+            .map(
+              (i) => `
+      <tr><td class="serial">${escapeHtml(i.codigoVd)}</td><td>${escapeHtml(i.produto)}</td><td class="mono">${i.qtde}</td><td class="mono">${fmtMoney(i.rLiq)}</td><td class="mono">${fmtMoney(i.rTotal)}</td></tr>`
+            )
+            .join('')}
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="confirmarImportacaoVenda()">Confirmar e Adicionar ao Histórico</button>
+    </div>`
+        openModal('Prévia da Venda Importada', body)
+      }
+      function confirmarImportacaoVenda() {
+        const venda = vendaImportadaPendente
+        if (!venda) return
+        db.expedicoes.push({
+          id: uid(),
+          pedido: venda.pedido,
+          dataPedido: venda.dataPedido,
+          cnpj: venda.cnpj,
+          clienteNome: venda.clienteNome,
+          itensVenda: venda.itens,
+          data: nowISO(),
+        })
+        addHistorico(
+          'Expedição',
+          'Venda importada — Pedido ' +
+            venda.pedido +
+            ' (' +
+            venda.clienteNome +
+            '): ' +
+            venda.itens.length +
+            ' item(ns)'
+        )
+        vendaImportadaPendente = null
+        save()
+        closeModal()
+        toast('Venda importada e adicionada ao Histórico de Expedições.')
+        renderAll()
       }
 
       /* ============================= ESTOQUES / RELATÓRIOS ============================= */
@@ -7799,6 +8619,7 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="4">${relHistoricoBusca.trim() ? 'Nenhuma movimentação encontrada para a busca.' : 'Sem movimentações.'}</td></tr>`
+        reaplicarBuscasGenericas()
       }
 
       /* ============================= DASHBOARD ============================= */
@@ -7893,6 +8714,7 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="4">${buscaDashHist ? 'Nenhuma movimentação encontrada para a busca.' : 'Nenhuma movimentação ainda. Comece registrando um pedido de compra.'}</td></tr>`
+        reaplicarBuscasGenericas()
       }
 
       /* ============================= AJUSTES ============================= */
@@ -7986,6 +8808,7 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="7">${buscaAj ? 'Nenhum ajuste encontrado para a busca.' : 'Nenhum ajuste registrado.'}</td></tr>`
+        reaplicarBuscasGenericas()
       }
 
       /* ============================= CADASTROS ============================= */
@@ -8244,11 +9067,14 @@
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap; margin-bottom:10px;">
         <h3 style="margin:0;">${cfg.label} Cadastrados</h3>
-        <input type="text" id="cad-busca" placeholder="Buscar por ${cfg.fields.map((f) => f.label.toLowerCase()).join(', ')}" value="${escapeHtml(cadBusca)}" oninput="buscarCadastros(this.value)" style="max-width:280px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <input type="text" id="cad-busca" placeholder="Buscar por ${cfg.fields.map((f) => f.label.toLowerCase()).join(', ')}" value="${escapeHtml(cadBusca)}" oninput="buscarCadastros(this.value)" style="max-width:280px;margin-bottom:0;">
+          <button class="btn-ghost btn-sm" onclick="exportarTabelaGenericaPDF('cad-tbody','${escapeHtml(cfg.label)} Cadastrados','Cadastro_${slugifyArquivo(cfg.label)}','cad-busca')">📄 Exportar PDF</button>
+        </div>
       </div>
       <div class="table-wrap"><table>
       <thead><tr>${cfg.showId ? '<th>ID</th>' : ''}${cfg.fields.map((f) => `<th>${f.label}</th>`).join('')}<th>Ações</th></tr></thead>
-      <tbody>${
+      <tbody id="cad-tbody">${
         rows.length
           ? rows
               .map(
@@ -8499,10 +9325,13 @@
         <h3 style="margin-bottom:0;">Modelos / Catálogo Cadastrado</h3>
         <span class="hint" style="margin:0;">${lista.length} de ${db.modelosRelogio.length} registro(s)</span>
       </div>
-      <input id="modelo-busca" placeholder="Buscar por nome, código ref. ou código de barras..." value="${modeloBusca || ''}" oninput="filtrarModelos(this.value)" style="margin-top:10px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;">
+        <input id="modelo-busca" placeholder="Buscar por nome, código ref. ou código de barras..." value="${modeloBusca || ''}" oninput="filtrarModelos(this.value)" style="flex:1;min-width:220px;margin-bottom:0;">
+        <button class="btn-ghost btn-sm" onclick="exportarTabelaGenericaPDF('modelo-tbody','Modelos / Catálogo Cadastrado','Cadastro_Modelos_Catalogo','modelo-busca')">📄 Exportar PDF</button>
+      </div>
       <div class="table-wrap" style="margin-top:10px;"><table>
         <thead><tr><th>Cód. Ref</th><th>Descrição</th><th>Cód. Barras</th><th>NCM</th><th>Valor</th><th>Peso</th><th></th></tr></thead>
-        <tbody>${
+        <tbody id="modelo-tbody">${
           lista.length
             ? lista
                 .map((m) => {

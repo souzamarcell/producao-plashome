@@ -859,6 +859,12 @@
       .est-subview.active {
         display: block;
       }
+      .rel-subview {
+        display: none;
+      }
+      .rel-subview.active {
+        display: block;
+      }
 
       /* ===== Modal ===== */
       .modal-backdrop {
@@ -950,7 +956,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.5</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.6</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -982,7 +988,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.5</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.6</span>
       </div>
       <button
         class="menu-btn"
@@ -1903,6 +1909,9 @@
 
       <!-- RELATÓRIOS -->
       <section class="view" id="view-relatorios">
+        <div class="subtabs" id="rel-subtabs"></div>
+
+        <div class="rel-subview" id="rel-sub-materia">
         <div class="section-title">
           <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
         </div>
@@ -1944,7 +1953,9 @@
             </table>
           </div>
         </div>
+        </div>
 
+        <div class="rel-subview" id="rel-sub-terceiros">
         <div class="section-title">
           <h2>Estoque em Produção (terceiros)</h2>
         </div>
@@ -1986,7 +1997,9 @@
             </table>
           </div>
         </div>
+        </div>
 
+        <div class="rel-subview" id="rel-sub-semi">
         <div class="section-title"><h2>Estoque de Injetados</h2></div>
         <div class="card">
           <div
@@ -2026,7 +2039,9 @@
             </table>
           </div>
         </div>
+        </div>
 
+        <div class="rel-subview" id="rel-sub-acabados">
         <div class="section-title"><h2>Estoque de Produtos Acabados</h2></div>
         <div class="card">
           <div
@@ -2066,7 +2081,9 @@
             </table>
           </div>
         </div>
+        </div>
 
+        <div class="rel-subview" id="rel-sub-historico">
         <div class="section-title">
           <h2>Histórico Completo de Movimentações</h2>
         </div>
@@ -2108,6 +2125,7 @@
               <tbody id="rel-historico"></tbody>
             </table>
           </div>
+        </div>
         </div>
       </section>
 
@@ -8333,6 +8351,35 @@
         estAtivo = key
         renderEstSubtabs()
       }
+      /* ============================= RELATÓRIOS (subtabs) ============================= */
+      // Navegação por sub-abas dentro de Relatórios, separando cada tipo de
+      // posição de estoque e o histórico completo de movimentações.
+      const relConfig = {
+        materia: { label: 'Matéria-Prima e Insumos & Componentes' },
+        terceiros: { label: 'Produção (terceiros)' },
+        semi: { label: 'Injetados' },
+        acabados: { label: 'Produtos Acabados' },
+        historico: { label: 'Histórico Completo' },
+      }
+      let relAtivo = 'materia'
+      function renderRelSubtabs() {
+        document.getElementById('rel-subtabs').innerHTML = Object.keys(
+          relConfig
+        )
+          .map(
+            (k) =>
+              `<button class="subtab-btn ${k === relAtivo ? 'active' : ''}" onclick="trocarRel('${k}')">${relConfig[k].label}</button>`
+          )
+          .join('')
+        Object.keys(relConfig).forEach((k) => {
+          const el = document.getElementById('rel-sub-' + k)
+          if (el) el.classList.toggle('active', k === relAtivo)
+        })
+      }
+      function trocarRel(key) {
+        relAtivo = key
+        renderRelSubtabs()
+      }
       let relHistoricoBusca = ''
       function filtrarHistoricoRelatorio(valor) {
         relHistoricoBusca = valor || ''
@@ -8440,6 +8487,7 @@
       }
       function renderEstoquesReports() {
         renderEstSubtabs()
+        renderRelSubtabs()
         const mRowsEst = (() => {
           const recebidos = db.pedidosCompra.filter(
             (p) => p.status === 'entregue'
