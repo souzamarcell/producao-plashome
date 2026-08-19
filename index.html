@@ -956,7 +956,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.9</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.4.0</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -988,7 +988,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.9</span>
+        <span>Controle de Produção · Relógios · Versão 1.4.0</span>
       </div>
       <button
         class="menu-btn"
@@ -1066,16 +1066,6 @@
       </button>
       <button
         class="drawer-item"
-        data-view="expedicao"
-        onclick="
-          switchView('expedicao')
-          closeDrawer()
-        "
-      >
-        <span class="drawer-item-icon">◆</span> Expedição
-      </button>
-      <button
-        class="drawer-item"
         data-view="estoques"
         onclick="
           switchView('estoques')
@@ -1083,6 +1073,16 @@
         "
       >
         <span class="drawer-item-icon">◆</span> Estoques
+      </button>
+      <button
+        class="drawer-item"
+        data-view="expedicao"
+        onclick="
+          switchView('expedicao')
+          closeDrawer()
+        "
+      >
+        <span class="drawer-item-icon">◆</span> Expedição
       </button>
       <button
         class="drawer-item"
@@ -1133,8 +1133,8 @@
       <button class="tab-btn" data-view="compras">Compras</button>
       <button class="tab-btn" data-view="producao">Produção</button>
       <button class="tab-btn" data-view="montagem">Montagem</button>
-      <button class="tab-btn" data-view="expedicao">Expedição</button>
       <button class="tab-btn" data-view="estoques">Estoques</button>
+      <button class="tab-btn" data-view="expedicao">Expedição</button>
       <button class="tab-btn" data-view="cadastros">Cadastros</button>
       <button class="tab-btn" data-view="relatorios">Relatórios</button>
       <button class="tab-btn" data-view="ajustes">Ajustes</button>
@@ -1170,7 +1170,14 @@
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('dash-historico','Últimas Movimentações','Ultimas_Movimentacoes','dash-historico-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'dash-historico',
+                  'Últimas Movimentações',
+                  'Ultimas_Movimentacoes',
+                  'dash-historico-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1253,12 +1260,19 @@
               id="pc-pendentes-busca"
               placeholder="Buscar por fornecedor, material ou data..."
               value=""
-              oninput="buscaGenericaTabela(this,'tbl-pc-pendentes')"
+              oninput="buscaGenericaTabela(this, 'tbl-pc-pendentes')"
               style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-pc-pendentes','Pedidos Pendentes','Pedidos_Pendentes','pc-pendentes-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-pc-pendentes',
+                  'Pedidos Pendentes',
+                  'Pedidos_Pendentes',
+                  'pc-pendentes-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1303,7 +1317,14 @@
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-pc-historico','Histórico de Compras','Historico_Compras','pc-historico-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-pc-historico',
+                  'Histórico de Compras',
+                  'Historico_Compras',
+                  'pc-historico-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1378,12 +1399,19 @@
               id="op-abertas-busca"
               placeholder="Buscar por produtor ou produto..."
               value=""
-              oninput="buscaGenericaTabela(this,'tbl-op-abertas')"
+              oninput="buscaGenericaTabela(this, 'tbl-op-abertas')"
               style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-op-abertas','Ordens Abertas — Produção','Producao_Ordens_Abertas','op-abertas-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-op-abertas',
+                  'Ordens Abertas — Produção',
+                  'Producao_Ordens_Abertas',
+                  'op-abertas-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1423,12 +1451,19 @@
               id="op-concluidas-busca"
               placeholder="Buscar por produtor ou produto..."
               value=""
-              oninput="buscaGenericaTabela(this,'tbl-op-concluidas')"
+              oninput="buscaGenericaTabela(this, 'tbl-op-concluidas')"
               style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-op-concluidas','Ordens Concluídas — Produção','Producao_Ordens_Concluidas','op-concluidas-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-op-concluidas',
+                  'Ordens Concluídas — Produção',
+                  'Producao_Ordens_Concluidas',
+                  'op-concluidas-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1449,7 +1484,11 @@
               <tbody id="tbl-op-concluidas"></tbody>
             </table>
           </div>
-          <div class="hint" id="op-concluidas-atualizacao" style="text-align: right; margin-top: 8px"></div>
+          <div
+            class="hint"
+            id="op-concluidas-atualizacao"
+            style="text-align: right; margin-top: 8px"
+          ></div>
         </div>
       </section>
 
@@ -1501,12 +1540,19 @@
               id="om-abertas-busca"
               placeholder="Buscar por montador, modelo ou cód. barras..."
               value=""
-              oninput="buscaGenericaTabela(this,'tbl-om-abertas')"
+              oninput="buscaGenericaTabela(this, 'tbl-om-abertas')"
               style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-om-abertas','Ordens Enviadas (aguardando retorno) — Montagem','Montagem_Ordens_Enviadas','om-abertas-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-om-abertas',
+                  'Ordens Enviadas (aguardando retorno) — Montagem',
+                  'Montagem_Ordens_Enviadas',
+                  'om-abertas-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1546,12 +1592,19 @@
               id="om-concluidas-busca"
               placeholder="Buscar por montador, modelo ou cód. barras..."
               value=""
-              oninput="buscaGenericaTabela(this,'tbl-om-concluidas')"
+              oninput="buscaGenericaTabela(this, 'tbl-om-concluidas')"
               style="flex: 1; min-width: 220px; margin-bottom: 0"
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-om-concluidas','Ordens Concluídas — Montagem','Montagem_Ordens_Concluidas','om-concluidas-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-om-concluidas',
+                  'Ordens Concluídas — Montagem',
+                  'Montagem_Ordens_Concluidas',
+                  'om-concluidas-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -1573,7 +1626,11 @@
               <tbody id="tbl-om-concluidas"></tbody>
             </table>
           </div>
-          <div class="hint" id="om-concluidas-atualizacao" style="text-align: right; margin-top: 8px"></div>
+          <div
+            class="hint"
+            id="om-concluidas-atualizacao"
+            style="text-align: right; margin-top: 8px"
+          ></div>
         </div>
       </section>
 
@@ -1620,40 +1677,54 @@
         <div class="section-title">
           <h2>Histórico de Expedições</h2>
           <div style="display: flex; align-items: center; gap: 10px">
-          <button
-            class="btn-ghost btn-sm"
-            onclick="exportarTabelaGenericaPDF('tbl-expedicoes','Histórico de Expedições','Historico_Expedicoes','expedicoes-busca')"
-          >
-            📄 Exportar PDF
-          </button>
-          <label class="btn-upload-venda" title="Importar pedido de venda (.txt)">
-            <span class="icon-upload-circle">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 16V4M12 4L7 9M12 4L17 9"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M5 16V18.5C5 19.8807 6.11929 21 7.5 21H16.5C17.8807 21 19 19.8807 19 18.5V16"
-                  stroke="currentColor"
-                  stroke-width="2.4"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-            Subir Venda
-            <input
-              type="file"
-              id="import-venda-input"
-              accept=".txt"
-              style="display: none"
-              onchange="handleImportVendaTxt(event)"
-            />
-          </label>
+            <button
+              class="btn-ghost btn-sm"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-expedicoes',
+                  'Histórico de Expedições',
+                  'Historico_Expedicoes',
+                  'expedicoes-busca'
+                )
+              "
+            >
+              📄 Exportar PDF
+            </button>
+            <label
+              class="btn-upload-venda"
+              title="Importar pedido de venda (.txt)"
+            >
+              <span class="icon-upload-circle">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 16V4M12 4L7 9M12 4L17 9"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M5 16V18.5C5 19.8807 6.11929 21 7.5 21H16.5C17.8807 21 19 19.8807 19 18.5V16"
+                    stroke="currentColor"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              Subir Venda
+              <input
+                type="file"
+                id="import-venda-input"
+                accept=".txt"
+                style="display: none"
+                onchange="handleImportVendaTxt(event)"
+              />
+            </label>
           </div>
         </div>
         <div class="card">
@@ -1709,12 +1780,19 @@
                 id="est-materia-busca"
                 placeholder="Buscar por material..."
                 value=""
-                oninput="buscaGenericaTabela(this,'tbl-est-materia')"
+                oninput="buscaGenericaTabela(this, 'tbl-est-materia')"
                 style="flex: 1; min-width: 220px; margin-bottom: 0"
               />
               <button
                 class="btn-ghost btn-sm"
-                onclick="exportarTabelaGenericaPDF('tbl-est-materia','Matéria-Prima & Componentes (Entradas)','Estoque_Materia_Prima_Entradas','est-materia-busca')"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'tbl-est-materia',
+                    'Matéria-Prima & Componentes (Entradas)',
+                    'Estoque_Materia_Prima_Entradas',
+                    'est-materia-busca'
+                  )
+                "
               >
                 📄 Exportar PDF
               </button>
@@ -1755,12 +1833,19 @@
                 id="est-terceiros-busca"
                 placeholder="Buscar por produto ou produtor..."
                 value=""
-                oninput="buscaGenericaTabela(this,'tbl-est-terceiros')"
+                oninput="buscaGenericaTabela(this, 'tbl-est-terceiros')"
                 style="flex: 1; min-width: 220px; margin-bottom: 0"
               />
               <button
                 class="btn-ghost btn-sm"
-                onclick="exportarTabelaGenericaPDF('tbl-est-terceiros','Produção em Terceiros (pendente)','Estoque_Producao_Terceiros_Pendente','est-terceiros-busca')"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'tbl-est-terceiros',
+                    'Produção em Terceiros (pendente)',
+                    'Estoque_Producao_Terceiros_Pendente',
+                    'est-terceiros-busca'
+                  )
+                "
               >
                 📄 Exportar PDF
               </button>
@@ -1798,12 +1883,19 @@
                 id="est-semi-busca"
                 placeholder="Buscar por produto..."
                 value=""
-                oninput="buscaGenericaTabela(this,'tbl-est-semi')"
+                oninput="buscaGenericaTabela(this, 'tbl-est-semi')"
                 style="flex: 1; min-width: 220px; margin-bottom: 0"
               />
               <button
                 class="btn-ghost btn-sm"
-                onclick="exportarTabelaGenericaPDF('tbl-est-semi','Produtos Injetados','Estoque_Produtos_Injetados','est-semi-busca')"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'tbl-est-semi',
+                    'Produtos Injetados',
+                    'Estoque_Produtos_Injetados',
+                    'est-semi-busca'
+                  )
+                "
               >
                 📄 Exportar PDF
               </button>
@@ -1820,7 +1912,11 @@
                 <tbody id="tbl-est-semi"></tbody>
               </table>
             </div>
-            <div class="hint" id="est-semi-atualizacao" style="text-align: right; margin-top: 8px"></div>
+            <div
+              class="hint"
+              id="est-semi-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
           </div>
         </div>
 
@@ -1841,12 +1937,19 @@
                 id="est-acabados-busca"
                 placeholder="Buscar por modelo ou cód. barras..."
                 value=""
-                oninput="buscaGenericaTabela(this,'tbl-est-acabados')"
+                oninput="buscaGenericaTabela(this, 'tbl-est-acabados')"
                 style="flex: 1; min-width: 220px; margin-bottom: 0"
               />
               <button
                 class="btn-ghost btn-sm"
-                onclick="exportarTabelaGenericaPDF('tbl-est-acabados','Produtos Acabados','Estoque_Produtos_Acabados','est-acabados-busca')"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'tbl-est-acabados',
+                    'Produtos Acabados',
+                    'Estoque_Produtos_Acabados',
+                    'est-acabados-busca'
+                  )
+                "
               >
                 📄 Exportar PDF
               </button>
@@ -1863,7 +1966,11 @@
                 <tbody id="tbl-est-acabados"></tbody>
               </table>
             </div>
-            <div class="hint" id="est-acabados-atualizacao" style="text-align: right; margin-top: 8px"></div>
+            <div
+              class="hint"
+              id="est-acabados-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
           </div>
         </div>
       </section>
@@ -1923,224 +2030,263 @@
         <div class="subtabs" id="rel-subtabs"></div>
 
         <div class="rel-subview" id="rel-sub-materia">
-        <div class="section-title">
-          <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
-        </div>
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-              margin-bottom: 10px;
-            "
-          >
-            <input
-              type="text"
-              id="rel-materia-busca"
-              placeholder="Buscar por material..."
-              value=""
-              oninput="buscaGenericaTabela(this,'rel-materia')"
-              style="flex: 1; min-width: 220px; margin-bottom: 0"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('rel-materia','Estoque de Matéria-Prima e Insumos & Componentes (Saldos)','Estoque_Materia_Prima_Saldos','rel-materia-busca')"
+          <div class="section-title">
+            <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
             >
-              📄 Exportar PDF
-            </button>
+              <input
+                type="text"
+                id="rel-materia-busca"
+                placeholder="Buscar por material..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-materia')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-materia',
+                    'Estoque de Matéria-Prima e Insumos & Componentes (Saldos)',
+                    'Estoque_Materia_Prima_Saldos',
+                    'rel-materia-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Material</th>
+                    <th>Quantidade</th>
+                    <th>Data e Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-materia"></tbody>
+              </table>
+            </div>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Material</th>
-                  <th>Quantidade</th>
-                  <th>Data e Hora</th>
-                </tr>
-              </thead>
-              <tbody id="rel-materia"></tbody>
-            </table>
-          </div>
-        </div>
         </div>
 
         <div class="rel-subview" id="rel-sub-terceiros">
-        <div class="section-title">
-          <h2>Estoque em Produção (terceiros)</h2>
-        </div>
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-              margin-bottom: 10px;
-            "
-          >
-            <input
-              type="text"
-              id="rel-terceiros-busca"
-              placeholder="Buscar por produto ou produtor..."
-              value=""
-              oninput="buscaGenericaTabela(this,'rel-terceiros')"
-              style="flex: 1; min-width: 220px; margin-bottom: 0"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('rel-terceiros','Estoque em Produção (terceiros)','Estoque_Producao_Terceiros','rel-terceiros-busca')"
+          <div class="section-title">
+            <h2>Produção em Terceiros (pendente)</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
             >
-              📄 Exportar PDF
-            </button>
+              <input
+                type="text"
+                id="rel-terceiros-busca"
+                placeholder="Buscar por produtor ou produto..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-terceiros')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-terceiros',
+                    'Produção em Terceiros (pendente)',
+                    'Producao_Terceiros_Pendente',
+                    'rel-terceiros-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Produtor</th>
+                    <th>Produto</th>
+                    <th>Recebida</th>
+                    <th>Total</th>
+                    <th>Entregas</th>
+                    <th>Data</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-terceiros"></tbody>
+              </table>
+            </div>
+            <div
+              class="hint"
+              id="rel-terceiros-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Produtor</th>
-                  <th>Pendente</th>
-                  <th>Data e Hora</th>
-                </tr>
-              </thead>
-              <tbody id="rel-terceiros"></tbody>
-            </table>
-          </div>
-          <div class="hint" id="rel-terceiros-atualizacao" style="text-align: right; margin-top: 8px"></div>
-        </div>
         </div>
 
         <div class="rel-subview" id="rel-sub-semi">
-        <div class="section-title"><h2>Estoque de Injetados</h2></div>
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-              margin-bottom: 10px;
-            "
-          >
-            <input
-              type="text"
-              id="rel-semi-busca"
-              placeholder="Buscar por produto..."
-              value=""
-              oninput="buscaGenericaTabela(this,'rel-semi')"
-              style="flex: 1; min-width: 220px; margin-bottom: 0"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('rel-semi','Estoque de Injetados','Estoque_Injetados','rel-semi-busca')"
+          <div class="section-title"><h2>Estoque de Injetados</h2></div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
             >
-              📄 Exportar PDF
-            </button>
+              <input
+                type="text"
+                id="rel-semi-busca"
+                placeholder="Buscar por produto..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-semi')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-semi',
+                    'Estoque de Injetados',
+                    'Estoque_Injetados',
+                    'rel-semi-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-semi"></tbody>
+              </table>
+            </div>
+            <div
+              class="hint"
+              id="rel-semi-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Preço</th>
-                  <th>Quantidade</th>
-                </tr>
-              </thead>
-              <tbody id="rel-semi"></tbody>
-            </table>
-          </div>
-          <div class="hint" id="rel-semi-atualizacao" style="text-align: right; margin-top: 8px"></div>
-        </div>
         </div>
 
         <div class="rel-subview" id="rel-sub-acabados">
-        <div class="section-title"><h2>Estoque de Produtos Acabados</h2></div>
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-              margin-bottom: 10px;
-            "
-          >
-            <input
-              type="text"
-              id="rel-acabados-busca"
-              placeholder="Buscar por modelo ou cód. barras..."
-              value=""
-              oninput="buscaGenericaTabela(this,'rel-acabados')"
-              style="flex: 1; min-width: 220px; margin-bottom: 0"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('rel-acabados','Estoque de Produtos Acabados','Estoque_Produtos_Acabados','rel-acabados-busca')"
+          <div class="section-title"><h2>Estoque de Produtos Acabados</h2></div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
             >
-              📄 Exportar PDF
-            </button>
+              <input
+                type="text"
+                id="rel-acabados-busca"
+                placeholder="Buscar por modelo ou cód. barras..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-acabados')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-acabados',
+                    'Estoque de Produtos Acabados',
+                    'Estoque_Produtos_Acabados',
+                    'rel-acabados-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Modelo</th>
+                    <th>Cód. Barras</th>
+                    <th>Quantidade</th>
+                    <th>Data e Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-acabados"></tbody>
+              </table>
+            </div>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Modelo</th>
-                  <th>Cód. Barras</th>
-                  <th>Quantidade</th>
-                  <th>Data e Hora</th>
-                </tr>
-              </thead>
-              <tbody id="rel-acabados"></tbody>
-            </table>
-          </div>
-        </div>
         </div>
 
         <div class="rel-subview" id="rel-sub-historico">
-        <div class="section-title">
-          <h2>Histórico Completo de Movimentações</h2>
-        </div>
-        <div class="card">
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              align-items: center;
-              flex-wrap: wrap;
-              margin-bottom: 10px;
-            "
-          >
-            <input
-              type="text"
-              id="rel-historico-busca"
-              placeholder="Buscar por tipo, descrição ou usuário..."
-              value=""
-              oninput="filtrarHistoricoRelatorio(this.value)"
-              style="flex: 1; min-width: 220px; margin-bottom: 0"
-            />
-            <button
-              class="btn-ghost btn-sm"
-              onclick="exportarHistoricoRelatorioPDF()"
+          <div class="section-title">
+            <h2>Histórico Completo de Movimentações</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
             >
-              📄 Exportar PDF
-            </button>
+              <input
+                type="text"
+                id="rel-historico-busca"
+                placeholder="Buscar por tipo, descrição ou usuário..."
+                value=""
+                oninput="filtrarHistoricoRelatorio(this.value)"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarHistoricoRelatorioPDF()"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Usuário</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-historico"></tbody>
+              </table>
+            </div>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Tipo</th>
-                  <th>Descrição</th>
-                  <th>Usuário</th>
-                </tr>
-              </thead>
-              <tbody id="rel-historico"></tbody>
-            </table>
-          </div>
-        </div>
         </div>
       </section>
 
@@ -2197,7 +2343,14 @@
             />
             <button
               class="btn-ghost btn-sm"
-              onclick="exportarTabelaGenericaPDF('tbl-ajustes','Histórico de Ajustes','Historico_Ajustes','ajustes-busca')"
+              onclick="
+                exportarTabelaGenericaPDF(
+                  'tbl-ajustes',
+                  'Histórico de Ajustes',
+                  'Historico_Ajustes',
+                  'ajustes-busca'
+                )
+              "
             >
               📄 Exportar PDF
             </button>
@@ -2645,49 +2798,49 @@
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - CAFÉ - Solapa',
+          produto: 'BETHA PRETO - CAFÉ - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - CARRO ANTIGO - Solapa',
+          produto: 'BETHA PRETO - CARRO ANTIGO - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - ROCK - Solapa',
+          produto: 'BETHA PRETO - ROCK - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - ROUTE 66 - Solapa',
+          produto: 'BETHA PRETO - ROUTE 66 - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - LAMBORGHINI - Solapa',
+          produto: 'BETHA PRETO - LAMBORGHINI - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA PRETO - CARRO PRETO - Solapa',
+          produto: 'BETHA PRETO - CARRO PRETO - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA BRANCO - PRAIA - Solapa',
+          produto: 'BETHA BRANCO - PRAIA - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
           cnpj: '',
           contato: 'MAURICI',
-          produto: 'BETA BRANCO - FRUTA - Solapa',
+          produto: 'BETHA BRANCO - FRUTA - Solapa',
         },
         {
           fornecedor: 'TOP 6 GRAFICA',
@@ -2926,7 +3079,14 @@
           fornecedor: 'TOP PLAST',
           cnpj: '',
           contato: 'CALUAN',
-          produto: 'BASE ALFHA/BETA',
+          produto: 'BASE ALFHA/BETHA PRETO',
+        },
+        {
+          tipoMateria: 'INJEÇÃO',
+          fornecedor: 'TOP PLAST',
+          cnpj: '',
+          contato: 'CALUAN',
+          produto: 'BASE ALFHA/BETHA BRANCO',
         },
         {
           tipoMateria: 'INJEÇÃO',
@@ -2940,7 +3100,14 @@
           fornecedor: 'TOP PLAST',
           cnpj: '',
           contato: 'CALUAN',
-          produto: 'BASE SIGMA REDONDO',
+          produto: 'BASE SIGMA REDONDO PRETO',
+        },
+        {
+          tipoMateria: 'INJEÇÃO',
+          fornecedor: 'TOP PLAST',
+          cnpj: '',
+          contato: 'CALUAN',
+          produto: 'BASE SIGMA REDONDO BRANCO',
         },
         {
           tipoMateria: 'INJEÇÃO',
@@ -2977,7 +3144,7 @@
         },
         {
           codigo: '3',
-          nome: 'BASE BETA BRANCO',
+          nome: 'BASE BETHA BRANCO',
           mpUtilizadas: 'PSAI BRANCO',
           quantidade: '1',
           materiaPrima: '0,17',
@@ -2985,7 +3152,7 @@
         },
         {
           codigo: '4',
-          nome: 'BASE BETA PRETO',
+          nome: 'BASE BETHA PRETO',
           mpUtilizadas: 'PSAI PRETO',
           quantidade: '1',
           materiaPrima: '0,17',
@@ -3089,7 +3256,7 @@
         },
         {
           codigo: '17',
-          nome: 'LENTE BETA',
+          nome: 'LENTE BETHA',
           mpUtilizadas: 'PS CRISTAL',
           quantidade: '1',
           materiaPrima: '1,12',
@@ -3119,6 +3286,31 @@
           materiaPrima: '0,08',
           preco: '',
         },
+        {
+          codigo: '21',
+          nome: 'BASE ALFHA/BETHA BRANCO',
+          mpUtilizadas: 'PSAI BRANCO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+        {
+          codigo: '22',
+          nome: 'BASE ALFHA/BETHA PRETO',
+          mpUtilizadas: 'PSAI PRETO',
+          quantidade: '1',
+          materiaPrima: '0,17',
+          preco: '',
+        },
+
+        {
+          codigo: '18',
+          nome: 'LENTE OMEGA',
+          mpUtilizadas: 'PS CRISTAL',
+          quantidade: '1',
+          materiaPrima: '0,1',
+          preco: '',
+        },
       ]
       // Catálogo de produtos acabados (item final vendido ao cliente)
       const PRODUTOS_INICIAIS = [
@@ -3127,6 +3319,7 @@
           codigo_v: '758',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-CLASSICO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684031',
@@ -3144,6 +3337,7 @@
           codigo_v: '760',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-FRUTAS',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684482',
@@ -3161,6 +3355,7 @@
           codigo_v: '2016',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO LONDRES',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684680',
@@ -3178,6 +3373,7 @@
           codigo_v: '762',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-MODERNO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684437',
@@ -3195,6 +3391,7 @@
           codigo_v: '763',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO NATUREZA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001035',
@@ -3212,6 +3409,7 @@
           codigo_v: '770',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA BRANCO-PRETO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684475',
@@ -3229,6 +3427,7 @@
           codigo_v: '789',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-CLASSICO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684505',
@@ -3246,6 +3445,7 @@
           codigo_v: '791',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-FRUTA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684574',
@@ -3263,6 +3463,7 @@
           codigo_v: '2015',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO LONDRES',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684666',
@@ -3280,6 +3481,7 @@
           codigo_v: '793',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-MODERNO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684529',
@@ -3297,6 +3499,7 @@
           codigo_v: '794',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO NATUREZA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001097',
@@ -3314,6 +3517,7 @@
           codigo_v: '801',
           modelo: 'PHR003 OMEGA REDONDO',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-PRETO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684567',
@@ -3331,6 +3535,7 @@
           codigo_v: '2078',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-FRUTA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000182',
@@ -3348,6 +3553,7 @@
           codigo_v: '2079',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-GALINHA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000199',
@@ -3365,6 +3571,7 @@
           codigo_v: '2072',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CAFÉ',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000410',
@@ -3382,6 +3589,7 @@
           codigo_v: '2314',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CLASSICO',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000311',
@@ -3399,6 +3607,7 @@
           codigo_v: '2068',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-CORUJA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000434',
@@ -3416,6 +3625,7 @@
           codigo_v: '2071',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA BRANCO-PET (DOG)',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000212',
@@ -3433,6 +3643,7 @@
           codigo_v: '2106',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CAFÉ',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000618',
@@ -3450,6 +3661,7 @@
           codigo_v: '2316',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CLASSICO',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684901',
@@ -3467,6 +3679,7 @@
           codigo_v: '2102',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-CORUJA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000649',
@@ -3484,6 +3697,7 @@
           codigo_v: '2112',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-FRUTA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000557',
@@ -3501,6 +3715,7 @@
           codigo_v: '2113',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-GALINHA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000236',
@@ -3518,6 +3733,7 @@
           codigo_v: '2105',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELÓGIO GAMA PRETO-PET (DOG)',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000243',
@@ -3535,6 +3751,7 @@
           codigo_v: '3546',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELOGIO OITAVADO GAMA PRETO BASILICA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001493',
@@ -3552,6 +3769,7 @@
           codigo_v: '3547',
           modelo: 'PHR007 GAMA OITAVADO',
           produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001509',
@@ -3569,6 +3787,7 @@
           codigo_v: '3530',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO REDONDO OMEGA SANTA CEIA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001370',
@@ -3586,6 +3805,7 @@
           codigo_v: '3544',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO REDONDO OMEGA PRETO BASILICA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001479',
@@ -3603,6 +3823,7 @@
           codigo_v: '795',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO REDONDO OMEGA PRETO-JESUS CRISTO',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684550',
@@ -3620,6 +3841,7 @@
           codigo_v: '796',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO REDONDO OMEGA PRETO NOSSA SENHORA',
+          receita: 'RELÓGIO OMEGA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001103',
@@ -3637,6 +3859,7 @@
           codigo_v: '3547',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELOGIO OITAVADO GAMA BRANCO BASILICA',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001509',
@@ -3654,6 +3877,7 @@
           codigo_v: '2080',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA BRANCO-FILIPENSES',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052901',
           codigoBarras: '7898672000366',
@@ -3671,6 +3895,7 @@
           codigo_v: '2074',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA BRANCO-SALMOS',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052902',
           codigoBarras: '7898672000403',
@@ -3688,6 +3913,7 @@
           codigo_v: '2108',
           modelo: 'RELIGIOSOS DIVERSOS',
           produto: 'RELÓGIO GAMA PRETO-SALMOS',
+          receita: 'RELÓGIO GAMA',
           unidade: 'PC',
           codNcm: '91052903',
           codigoBarras: '7898672000595',
@@ -3705,6 +3931,7 @@
           codigo_v: '743',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO CLÁSSICO',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001004',
@@ -3722,6 +3949,7 @@
           codigo_v: '745',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO FRUTA',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684376',
@@ -3739,6 +3967,7 @@
           codigo_v: '747',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO MODERNO',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000984',
@@ -3756,6 +3985,7 @@
           codigo_v: '755',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO PRETO',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000939',
@@ -3773,6 +4003,7 @@
           codigo_v: '2020',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO - PARIS',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684338',
@@ -3790,6 +4021,7 @@
           codigo_v: '746',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA PRETO VACA',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000991',
@@ -3807,6 +4039,7 @@
           codigo_v: '725',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA BRANCO  PRETO',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000823',
@@ -3824,6 +4057,7 @@
           codigo_v: '726',
           modelo: 'PHR002 ALPHA QUADRADO',
           produto: 'RELÓGIO QUADRADO ALPHA BRANCO  VERDE',
+          receita: 'RELÓGIO ALPHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000816',
@@ -3840,7 +4074,8 @@
           codigo: 'PHR008-PCA',
           codigo_v: '1979',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - CAFÉ',
+          produto: 'RELÓGIO BETHA PRETO - CAFÉ',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000779',
@@ -3857,7 +4092,8 @@
           codigo: 'PHR008-PCR',
           codigo_v: '2000',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - CARRO ANTIGO',
+          produto: 'RELÓGIO BETHA PRETO - CARRO ANTIGO',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000038',
@@ -3874,7 +4110,8 @@
           codigo: 'PHR008-PRK',
           codigo_v: '2002',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - ROCK',
+          produto: 'RELÓGIO BETHA PRETO - ROCK',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000717',
@@ -3891,7 +4128,8 @@
           codigo: 'PHR008-PRO',
           codigo_v: '1977',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - ROUTE 66',
+          produto: 'RELÓGIO BETHA PRETO - ROUTE 66',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000144',
@@ -3908,7 +4146,8 @@
           codigo: 'PHR008-PLA',
           codigo_v: '1986',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - LAMBORGHINI',
+          produto: 'RELÓGIO BETHA PRETO - LAMBORGHINI',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000076',
@@ -3925,7 +4164,8 @@
           codigo: 'PHR008-PCP',
           codigo_v: '1998',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA PRETO - CARRO PRETO',
+          produto: 'RELÓGIO BETHA PRETO - CARRO PRETO',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000724',
@@ -3942,7 +4182,8 @@
           codigo: 'PHR008-BPR',
           codigo_v: '1983',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA BRANCO - PRAIA',
+          produto: 'RELÓGIO BETHA BRANCO - PRAIA',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684987',
@@ -3959,7 +4200,8 @@
           codigo: 'PHR008-BFR',
           codigo_v: '1981',
           modelo: 'PHR008 BETHA QUADRADO',
-          produto: 'RELÓGIO BETA BRANCO - FRUTA',
+          produto: 'RELÓGIO BETHA BRANCO - FRUTA',
+          receita: 'RELÓGIO BETHA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672000700',
@@ -3977,6 +4219,7 @@
           codigo_v: '3538',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO CINZA',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001431',
@@ -3994,6 +4237,7 @@
           codigo_v: '3539',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO VERDE',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001424',
@@ -4011,6 +4255,7 @@
           codigo_v: '3540',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO AZUL',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001417',
@@ -4028,6 +4273,7 @@
           codigo_v: '3541',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO ROSA',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001400',
@@ -4045,6 +4291,7 @@
           codigo_v: '3542',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO BRANCO',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001394',
@@ -4062,6 +4309,7 @@
           codigo_v: '3534',
           modelo: 'PHR062 SIGMA DOURADO REDONDO',
           produto: 'RELÓGIO 3D SIGMA DOURADO PRETO',
+          receita: 'RELÓGIO SIGMA REDONDO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001387',
@@ -4079,6 +4327,7 @@
           codigo_v: '3568',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO PRETO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001752',
@@ -4096,6 +4345,7 @@
           codigo_v: '3569',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO GRATIDÃO BRANCO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001745',
@@ -4113,6 +4363,7 @@
           codigo_v: '3570',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS PRETO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001738',
@@ -4130,6 +4381,7 @@
           codigo_v: '3571',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUAD DOURADO JESUS BRANCO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001721',
@@ -4147,6 +4399,7 @@
           codigo_v: '3572',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO BRANCO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001714',
@@ -4164,6 +4417,7 @@
           codigo_v: '3566',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO DOURADO PRETO',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001707',
@@ -4181,6 +4435,7 @@
           codigo_v: '3573',
           modelo: 'PHR063 SIGMA DOURADO QUADRADO',
           produto: 'RELÓGIO 3D SIGMA QUADRADO SORTIDOS',
+          receita: 'RELÓGIO SIGMA QUADRADO',
           unidade: 'CX',
           codNcm: '91052900',
           codigoBarras: '7898672001707',
@@ -4198,6 +4453,7 @@
           codigo_v: '711',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER AMARELO',
+          receita: 'RELÓGIO DELTA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898954684017',
@@ -4215,6 +4471,7 @@
           codigo_v: '712',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER AZUL',
+          receita: 'RELÓGIO DELTA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001158',
@@ -4232,6 +4489,7 @@
           codigo_v: '706',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER BRANCO',
+          receita: 'RELÓGIO DELTA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001165',
@@ -4249,6 +4507,7 @@
           codigo_v: '707',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER PRETO',
+          receita: 'RELÓGIO DELTA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001172',
@@ -4266,6 +4525,7 @@
           codigo_v: '709',
           modelo: 'PHR001 DELTA 3D',
           produto: 'RELOGIO DELTA MASTER VERMELHO',
+          receita: 'RELÓGIO DELTA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001196',
@@ -4282,6 +4542,7 @@
           codigo: 'PHR011-BR',
           modelo: 'DESPERTADORES',
           produto: 'DESPERTADOR REDONDO BRANCO',
+          receita: '',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001554',
@@ -4299,6 +4560,7 @@
           codigo: 'PHR011-PT',
           modelo: 'DESPERTADORES',
           produto: 'DESPERTADOR REDODNDO PRETO',
+          receita: '',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001547',
@@ -4316,6 +4578,7 @@
           codigo: 'PHR012-BR',
           modelo: 'DESPERTADORES',
           produto: 'DESPERTADOR QUADRADO BRANCO',
+          receita: '',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001530',
@@ -4333,6 +4596,7 @@
           codigo: 'PHR012-PT',
           modelo: 'DESPERTADORES',
           produto: 'DESPERTADOR QUADRADO PRETO',
+          receita: '',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001523',
@@ -4351,6 +4615,7 @@
           codigo_v: '3593',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO CLASSICO PRETO 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001844',
@@ -4368,6 +4633,7 @@
           codigo_v: '3594',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO CLASSICO BRANCO 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001851',
@@ -4385,6 +4651,7 @@
           codigo_v: '3595',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE REDONDO PRETO VERDE 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001868',
@@ -4402,6 +4669,7 @@
           codigo_v: '3596',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO VERDE 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001875',
@@ -4419,6 +4687,7 @@
           codigo_v: '3597',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO MADEIRA 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001882',
@@ -4436,6 +4705,7 @@
           codigo_v: '3598',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO MADEIRA 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001899',
@@ -4453,6 +4723,7 @@
           codigo_v: '3599',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO PRETO PRETO 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001905',
@@ -4470,6 +4741,7 @@
           codigo_v: '3600',
           modelo: 'PHR064 KAPPA REDONDO 28 CM',
           produto: 'RELOGIO DE PAREDE KAPPA REDONDO BRANCO PRETO 28 CM',
+          receita: 'RELÓGIO KAPPA',
           unidade: 'PC',
           codNcm: '91052900',
           codigoBarras: '7898672001912',
@@ -4484,6 +4756,470 @@
         },
       ]
       // Montadores terceirizados que fazem a montagem final do produto
+      const RECEITAS_INICIAIS = [
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "PP -  COLORIDO",
+          quantidade: "0.09",
+          valorBase: "12.5",
+          valorUnitario: "1.13",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "M.O PRODUÇÃO",
+          quantidade: "1",
+          valorBase: "0.65",
+          valorUnitario: "0.65",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.21",
+          valorUnitario: "2.21",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "HOT STAMP",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "M.O MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "6.9",
+          valorUnitario: "0.29",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.09",
+          valorBase: "12.5",
+          valorUnitario: "1.13",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "M.O PRODUÇÃO",
+          quantidade: "1",
+          valorBase: "0.75",
+          valorUnitario: "0.75",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.21",
+          valorUnitario: "2.21",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "HOT STAMP",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "M.O MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "6.9",
+          valorUnitario: "0.29",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.1",
+          valorBase: "14",
+          valorUnitario: "1.4",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.36",
+          valorUnitario: "0.36",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.85",
+          valorUnitario: "1.7",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "PP -  COLORIDO",
+          quantidade: "0.18",
+          valorBase: "11",
+          valorUnitario: "1.98",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "23",
+          valorUnitario: "0.35",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.2",
+          valorUnitario: "2.2",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "1",
+          valorBase: "1.1",
+          valorUnitario: "1.1",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.45",
+          valorUnitario: "0.45",
+        },
+        {
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.09",
+          valorBase: "8",
+          valorUnitario: "0.72",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.08",
+          valorBase: "14",
+          valorUnitario: "1.12",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.011",
+          valorBase: "21.9",
+          valorUnitario: "0.24",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.28",
+          valorUnitario: "0.28",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.6",
+          valorUnitario: "1.2",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "7.2",
+          valorUnitario: "0.3",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.11",
+          valorBase: "8",
+          valorUnitario: "0.88",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.1",
+          valorBase: "14",
+          valorUnitario: "1.4",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.011",
+          valorBase: "21.9",
+          valorUnitario: "0.24",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.28",
+          valorUnitario: "0.28",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.6",
+          valorUnitario: "1.2",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "7.2",
+          valorUnitario: "0.3",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "PSAI - BRANCO PRETO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.12",
+          valorBase: "14",
+          valorUnitario: "1.68",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.3",
+          valorUnitario: "0.3",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.7",
+          valorUnitario: "1.4",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "PSAI - BRANCO PRETO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.12",
+          valorBase: "14",
+          valorUnitario: "1.68",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.3",
+          valorUnitario: "0.3",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.7",
+          valorUnitario: "1.4",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
+        },
+        {
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
+        },
+      ]
       const MONTADORES_INICIAIS = [
         {
           tipoMateria: 'MONTAGEM',
@@ -6108,6 +6844,7 @@
           produtores: [],
           produtosSemiacabados: [],
           produtos: [],
+          receitas: [],
           montadores: [],
           clientes: [],
           modelosRelogio: [],
@@ -6201,6 +6938,20 @@
         const existentes = Array.isArray(data?.produtores)
           ? data.produtores
           : []
+        // Depois que um produtor é migrado, o campo `produto` passa a
+        // guardar o ID do catálogo (Produtos Injetados) em vez do nome.
+        // Para a comparação de duplicados continuar reconhecendo os
+        // registros padrão (que usam nome em PRODUTORES_INICIAIS), resolve
+        // o ID de volta para o nome do produto ao montar a chave — evitando
+        // que o seed recrie os produtores padrão a cada carregamento (F5).
+        const catalogoProdutos = Array.isArray(data?.produtosSemiacabados)
+          ? data.produtosSemiacabados
+          : []
+        const produtoParaChave = (valor) => {
+          const texto = String(valor || '').trim()
+          const match = catalogoProdutos.find((p) => p.id === texto)
+          return (match ? match.nome : texto).trim().toLowerCase()
+        }
         const vistos = new Set()
         const lista = []
 
@@ -6213,9 +6964,7 @@
             .trim()
             .toLowerCase()}|${String(item?.contato || '')
             .trim()
-            .toLowerCase()}|${String(item?.produto || '')
-            .trim()
-            .toLowerCase()}`
+            .toLowerCase()}|${produtoParaChave(item?.produto)}`
           if (!vistos.has(key)) {
             vistos.add(key)
             lista.push(item)
@@ -6305,12 +7054,7 @@
         // mantendo a ordem original. Códigos já no novo padrão são preservados.
         lista.forEach((item) => {
           if (!/^IJT-D\d+$/.test(String(item.codigo || '').trim())) {
-            item.codigo = proximoValorAutoPrefixado(
-              lista,
-              'codigo',
-              'IJT-D',
-              3
-            )
+            item.codigo = proximoValorAutoPrefixado(lista, 'codigo', 'IJT-D', 3)
           }
         })
 
@@ -6328,6 +7072,7 @@
             .toLowerCase()
           if (!vistos.has(key)) {
             vistos.add(key)
+            if (!item.receita) item.receita = 'RELÓGIO OMEGA'
             lista.push(item)
           }
         })
@@ -6344,6 +7089,7 @@
               codigo_v: item.codigo_v,
               modelo: item.modelo,
               produto: item.produto,
+              receita: item.receita,
               unidade: item.unidade,
               codNcm: item.codNcm,
               codigoBarras: item.codigoBarras,
@@ -6360,6 +7106,45 @@
         })
 
         data.produtos = lista
+        return data
+      }
+      function seedReceitas(data) {
+        const existentes = Array.isArray(data?.receitas) ? data.receitas : []
+        const vistos = new Set()
+        const lista = []
+
+        existentes.forEach((item) => {
+          const key = `${String(item?.produto || '')
+            .trim()
+            .toLowerCase()}|${String(item?.materiaPrima || '')
+            .trim()
+            .toLowerCase()}`
+          if (!vistos.has(key)) {
+            vistos.add(key)
+            lista.push(item)
+          }
+        })
+
+        RECEITAS_INICIAIS.forEach((item) => {
+          const key = `${String(item.produto || '')
+            .trim()
+            .toLowerCase()}|${String(item.materiaPrima || '')
+            .trim()
+            .toLowerCase()}`
+          if (!vistos.has(key)) {
+            vistos.add(key)
+            lista.push({
+              id: uid(),
+              produto: item.produto,
+              materiaPrima: item.materiaPrima,
+              quantidade: item.quantidade,
+              valorBase: item.valorBase,
+              valorUnitario: item.valorUnitario,
+            })
+          }
+        })
+
+        data.receitas = lista
         return data
       }
       function seedMontadores(data) {
@@ -6416,12 +7201,7 @@
         // registros que ainda não tenham um, sem alterar os já existentes.
         lista.forEach((item) => {
           if (!String(item.codigo || '').trim()) {
-            item.codigo = proximoValorAutoPrefixado(
-              lista,
-              'codigo',
-              'FMC-I',
-              3
-            )
+            item.codigo = proximoValorAutoPrefixado(lista, 'codigo', 'FMC-I', 3)
           }
         })
 
@@ -6568,14 +7348,16 @@
           const data = migrarCodigosCadastro(
             seedClientes(
               seedMontadores(
-                seedProdutos(
-                  migrarProdutoProdutorParaId(
-                    seedProdutosInjetados(
-                      seedProdutores(
-                        seedFornecedoresMateriaPrima(
-                          parsed
-                            ? seedFornecedores(parsed)
-                            : seedFornecedores(defaultDB())
+                seedReceitas(
+                  seedProdutos(
+                    migrarProdutoProdutorParaId(
+                      seedProdutosInjetados(
+                        seedProdutores(
+                          seedFornecedoresMateriaPrima(
+                            parsed
+                              ? seedFornecedores(parsed)
+                              : seedFornecedores(defaultDB())
+                          )
                         )
                       )
                     )
@@ -6597,6 +7379,8 @@
               JSON.stringify(parsed?.produtosSemiacabados || []) ||
             JSON.stringify(data.produtos) !==
               JSON.stringify(parsed?.produtos || []) ||
+            JSON.stringify(data.receitas) !==
+              JSON.stringify(parsed?.receitas || []) ||
             JSON.stringify(data.montadores) !==
               JSON.stringify(parsed?.montadores || []) ||
             JSON.stringify(data.clientes) !==
@@ -6627,10 +7411,12 @@
         } catch (e) {
           const data = seedClientes(
             seedMontadores(
-              seedProdutos(
-                seedProdutosInjetados(
-                  seedProdutores(
-                    seedFornecedoresMateriaPrima(seedFornecedores(defaultDB()))
+              seedReceitas(
+                seedProdutos(
+                  seedProdutosInjetados(
+                    seedProdutores(
+                      seedFornecedoresMateriaPrima(seedFornecedores(defaultDB()))
+                    )
                   )
                 )
               )
@@ -7860,9 +8646,14 @@
       // corresponde ao fornecedor e ao produto injetado escolhidos, para usar
       // como produtorId da ordem de produção.
       function resolverProdutorId(fornecedorNome, produtoId) {
-        const alvo = String(fornecedorNome || '').trim().toLowerCase()
+        const alvo = String(fornecedorNome || '')
+          .trim()
+          .toLowerCase()
         const linhasFornecedor = db.produtores.filter(
-          (p) => String(p.fornecedor || '').trim().toLowerCase() === alvo
+          (p) =>
+            String(p.fornecedor || '')
+              .trim()
+              .toLowerCase() === alvo
         )
         if (!linhasFornecedor.length) return null
         const exata = linhasFornecedor.find((p) => p.produto === produtoId)
@@ -7880,8 +8671,9 @@
           .toLowerCase()
         const linhasFornecedor = db.produtores.filter(
           (p) =>
-            String(p.fornecedor || '').trim().toLowerCase() ===
-            fornecedorSelecionado
+            String(p.fornecedor || '')
+              .trim()
+              .toLowerCase() === fornecedorSelecionado
         )
         // Para cada linha do fornecedor, tenta resolver o produto vinculado
         // pelo ID; se ainda não estiver vinculado (cadastro antigo/pendente),
@@ -7909,26 +8701,15 @@
           )
           .join('')
       }
-      function renderProducao() {
-        document.getElementById('op-produtor').innerHTML =
-          optListProdutoresAgrupados()
-        atualizarProdutosDoProdutor()
-        const abertas = db.ordensProducao.filter((o) => o.status === 'aberta')
-        document.getElementById('tbl-op-abertas').innerHTML = abertas.length
-          ? abertas
-              .map(
-                (o) => `
-    <tr><td class="serial">${o.id}</td><td>${nome(db.produtores, o.produtorId)}</td><td>${nome(db.produtosSemiacabados, o.produtoId)}</td>
-    <td class="mono">${o.quantidadeSolicitada}</td><td class="mono">${o.quantidadeRecebida}</td><td class="mono">${o.quantidadeSolicitada - o.quantidadeRecebida}</td>
-    <td class="mono">${fmtDate(o.dataCriacao)}</td>
-    <td><button class="btn-ghost btn-sm" title="Baixar PDF" onclick="baixarOrdemProducaoPDF('${o.id}')">${ICON_PDF}</button><button class="btn-primary btn-sm" onclick="registrarEntregaProducao('${o.id}')">+ Entrega</button></td></tr>`
-              )
-              .join('')
-          : `<tr class="empty-row"><td colspan="8">Nenhuma ordem aberta.</td></tr>`
+      // Gera as linhas da tabela "Ordens Concluídas" (Produção), incluindo o
+      // detalhamento por entrega e a linha de total por ordem. Reutilizada
+      // também em Relatórios > Produção (terceiros) > "Produção em Terceiros
+      // (pendente)", que segue a mesma estrutura.
+      function ordensConcluidasRowsHTML() {
         const conc = db.ordensProducao.filter(
           (o) => (o.entregas || []).length > 0
         )
-        document.getElementById('tbl-op-concluidas').innerHTML = conc.length
+        return conc.length
           ? conc
               .map((o) => {
                 const produtorNome = nome(db.produtores, o.produtorId)
@@ -7950,7 +8731,6 @@
     <td class="mono">${fmtDate(e.data)}</td></tr>`
                   )
                   .join('')
-                if (entregas.length === 1) return linhasEntregas
                 const linhaTotal = `
     <tr style="font-weight:700;background:var(--surface-2);">
       <td style="color:#2563EB !important;">Total — ${o.id}</td>
@@ -7965,6 +8745,25 @@
               })
               .join('')
           : `<tr class="empty-row"><td colspan="7">Nenhuma ordem concluída ainda.</td></tr>`
+      }
+      function renderProducao() {
+        document.getElementById('op-produtor').innerHTML =
+          optListProdutoresAgrupados()
+        atualizarProdutosDoProdutor()
+        const abertas = db.ordensProducao.filter((o) => o.status === 'aberta')
+        document.getElementById('tbl-op-abertas').innerHTML = abertas.length
+          ? abertas
+              .map(
+                (o) => `
+    <tr><td class="serial">${o.id}</td><td>${nome(db.produtores, o.produtorId)}</td><td>${nome(db.produtosSemiacabados, o.produtoId)}</td>
+    <td class="mono">${o.quantidadeSolicitada}</td><td class="mono">${o.quantidadeRecebida}</td><td class="mono">${o.quantidadeSolicitada - o.quantidadeRecebida}</td>
+    <td class="mono">${fmtDate(o.dataCriacao)}</td>
+    <td><button class="btn-ghost btn-sm" title="Baixar PDF" onclick="baixarOrdemProducaoPDF('${o.id}')">${ICON_PDF}</button><button class="btn-primary btn-sm" onclick="registrarEntregaProducao('${o.id}')">+ Entrega</button></td></tr>`
+              )
+              .join('')
+          : `<tr class="empty-row"><td colspan="8">Nenhuma ordem aberta.</td></tr>`
+        document.getElementById('tbl-op-concluidas').innerHTML =
+          ordensConcluidasRowsHTML()
         document.getElementById('op-concluidas-atualizacao').textContent =
           textoUltimaAtualizacao()
         reaplicarBuscasGenericas()
@@ -8440,7 +9239,8 @@
         })
         const itens = itensBrutos.map((it) => {
           const prod = (db.produtos || []).find(
-            (p) => String(p.codigo_v || '').replace(/^0+(?=\d)/, '') === it.codigoVd
+            (p) =>
+              String(p.codigo_v || '').replace(/^0+(?=\d)/, '') === it.codigoVd
           )
           return {
             codigoVd: it.codigoVd,
@@ -8884,7 +9684,7 @@
         document.getElementById('tbl-est-terceiros').innerHTML =
           terceirosPendentesRows(true)
         document.getElementById('rel-terceiros').innerHTML =
-          terceirosPendentesRows(true)
+          ordensConcluidasRowsHTML()
         const atualizacaoTexto = textoUltimaAtualizacao()
         ;[
           'est-semi-atualizacao',
@@ -9230,6 +10030,12 @@
             { key: 'codigo_v', label: 'CÓDIGO VD', type: 'text' },
             { key: 'modelo', label: 'Modelo', type: 'text' },
             { key: 'produto', label: 'Produto', type: 'text' },
+            {
+              key: 'receita',
+              label: 'Receita',
+              type: 'text',
+
+            },
             { key: 'unidade', label: 'Unidade', type: 'text' },
             { key: 'codNcm', label: 'COD NCM', type: 'text' },
             { key: 'codigoBarras', label: 'CODIGO BARRAS', type: 'text' },
@@ -9245,6 +10051,21 @@
             },
             { key: 'solapa', label: 'SOLAPA', type: 'text' },
             { key: 'caixa_coletiva', label: 'CAIXA COLETIVA', type: 'text' },
+          ],
+        },
+        receitas: {
+          label: 'Receitas',
+          fields: [
+            { key: 'produto', label: 'Produto', type: 'text', required: true },
+            {
+              key: 'materiaPrima',
+              label: 'Matéria-Prima',
+              type: 'text',
+              required: true,
+            },
+            { key: 'quantidade', label: 'Quantidade', type: 'text' },
+            { key: 'valorBase', label: 'Valor Base', type: 'text' },
+            { key: 'valorUnitario', label: 'Valor Unitário', type: 'text' },
           ],
         },
         clientes: {
@@ -9363,7 +10184,7 @@
         }
         const formFields = cfg.fields
           .filter((f) => !f.auto)
-          .map((f) => renderCadastroFieldHTML(f, '', 'cad-f-'))
+          .map((f) => renderCadastroFieldHTML(f, f.defaultValue || '', 'cad-f-'))
           .join('')
         const searchTerm = (cadBusca || '').toLowerCase().trim()
         const valorExibicaoCadastro = (item, f) => {
@@ -9371,7 +10192,8 @@
             const encontrado = (db[f.optionsFrom] || []).find(
               (x) => x.id === item[f.key]
             )
-            if (encontrado) return encontrado.nome || encontrado.fornecedor || encontrado.id
+            if (encontrado)
+              return encontrado.nome || encontrado.fornecedor || encontrado.id
             return item[f.key] || ''
           }
           return item[f.key]
@@ -9384,6 +10206,44 @@
               .includes(searchTerm)
           )
         })
+        const tableFields =
+          cadAtivo === 'receitas'
+            ? cfg.fields.filter((f) => f.key !== 'produto')
+            : cfg.fields
+        const renderCadastroActions = (item) => `
+        <td>
+          <button class="btn-ghost btn-sm" title="Editar" onclick="editarCadastro('${item.id}')">✏️</button>
+          <button class="btn-danger btn-sm" title="Excluir" onclick="confirmarExclusaoCadastro('${item.id}')">🗑️</button>
+        </td>`
+        const renderCadastroRow = (item) => `
+        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${tableFields.map((f) => `<td>${f.type === 'datetime' && item[f.key] ? fmtDate(item[f.key]) : valorExibicaoCadastro(item, f) || '—'}</td>`).join('')}
+        ${renderCadastroActions(item)}</tr>`
+        const renderReceitasRows = () => {
+          const grupos = []
+          const porProduto = new Map()
+          rows.forEach((item) => {
+            const produto = String(item.produto || '—').trim() || '—'
+            if (!porProduto.has(produto)) {
+              porProduto.set(produto, [])
+              grupos.push(produto)
+            }
+            porProduto.get(produto).push(item)
+          })
+          return grupos
+            .map((produto) => {
+              const itens = porProduto.get(produto) || []
+              return `
+        <tr style="background:rgba(37,99,235,0.10);border-top:10px solid var(--surface);">
+          <td colspan="${tableFields.length + 1}" style="color:#2563EB;font-weight:800;">${escapeHtml(produto)}</td>
+        </tr>${itens.map(renderCadastroRow).join('')}`
+            })
+            .join('')
+        }
+        const tableRowsHTML = rows.length
+          ? cadAtivo === 'receitas'
+            ? renderReceitasRows()
+            : rows.map(renderCadastroRow).join('')
+          : `<tr class="empty-row"><td colspan="${tableFields.length + (cfg.showId ? 2 : 1)}">${searchTerm ? 'Nenhum registro encontrado para a busca.' : 'Nenhum registro ainda.'}</td></tr>`
         content.innerHTML = `
     <div class="card"><h3>Novo Registro — ${cfg.label}</h3>${cfg.subtitle ? `<div class="hint" style="margin-bottom:10px;">${cfg.subtitle}</div>` : ''}${formFields}
       <div class="btn-row"><button class="btn-primary" onclick="salvarCadastroSimples()">Adicionar</button></div>
@@ -9397,22 +10257,8 @@
         </div>
       </div>
       <div class="table-wrap"><table>
-      <thead><tr>${cfg.showId ? '<th>ID</th>' : ''}${cfg.fields.map((f) => `<th>${f.label}</th>`).join('')}<th>Ações</th></tr></thead>
-      <tbody id="cad-tbody">${
-        rows.length
-          ? rows
-              .map(
-                (item) => `
-        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${f.type === 'datetime' && item[f.key] ? fmtDate(item[f.key]) : valorExibicaoCadastro(item, f) || '—'}</td>`).join('')}
-        <td>
-          <button class="btn-ghost btn-sm" title="Editar" onclick="editarCadastro('${item.id}')">✏️</button>
-          <button class="btn-danger btn-sm" title="Excluir" onclick="confirmarExclusaoCadastro('${item.id}')">🗑️</button>
-        </td></tr>`
-              )
-              .join('')
-          : `<tr class="empty-row"><td colspan="${cfg.fields.length + (cfg.showId ? 2 : 1)}">${searchTerm ? 'Nenhum registro encontrado para a busca.' : 'Nenhum registro ainda.'}</td></tr>`
-      }
-      </tbody></table></div></div>`
+      <thead><tr>${cfg.showId ? '<th>ID</th>' : ''}${tableFields.map((f) => `<th>${f.label}</th>`).join('')}<th>Ações</th></tr></thead>
+      <tbody id="cad-tbody">${tableRowsHTML}</tbody></table></div></div>`
       }
       function proximoValorAuto(lista, key) {
         const max = lista.reduce((acc, item) => {
@@ -10368,7 +11214,7 @@
           closeModal()
           return
         }
-        db = Object.assign(defaultDB(), incoming)
+        db = seedReceitas(Object.assign(defaultDB(), incoming))
         window._pendingBackupImport = null
         addHistorico('Backup', 'Restauração completa (substituição) de backup')
         save()
@@ -10385,6 +11231,7 @@
           'produtores',
           'produtosSemiacabados',
           'produtos',
+          'receitas',
           'montadores',
           'clientes',
           'modelosRelogio',
@@ -10443,6 +11290,7 @@
           ['Produtores', db.produtores.length],
           ['Produtos Injetados', db.produtosSemiacabados.length],
           ['Produtos', (db.produtos || []).length],
+          ['Receitas', (db.receitas || []).length],
           ['Montadores', db.montadores.length],
           ['Clientes', db.clientes.length],
           ['Modelos de Relógio', db.modelosRelogio.length],
