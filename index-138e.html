@@ -956,7 +956,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.3.9</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.3.7</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -988,7 +988,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.3.9</span>
+        <span>Controle de Produção · Relógios · Versão 1.3.7</span>
       </div>
       <button
         class="menu-btn"
@@ -1337,10 +1337,7 @@
           <div class="grid-2">
             <div>
               <label>Produtor Terceirizado</label
-              ><select
-                id="op-produtor"
-                onchange="atualizarProdutosDoProdutor()"
-              ></select>
+              ><select id="op-produtor"></select>
             </div>
             <div>
               <label>Produto (Injetado)</label
@@ -6506,34 +6503,6 @@
         })
         return data
       }
-      // Migra registros antigos de "Fornecedores Injeção" que ainda guardam o
-      // Produto como texto livre (ex: "BASE SIGMA QUADRADO BRANCA") para o ID
-      // do produto correspondente em Produtos Injetados, evitando divergências
-      // de escrita (BRANCA/BRANCO, PRETA/PRETO etc). Registros sem
-      // correspondência exata ficam com o texto original preservado, para que
-      // o usuário possa corrigir manualmente pelo novo campo de seleção.
-      function migrarProdutoProdutorParaId(data) {
-        const produtos = Array.isArray(data?.produtosSemiacabados)
-          ? data.produtosSemiacabados
-          : []
-        const normalizar = (s) =>
-          String(s || '')
-            .trim()
-            .toLowerCase()
-            .replace(/\bbranca\b/g, 'branco')
-            .replace(/\bpreta\b/g, 'preto')
-        const lista = Array.isArray(data?.produtores) ? data.produtores : []
-        lista.forEach((item) => {
-          if (!item.produto) return
-          const jaEhId = produtos.some((m) => m.id === item.produto)
-          if (jaEhId) return
-          const alvo = normalizar(item.produto)
-          const match = produtos.find((m) => normalizar(m.nome) === alvo)
-          if (match) item.produto = match.id
-        })
-        data.produtores = lista
-        return data
-      }
       let db = load()
       // Lê uma chave do localStorage e retorna o objeto só se for um DB válido; senão null.
       function readAndValidate(key) {
@@ -6569,14 +6538,12 @@
             seedClientes(
               seedMontadores(
                 seedProdutos(
-                  migrarProdutoProdutorParaId(
-                    seedProdutosInjetados(
-                      seedProdutores(
-                        seedFornecedoresMateriaPrima(
-                          parsed
-                            ? seedFornecedores(parsed)
-                            : seedFornecedores(defaultDB())
-                        )
+                  seedProdutosInjetados(
+                    seedProdutores(
+                      seedFornecedoresMateriaPrima(
+                        parsed
+                          ? seedFornecedores(parsed)
+                          : seedFornecedores(defaultDB())
                       )
                     )
                   )
@@ -6874,7 +6841,9 @@
       function optListProdutosInjetados(arr, selected) {
         return arr
           .map((i) => {
-            const label = i.nome || ''
+            const label = i.nome
+              ? `${i.nome}${i.mpUtilizadas ? ' - ' + i.mpUtilizadas : ''}`
+              : ''
             return `<option value="${i.id}" ${i.id === selected ? 'selected' : ''}>${label}</option>`
           })
           .join('')
@@ -7445,15 +7414,8 @@
           table.querySelectorAll('thead th')
         ).map((th) => th.textContent.trim())
         // Ignora colunas de ações (sem cabeçalho de texto ou rotuladas "Ações").
-        const semAcento = (s) =>
-          String(s || '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-            .trim()
         const colunasIgnoradas = headersOriginais.reduce((arr, h, i) => {
-          const norm = semAcento(h)
-          if (!h || norm === 'acao' || norm === 'acoes') arr.push(i)
+          if (!h || /^a[çc][ãa]o(es)?$/i.test(h)) arr.push(i)
           return arr
         }, [])
         const headers = headersOriginais.filter(
@@ -7660,12 +7622,6 @@
           toast('Preencha todos os campos.')
           return
         }
-        if (produtoId.startsWith('pendente:')) {
-          toast(
-            'Este produto ainda não está vinculado ao catálogo de Injetados. Corrija em Cadastros > Fornecedores Injeção antes de criar a ordem.'
-          )
-          return
-        }
         const produtorId = resolverProdutorId(fornecedorNome, produtoId)
         if (!produtorId) {
           toast('Selecione um Produtor Terceirizado válido.')
@@ -7865,49 +7821,25 @@
           (p) => String(p.fornecedor || '').trim().toLowerCase() === alvo
         )
         if (!linhasFornecedor.length) return null
-        const exata = linhasFornecedor.find((p) => p.produto === produtoId)
+        const produto = db.produtosSemiacabados.find((x) => x.id === produtoId)
+        const nomeProduto = String(produto?.nome || '').trim().toLowerCase()
+        const exata = linhasFornecedor.find(
+          (p) => String(p.produto || '').trim().toLowerCase() === nomeProduto
+        )
         return (exata || linhasFornecedor[0]).id
       }
-      // "Produto (Injetado)" lista apenas os produtos vinculados ao
-      // Produtor Terceirizado (fornecedor) selecionado, relacionando pelo ID
-      // do produto (db.produtores.produto agora referencia diretamente o
-      // ID em db.produtosSemiacabados), evitando divergências de texto.
+      // "Produto (Injetado)" lista sempre todos os produtos, sem filtrar pelo
+      // Produtor Terceirizado selecionado.
       function atualizarProdutosDoProdutor() {
-        const fornecedorSelecionado = (
-          document.getElementById('op-produtor').value || ''
-        )
-          .trim()
-          .toLowerCase()
-        const linhasFornecedor = db.produtores.filter(
-          (p) =>
-            String(p.fornecedor || '').trim().toLowerCase() ===
-            fornecedorSelecionado
-        )
-        // Para cada linha do fornecedor, tenta resolver o produto vinculado
-        // pelo ID; se ainda não estiver vinculado (cadastro antigo/pendente),
-        // mostra mesmo assim usando o texto cadastrado, mas com um valor
-        // especial "pendente:" para bloquear a criação da ordem até o
-        // cadastro ser corrigido em Fornecedores Injeção.
-        const opcoes = linhasFornecedor.map((p) => {
-          const produtoCatalogo = db.produtosSemiacabados.find(
-            (m) => m.id === p.produto
-          )
-          if (produtoCatalogo) {
-            return { value: produtoCatalogo.id, label: produtoCatalogo.nome }
-          }
-          return {
-            value: 'pendente:' + p.id,
-            label: (p.produto || '(sem produto)') + ' — não vinculado',
-          }
-        })
         const produtoAtual = document.getElementById('op-produto').value
-        const aindaValido = opcoes.some((o) => o.value === produtoAtual)
-        document.getElementById('op-produto').innerHTML = opcoes
-          .map(
-            (o) =>
-              `<option value="${escapeHtml(o.value)}" ${o.value === produtoAtual && aindaValido ? 'selected' : ''}>${escapeHtml(o.label)}</option>`
+        const aindaValido = db.produtosSemiacabados.some(
+          (m) => m.id === produtoAtual
+        )
+        document.getElementById('op-produto').innerHTML =
+          optListProdutosInjetados(
+            db.produtosSemiacabados,
+            aindaValido ? produtoAtual : undefined
           )
-          .join('')
       }
       function renderProducao() {
         document.getElementById('op-produtor').innerHTML =
@@ -9172,12 +9104,7 @@
             },
             { key: 'cnpj', label: 'CNPJ', type: 'text' },
             { key: 'contato', label: 'Contato', type: 'text' },
-            {
-              key: 'produto',
-              label: 'Produto',
-              type: 'select',
-              optionsFrom: 'produtosSemiacabados',
-            },
+            { key: 'produto', label: 'Produto', type: 'text' },
           ],
         },
         montadores: {
@@ -9335,19 +9262,13 @@
       function renderCadastroFieldHTML(f, value = '', prefix = 'cad-f-') {
         const val = value == null ? '' : String(value)
         if (f.type === 'select') {
-          const opcoes = f.optionsFrom
-            ? (db[f.optionsFrom] || []).map((i) => ({
-                value: i.id,
-                label: i.nome || i.fornecedor || i.id,
-              }))
-            : (f.options || []).map((o) => ({ value: o, label: o }))
-          const options = opcoes
+          const options = (f.options || [])
             .map(
               (o) =>
-                `<option value="${escapeHtml(o.value)}" ${o.value === val ? 'selected' : ''}>${escapeHtml(o.label)}</option>`
+                `<option value="${escapeHtml(o)}" ${o === val ? 'selected' : ''}>${escapeHtml(o)}</option>`
             )
             .join('')
-          return `<label>${f.label}</label><select id="${prefix}${f.key}"><option value="">— Selecione —</option>${options}</select>`
+          return `<label>${f.label}</label><select id="${prefix}${f.key}">${options}</select>`
         }
         return `<label>${f.label}</label><input id="${prefix}${f.key}" type="text" value="${escapeHtml(val)}">`
       }
@@ -9366,20 +9287,10 @@
           .map((f) => renderCadastroFieldHTML(f, '', 'cad-f-'))
           .join('')
         const searchTerm = (cadBusca || '').toLowerCase().trim()
-        const valorExibicaoCadastro = (item, f) => {
-          if (f.type === 'select' && f.optionsFrom) {
-            const encontrado = (db[f.optionsFrom] || []).find(
-              (x) => x.id === item[f.key]
-            )
-            if (encontrado) return encontrado.nome || encontrado.fornecedor || encontrado.id
-            return item[f.key] || ''
-          }
-          return item[f.key]
-        }
         const rows = db[cadAtivo].filter((item) => {
           if (!searchTerm) return true
           return cfg.fields.some((f) =>
-            String(valorExibicaoCadastro(item, f) || '')
+            String(item[f.key] || '')
               .toLowerCase()
               .includes(searchTerm)
           )
@@ -9403,7 +9314,7 @@
           ? rows
               .map(
                 (item) => `
-        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${f.type === 'datetime' && item[f.key] ? fmtDate(item[f.key]) : valorExibicaoCadastro(item, f) || '—'}</td>`).join('')}
+        <tr>${cfg.showId ? `<td class="mono">${item.id}</td>` : ''}${cfg.fields.map((f) => `<td>${f.type === 'datetime' && item[f.key] ? fmtDate(item[f.key]) : item[f.key] || '—'}</td>`).join('')}
         <td>
           <button class="btn-ghost btn-sm" title="Editar" onclick="editarCadastro('${item.id}')">✏️</button>
           <button class="btn-danger btn-sm" title="Excluir" onclick="confirmarExclusaoCadastro('${item.id}')">🗑️</button>
