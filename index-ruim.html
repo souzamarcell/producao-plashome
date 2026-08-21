@@ -859,10 +859,10 @@
       .est-subview.active {
         display: block;
       }
-      .est-materia-subview {
+      .rel-subview {
         display: none;
       }
-      .est-materia-subview.active {
+      .rel-subview.active {
         display: block;
       }
 
@@ -956,7 +956,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.4.1</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.4.0</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -988,7 +988,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.4.1</span>
+        <span>Controle de Produção · Relógios · Versão 1.4.0</span>
       </div>
       <button
         class="menu-btn"
@@ -1096,6 +1096,16 @@
       </button>
       <button
         class="drawer-item"
+        data-view="relatorios"
+        onclick="
+          switchView('relatorios')
+          closeDrawer()
+        "
+      >
+        <span class="drawer-item-icon">◆</span> Relatórios
+      </button>
+      <button
+        class="drawer-item"
         data-view="ajustes"
         onclick="
           switchView('ajustes')
@@ -1126,6 +1136,7 @@
       <button class="tab-btn" data-view="estoques">Estoques</button>
       <button class="tab-btn" data-view="expedicao">Expedição</button>
       <button class="tab-btn" data-view="cadastros">Cadastros</button>
+      <button class="tab-btn" data-view="relatorios">Relatórios</button>
       <button class="tab-btn" data-view="ajustes">Ajustes</button>
     </nav>
 
@@ -1679,7 +1690,7 @@
             >
               📄 Exportar PDF
             </button>
-            <!-- <label
+            <label
               class="btn-upload-venda"
               title="Importar pedido de venda (.txt)"
             >
@@ -1713,7 +1724,7 @@
                 style="display: none"
                 onchange="handleImportVendaTxt(event)"
               />
-            </label> -->
+            </label>
           </div>
         </div>
         <div class="card">
@@ -1751,109 +1762,54 @@
         <div class="subtabs" id="est-subtabs"></div>
 
         <div class="est-subview" id="est-sub-materia">
-          <div class="subtabs" id="est-materia-subtabs"></div>
-
-          <div class="est-materia-subview" id="est-materia-sub-entradas">
-            <div class="section-title">
-              <h2>Matéria-Prima & Componentes (Entradas)</h2>
-            </div>
-            <div class="card">
-              <div
-                style="
-                  display: flex;
-                  gap: 10px;
-                  align-items: center;
-                  flex-wrap: wrap;
-                  margin-bottom: 10px;
-                "
-              >
-                <input
-                  type="text"
-                  id="est-materia-busca"
-                  placeholder="Buscar por material..."
-                  value=""
-                  oninput="buscaGenericaTabela(this, 'tbl-est-materia')"
-                  style="flex: 1; min-width: 220px; margin-bottom: 0"
-                />
-                <button
-                  class="btn-ghost btn-sm"
-                  onclick="
-                    exportarTabelaGenericaPDF(
-                      'tbl-est-materia',
-                      'Matéria-Prima & Componentes (Entradas)',
-                      'Estoque_Materia_Prima_Entradas',
-                      'est-materia-busca'
-                    )
-                  "
-                >
-                  📄 Exportar PDF
-                </button>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Material</th>
-                      <th>Valor Unidade</th>
-                      <th>Quantidade Recebida</th>
-                      <th>Total</th>
-                      <th>Recebido em</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tbl-est-materia"></tbody>
-                </table>
-              </div>
-            </div>
+          <div class="section-title">
+            <h2>Matéria-Prima & Componentes (Entradas)</h2>
           </div>
-
-          <div class="est-materia-subview" id="est-materia-sub-saldos">
-            <div class="section-title">
-              <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
-            </div>
-            <div class="card">
-              <div
-                style="
-                  display: flex;
-                  gap: 10px;
-                  align-items: center;
-                  flex-wrap: wrap;
-                  margin-bottom: 10px;
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="est-materia-busca"
+                placeholder="Buscar por material..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'tbl-est-materia')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'tbl-est-materia',
+                    'Matéria-Prima & Componentes (Entradas)',
+                    'Estoque_Materia_Prima_Entradas',
+                    'est-materia-busca'
+                  )
                 "
               >
-                <input
-                  type="text"
-                  id="est-saldos-materia-busca"
-                  placeholder="Buscar por material..."
-                  value=""
-                  oninput="buscaGenericaTabela(this, 'est-saldos-materia')"
-                  style="flex: 1; min-width: 220px; margin-bottom: 0"
-                />
-                <button
-                  class="btn-ghost btn-sm"
-                  onclick="
-                    exportarTabelaGenericaPDF(
-                      'est-saldos-materia',
-                      'Estoque de Matéria-Prima e Insumos & Componentes (Saldos)',
-                      'Estoque_Materia_Prima_Saldos',
-                      'est-saldos-materia-busca'
-                    )
-                  "
-                >
-                  📄 Exportar PDF
-                </button>
-              </div>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Material</th>
-                      <th>Quantidade</th>
-                      <th>Data e Hora</th>
-                    </tr>
-                  </thead>
-                  <tbody id="est-saldos-materia"></tbody>
-                </table>
-              </div>
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Material</th>
+                    <th>Valor Unidade</th>
+                    <th>Quantidade Recebida</th>
+                    <th>Total</th>
+                    <th>Recebido em</th>
+                  </tr>
+                </thead>
+                <tbody id="tbl-est-materia"></tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -1911,7 +1867,7 @@
         </div>
 
         <div class="est-subview" id="est-sub-semi">
-          <div class="section-title"><h2>Produtos Injetados</h2></div>
+          <div class="section-title"><h2>Produtos Injetados (Entradas)</h2></div>
           <div class="card">
             <div
               style="
@@ -1935,7 +1891,7 @@
                 onclick="
                   exportarTabelaGenericaPDF(
                     'tbl-est-semi',
-                    'Produtos Injetados',
+                    'Produtos Injetados (Entradas)',
                     'Estoque_Produtos_Injetados',
                     'est-semi-busca'
                   )
@@ -1950,7 +1906,9 @@
                   <tr>
                     <th>Produto</th>
                     <th>Preço</th>
-                    <th>Quantidade</th>
+                    <th>Quantidade Recebida</th>
+                    <th>Total</th>
+                    <th>Recebido em</th>
                   </tr>
                 </thead>
                 <tbody id="tbl-est-semi"></tbody>
@@ -2017,51 +1975,6 @@
             ></div>
           </div>
         </div>
-
-        <div class="est-subview" id="est-sub-historico">
-          <div class="section-title">
-            <h2>Histórico Completo de Movimentações</h2>
-          </div>
-          <div class="card">
-            <div
-              style="
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                flex-wrap: wrap;
-                margin-bottom: 10px;
-              "
-            >
-              <input
-                type="text"
-                id="est-historico-busca"
-                placeholder="Buscar por tipo, descrição ou usuário..."
-                value=""
-                oninput="filtrarHistoricoRelatorio(this.value)"
-                style="flex: 1; min-width: 220px; margin-bottom: 0"
-              />
-              <button
-                class="btn-ghost btn-sm"
-                onclick="exportarHistoricoRelatorioPDF()"
-              >
-                📄 Exportar PDF
-              </button>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Descrição</th>
-                    <th>Usuário</th>
-                  </tr>
-                </thead>
-                <tbody id="est-historico"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </section>
 
       <!-- CADASTROS -->
@@ -2112,6 +2025,273 @@
         </div> -->
         <div class="subtabs" id="cad-subtabs"></div>
         <div id="cad-content"></div>
+      </section>
+
+      <!-- RELATÓRIOS -->
+      <section class="view" id="view-relatorios">
+        <div class="subtabs" id="rel-subtabs"></div>
+
+        <div class="rel-subview" id="rel-sub-materia">
+          <div class="section-title">
+            <h2>Estoque de Matéria-Prima e Insumos & Componentes (Saldos)</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="rel-materia-busca"
+                placeholder="Buscar por material..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-materia')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-materia',
+                    'Estoque de Matéria-Prima e Insumos & Componentes (Saldos)',
+                    'Estoque_Materia_Prima_Saldos',
+                    'rel-materia-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Material</th>
+                    <th>Quantidade</th>
+                    <th>Data e Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-materia"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="rel-subview" id="rel-sub-terceiros">
+          <div class="section-title">
+            <h2>Produção em Terceiros (pendente)</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="rel-terceiros-busca"
+                placeholder="Buscar por produtor ou produto..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-terceiros')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-terceiros',
+                    'Produção em Terceiros (pendente)',
+                    'Producao_Terceiros_Pendente',
+                    'rel-terceiros-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Produtor</th>
+                    <th>Produto</th>
+                    <th>Recebida</th>
+                    <th>Total</th>
+                    <th>Entregas</th>
+                    <th>Data</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-terceiros"></tbody>
+              </table>
+            </div>
+            <div
+              class="hint"
+              id="rel-terceiros-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
+          </div>
+        </div>
+
+        <div class="rel-subview" id="rel-sub-semi">
+          <div class="section-title">
+            <h2>Estoque de Injetados (Saldos)</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="rel-semi-busca"
+                placeholder="Buscar por produto..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-semi')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-semi',
+                    'Estoque de Injetados (Saldos)',
+                    'Estoque_Injetados_Saldos',
+                    'rel-semi-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Data e Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-semi"></tbody>
+              </table>
+            </div>
+            <div
+              class="hint"
+              id="rel-semi-atualizacao"
+              style="text-align: right; margin-top: 8px"
+            ></div>
+          </div>
+        </div>
+
+        <div class="rel-subview" id="rel-sub-acabados">
+          <div class="section-title"><h2>Estoque de Produtos Acabados</h2></div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="rel-acabados-busca"
+                placeholder="Buscar por modelo ou cód. barras..."
+                value=""
+                oninput="buscaGenericaTabela(this, 'rel-acabados')"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="
+                  exportarTabelaGenericaPDF(
+                    'rel-acabados',
+                    'Estoque de Produtos Acabados',
+                    'Estoque_Produtos_Acabados',
+                    'rel-acabados-busca'
+                  )
+                "
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Modelo</th>
+                    <th>Cód. Barras</th>
+                    <th>Quantidade</th>
+                    <th>Data e Hora</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-acabados"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="rel-subview" id="rel-sub-historico">
+          <div class="section-title">
+            <h2>Histórico Completo de Movimentações</h2>
+          </div>
+          <div class="card">
+            <div
+              style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                margin-bottom: 10px;
+              "
+            >
+              <input
+                type="text"
+                id="rel-historico-busca"
+                placeholder="Buscar por tipo, descrição ou usuário..."
+                value=""
+                oninput="filtrarHistoricoRelatorio(this.value)"
+                style="flex: 1; min-width: 220px; margin-bottom: 0"
+              />
+              <button
+                class="btn-ghost btn-sm"
+                onclick="exportarHistoricoRelatorioPDF()"
+              >
+                📄 Exportar PDF
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Usuário</th>
+                  </tr>
+                </thead>
+                <tbody id="rel-historico"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- AJUSTES -->
@@ -8194,7 +8374,10 @@
       }
       // Registro das buscas genéricas (input de busca -> tbody da tabela).
       registrarBuscaGenerica('expedicoes-busca', 'tbl-expedicoes')
-      registrarBuscaGenerica('est-saldos-materia-busca', 'est-saldos-materia')
+      registrarBuscaGenerica('rel-materia-busca', 'rel-materia')
+      registrarBuscaGenerica('rel-terceiros-busca', 'rel-terceiros')
+      registrarBuscaGenerica('rel-semi-busca', 'rel-semi')
+      registrarBuscaGenerica('rel-acabados-busca', 'rel-acabados')
       registrarBuscaGenerica('est-materia-busca', 'tbl-est-materia')
       registrarBuscaGenerica('est-terceiros-busca', 'tbl-est-terceiros')
       registrarBuscaGenerica('est-semi-busca', 'tbl-est-semi')
@@ -8523,7 +8706,9 @@
           .join('')
       }
       // Gera as linhas da tabela "Ordens Concluídas" (Produção), incluindo o
-      // detalhamento por entrega e a linha de total por ordem.
+      // detalhamento por entrega e a linha de total por ordem. Reutilizada
+      // também em Relatórios > Produção (terceiros) > "Produção em Terceiros
+      // (pendente)", que segue a mesma estrutura.
       function ordensConcluidasRowsHTML() {
         const conc = db.ordensProducao.filter(
           (o) => (o.entregas || []).length > 0
@@ -9170,7 +9355,6 @@
         terceiros: { label: 'Produção em Terceiros (pendente)' },
         semi: { label: 'Produtos Injetados' },
         acabados: { label: 'Produtos Acabados' },
-        historico: { label: 'Histórico Completo' },
       }
       let estAtivo = 'materia'
       function renderEstSubtabs() {
@@ -9191,30 +9375,34 @@
         estAtivo = key
         renderEstSubtabs()
       }
-      /* ============================= ESTOQUES > MATÉRIA-PRIMA (sub-navegação) ============================= */
-      // Navegação por sub-abas dentro de "Matéria-Prima & Componentes",
-      // separando as entradas recebidas dos saldos consolidados.
-      const estMateriaConfig = {
-        entradas: { label: 'Entradas' },
-        saldos: { label: 'Saldos' },
+      /* ============================= RELATÓRIOS (subtabs) ============================= */
+      // Navegação por sub-abas dentro de Relatórios, separando cada tipo de
+      // posição de estoque e o histórico completo de movimentações.
+      const relConfig = {
+        materia: { label: 'Matéria-Prima e Insumos & Componentes' },
+        terceiros: { label: 'Produção (terceiros)' },
+        semi: { label: 'Injetados' },
+        acabados: { label: 'Produtos Acabados' },
+        historico: { label: 'Histórico Completo' },
       }
-      let estMateriaAtivo = 'entradas'
-      function renderEstMateriaSubtabs() {
-        document.getElementById('est-materia-subtabs').innerHTML =
-          Object.keys(estMateriaConfig)
-            .map(
-              (k) =>
-                `<button class="subtab-btn ${k === estMateriaAtivo ? 'active' : ''}" onclick="trocarEstMateria('${k}')">${estMateriaConfig[k].label}</button>`
-            )
-            .join('')
-        Object.keys(estMateriaConfig).forEach((k) => {
-          const el = document.getElementById('est-materia-sub-' + k)
-          if (el) el.classList.toggle('active', k === estMateriaAtivo)
+      let relAtivo = 'materia'
+      function renderRelSubtabs() {
+        document.getElementById('rel-subtabs').innerHTML = Object.keys(
+          relConfig
+        )
+          .map(
+            (k) =>
+              `<button class="subtab-btn ${k === relAtivo ? 'active' : ''}" onclick="trocarRel('${k}')">${relConfig[k].label}</button>`
+          )
+          .join('')
+        Object.keys(relConfig).forEach((k) => {
+          const el = document.getElementById('rel-sub-' + k)
+          if (el) el.classList.toggle('active', k === relAtivo)
         })
       }
-      function trocarEstMateria(key) {
-        estMateriaAtivo = key
-        renderEstMateriaSubtabs()
+      function trocarRel(key) {
+        relAtivo = key
+        renderRelSubtabs()
       }
       let relHistoricoBusca = ''
       function filtrarHistoricoRelatorio(valor) {
@@ -9323,7 +9511,7 @@
       }
       function renderEstoquesReports() {
         renderEstSubtabs()
-        renderEstMateriaSubtabs()
+        renderRelSubtabs()
         const mRowsEst = (() => {
           const recebidos = db.pedidosCompra.filter(
             (p) => p.status === 'entregue'
@@ -9347,6 +9535,77 @@
                 }
               )
             )
+          let html = ''
+          let i = 0
+          while (i < linhas.length) {
+            const chave = String(linhas[i].nome || '')
+              .trim()
+              .toLowerCase()
+            let j = i
+            let somaQtd = 0
+            let somaTotal = 0
+            let temTotal = false
+            while (
+              j < linhas.length &&
+              String(linhas[j].nome || '')
+                .trim()
+                .toLowerCase() === chave
+            ) {
+              const l = linhas[j]
+              const total =
+                l.valorUnitario != null ? l.quantidade * l.valorUnitario : null
+              html += `<tr><td>${l.nome}</td><td class="mono">${l.valorUnitario != null ? fmtMoney(l.valorUnitario) : '—'}</td><td class="mono">${l.quantidade}</td><td class="mono">${total != null ? fmtMoney(total) : '—'}</td><td class="mono">${fmtDate(l.data)}</td></tr>`
+              somaQtd = +(somaQtd + l.quantidade).toFixed(3)
+              if (total != null) {
+                somaTotal += total
+                temTotal = true
+              }
+              j++
+            }
+            if (j - i > 1) {
+              html += `<tr style="font-weight:700;background:var(--surface-2);">
+  <td style="color:#2563EB !important;">Total — ${linhas[i].nome}</td>
+  <td class="mono" style="color:#2563EB !important;">${somaQtd ? fmtMoney(somaTotal / somaQtd) : ''}</td>
+  <td class="mono" style="color:#2563EB !important;">${somaQtd}</td>
+  <td class="mono" style="color:#2563EB !important;">${temTotal ? fmtMoney(somaTotal) : ''}</td>
+  <td class="mono" style="color:#2563EB !important;"></td>
+</tr>`
+            }
+            i = j
+          }
+          return html
+        })()
+        const mRowsEstSemi = (() => {
+          const linhas = []
+          db.ordensProducao.forEach((o) => {
+            const produto = db.produtosSemiacabados.find(
+              (x) => x.id === o.produtoId
+            )
+            ;(o.entregas || []).forEach((e) => {
+              linhas.push({
+                nome: produto
+                  ? produto.nome
+                  : nome(db.produtosSemiacabados, o.produtoId),
+                valorUnitario:
+                  produto && produto.preco != null && produto.preco !== ''
+                    ? Number(produto.preco)
+                    : null,
+                quantidade: Number(e.quantidade) || 0,
+                data: e.data,
+              })
+            })
+          })
+          if (!linhas.length)
+            return `<tr class="empty-row"><td colspan="5">Nenhum produto injetado recebido em estoque.</td></tr>`
+          linhas.sort((a, b) =>
+            String(a.nome || '').localeCompare(
+              String(b.nome || ''),
+              'pt-BR',
+              {
+                sensitivity: 'base',
+              }
+            )
+          )
           let html = ''
           let i = 0
           while (i < linhas.length) {
@@ -9415,6 +9674,37 @@
               tipo: 'retirada',
             })
           })
+        // Movimentações de Produtos Injetados: entradas (entregas recebidas
+        // de Ordens de Produção) e retiradas (consumo pela Montagem, cujos
+        // registros ficam "sombra" em retiradasMateriaPrima com nome
+        // batendo com um produto Injetado — ver isMateriaProdutoInjetado).
+        const movimentacoesInjetados = []
+        db.ordensProducao.forEach((o) => {
+          const produto = db.produtosSemiacabados.find(
+            (x) => x.id === o.produtoId
+          )
+          const nomeProduto = normalizeMateriaName(
+            produto ? produto.nome : nome(db.produtosSemiacabados, o.produtoId)
+          )
+          ;(o.entregas || []).forEach((e) => {
+            movimentacoesInjetados.push({
+              nome: nomeProduto,
+              quantidade: Number(e.quantidade) || 0,
+              dataHora: e.data,
+              tipo: 'entrada',
+            })
+          })
+        })
+        ;(db.retiradasMateriaPrima || [])
+          .filter((r) => isMateriaProdutoInjetado(r.materiaId))
+          .forEach((r) => {
+            movimentacoesInjetados.push({
+              nome: normalizeMateriaName(materiaLabel(r.materiaId)),
+              quantidade: -(Number(r.quantidade || 0) || 0),
+              dataHora: r.dataHora,
+              tipo: 'retirada',
+            })
+          })
         // Agrupa as movimentações por material e monta as linhas da tabela
         // de saldos (matéria-prima + insumos/componentes, produtos
         // Injetados já foram filtrados acima).
@@ -9465,14 +9755,10 @@
           movimentacoes,
           'Nenhuma movimentação registrada.'
         )
-        const sRows = db.produtosSemiacabados.length
-          ? db.produtosSemiacabados
-              .map(
-                (m) =>
-                  `<tr><td>${m.nome}</td><td>${m.preco || '—'}</td><td class="mono">${getStock('semiacabado', m.id)}</td></tr>`
-              )
-              .join('')
-          : `<tr class="empty-row"><td colspan="3">Nenhum produto injetado cadastrado.</td></tr>`
+        const sRowsInjetados = renderMovimentacoesAgrupadasHTML(
+          movimentacoesInjetados,
+          'Nenhuma movimentação registrada.'
+        )
         const aRows = db.modelosRelogio.length
           ? db.modelosRelogio
               .map(
@@ -9482,19 +9768,37 @@
               .join('')
           : `<tr class="empty-row"><td colspan="3">Nenhum modelo cadastrado.</td></tr>`
         document.getElementById('tbl-est-materia').innerHTML = mRowsEst
-        document.getElementById('est-saldos-materia').innerHTML = mRows
-        document.getElementById('tbl-est-semi').innerHTML = sRows
+        document.getElementById('rel-materia').innerHTML = mRows
+        document.getElementById('tbl-est-semi').innerHTML = mRowsEstSemi
+        document.getElementById('rel-semi').innerHTML = sRowsInjetados
         document.getElementById('tbl-est-acabados').innerHTML = aRows
+        const atualizacaoAgora = textoUltimaAtualizacao()
+        document.getElementById('rel-acabados').innerHTML = db.modelosRelogio
+          .length
+          ? db.modelosRelogio
+              .map(
+                (m) =>
+                  `<tr><td>${nomeModeloComCodigo(m.id)}</td><td class="mono">${m.codigoBarras || '—'}</td><td class="mono">${getStock('acabado', m.id)}</td><td class="mono">${atualizacaoAgora}</td></tr>`
+              )
+              .join('')
+          : `<tr class="empty-row"><td colspan="4">Nenhum modelo cadastrado.</td></tr>`
         document.getElementById('tbl-est-terceiros').innerHTML =
           terceirosPendentesRows(true)
+        document.getElementById('rel-terceiros').innerHTML =
+          ordensConcluidasRowsHTML()
         const atualizacaoTexto = textoUltimaAtualizacao()
-        ;['est-semi-atualizacao', 'est-acabados-atualizacao'].forEach((id) => {
+        ;[
+          'est-semi-atualizacao',
+          'est-acabados-atualizacao',
+          'rel-terceiros-atualizacao',
+          'rel-semi-atualizacao',
+        ].forEach((id) => {
           const el = document.getElementById(id)
           if (el) el.textContent = atualizacaoTexto
         })
         const histFiltrado = filtrarListaHistoricoRelatorio()
         const hist = histFiltrado.slice(0, 300)
-        document.getElementById('est-historico').innerHTML = hist.length
+        document.getElementById('rel-historico').innerHTML = hist.length
           ? hist
               .map(
                 (h) =>
