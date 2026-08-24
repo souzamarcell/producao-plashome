@@ -7,19 +7,6 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
     <title>Flow PlasHome — Controle de Produção</title>
-    <script>
-      // Aplica o tema salvo o quanto antes, para evitar "flash" da tela
-      // no tema errado ao recarregar a página. Modo Claro é o padrão:
-      // se não houver preferência salva, nenhum atributo é aplicado.
-      ;(function () {
-        try {
-          var tema = localStorage.getItem('flowplashome_theme')
-          if (tema === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark')
-          }
-        } catch (e) {}
-      })()
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
@@ -33,43 +20,8 @@
          Cards → Formulários/Botões → Tabelas → Badges → Dashboard →
          BOM builder → Toast → Subtabs → Modal → Importação Excel.
          ===================================================================== */
-      /* ===== Design Tokens (cores, sombras neumórficas, raio de borda) =====
-         Modo Claro é o padrão (:root). O Modo Escuro sobrescreve os mesmos
-         tokens via [data-theme="dark"], alternado pelo botão no cabeçalho. */
+      /* ===== Design Tokens (cores, sombras neumórficas, raio de borda) ===== */
       :root {
-        --bg: #f2ede2;
-        --bg-2: #eae3d4;
-        --surface: #fbf9f4;
-        --surface-2: #f4efe4;
-        --surface-hi: #ece4d3;
-        --brass: #a9803f;
-        --brass-bright: #c9a15d;
-        --brass-dim: #8a7143;
-        --ink: #2b2620;
-        --ink-muted: #6c6154;
-        --ink-faint: #948a78;
-        --line: #ddd3bf;
-        --ok: #5d7a4f;
-        --warn: #a3771f;
-        --bad: #a8453a;
-        --shadow-out: 7px 7px 14px #d7cdb9, -7px -7px 14px #ffffff;
-        --shadow-in: inset 4px 4px 8px #d7cdb9, inset -4px -4px 8px #ffffff;
-        --shadow-sm: 3px 3px 6px #d7cdb9, -3px -3px 6px #ffffff;
-        --radius: 14px;
-        --header-gradient: linear-gradient(180deg, #f8f4ea 0%, #f2ede2 100%);
-        --dial-gradient: radial-gradient(
-          circle at 35% 30%,
-          #efe8d8,
-          #d8cdb0 70%
-        );
-        --dial-ring: #ffffff;
-        --login-gradient: radial-gradient(
-          circle at 50% 30%,
-          #ece4d3 0%,
-          #fbf9f4 75%
-        );
-      }
-      [data-theme='dark'] {
         --bg: #171513;
         --bg-2: #1d1b18;
         --surface: #242220;
@@ -89,18 +41,6 @@
         --shadow-in: inset 4px 4px 8px #100f0d, inset -4px -4px 8px #242119;
         --shadow-sm: 3px 3px 6px #100f0d, -3px -3px 6px #242119;
         --radius: 14px;
-        --header-gradient: linear-gradient(180deg, #1a1816 0%, #171513 100%);
-        --dial-gradient: radial-gradient(
-          circle at 35% 30%,
-          #3a362e,
-          #151310 70%
-        );
-        --dial-ring: #0c0b0a;
-        --login-gradient: radial-gradient(
-          circle at 50% 30%,
-          #211e1a 0%,
-          #131110 75%
-        );
       }
       /* ===== Reset & Base ===== */
       * {
@@ -137,7 +77,7 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        background: var(--header-gradient);
+        background: linear-gradient(180deg, #1a1816 0%, #171513 100%);
         border-bottom: 1px solid var(--line);
         padding: 14px 18px 12px;
         display: flex;
@@ -148,12 +88,12 @@
         width: 38px;
         height: 38px;
         border-radius: 50%;
-        background: var(--dial-gradient);
+        background: radial-gradient(circle at 35% 30%, #3a362e, #151310 70%);
         border: 1.5px solid var(--brass-dim);
         position: relative;
         flex: 0 0 auto;
         box-shadow:
-          0 0 0 1px var(--dial-ring),
+          0 0 0 1px #0c0b0a,
           var(--shadow-sm);
       }
       .brand-dial::before,
@@ -215,42 +155,6 @@
       }
       .menu-btn:active {
         transform: scale(0.96);
-      }
-
-      /* ===== Botão Claro/Escuro ===== */
-      .theme-toggle {
-        margin-left: auto;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        background: var(--surface);
-        border: 1px solid var(--line);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: var(--shadow-sm);
-        flex: 0 0 auto;
-        color: var(--brass);
-        font-size: 17px;
-        line-height: 1;
-      }
-      .theme-toggle:active {
-        transform: scale(0.96);
-      }
-      .theme-toggle .icon-dark {
-        display: none;
-      }
-      [data-theme='dark'] .theme-toggle .icon-light {
-        display: none;
-      }
-      [data-theme='dark'] .theme-toggle .icon-dark {
-        display: inline;
-      }
-      /* quando o botão de tema é o último elemento fixo, o menu não deve
-         herdar margin-left:auto duas vezes */
-      .theme-toggle + .menu-btn {
-        margin-left: 0;
       }
 
       .drawer-backdrop {
@@ -381,7 +285,7 @@
         position: fixed;
         inset: 0;
         z-index: 300;
-        background: var(--login-gradient);
+        background: radial-gradient(circle at 50% 30%, #211e1a 0%, #131110 75%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1052,7 +956,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.4.3</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.4.2</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -1084,18 +988,8 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.4.3</span>
+        <span>Controle de Produção · Relógios · Versão 1.4.2</span>
       </div>
-      <button
-        class="theme-toggle"
-        id="theme-toggle-btn"
-        type="button"
-        aria-label="Alternar entre Modo Claro e Modo Escuro"
-        title="Alternar entre Modo Claro e Modo Escuro"
-        onclick="toggleTheme()"
-      >
-        <span class="icon-light">☀️</span><span class="icon-dark">🌙</span>
-      </button>
       <button
         class="menu-btn"
         id="menu-btn"
@@ -1200,7 +1094,7 @@
       >
         <span class="drawer-item-icon">◆</span> Cadastros
       </button>
-      <!-- <button
+      <button
         class="drawer-item"
         data-view="ajustes"
         onclick="
@@ -1209,7 +1103,7 @@
         "
       >
         <span class="drawer-item-icon">◆</span> Ajustes
-      </button> -->
+      </button>
       <button
         class="drawer-item"
         onclick="
@@ -4688,466 +4582,466 @@
       // Montadores terceirizados que fazem a montagem final do produto
       const RECEITAS_INICIAIS = [
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'PP -  COLORIDO',
-          quantidade: '0.09',
-          valorBase: '12.5',
-          valorUnitario: '1.13',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "PP -  COLORIDO",
+          quantidade: "0.09",
+          valorBase: "12.5",
+          valorUnitario: "1.13",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'M.O PRODUÇÃO',
-          quantidade: '1',
-          valorBase: '0.65',
-          valorUnitario: '0.65',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "M.O PRODUÇÃO",
+          quantidade: "1",
+          valorBase: "0.65",
+          valorUnitario: "0.65",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.95',
-          valorUnitario: '1.95',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '2.21',
-          valorUnitario: '2.21',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.21",
+          valorUnitario: "2.21",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'HOT STAMP',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "HOT STAMP",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'M.O MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "M.O MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO SIGMA REDONDO',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '24',
-          valorBase: '6.9',
-          valorUnitario: '0.29',
+          produto: "RELÓGIO SIGMA REDONDO",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "6.9",
+          valorUnitario: "0.29",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'PP -  PRETO BRANCO',
-          quantidade: '0.09',
-          valorBase: '12.5',
-          valorUnitario: '1.13',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.09",
+          valorBase: "12.5",
+          valorUnitario: "1.13",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'M.O PRODUÇÃO',
-          quantidade: '1',
-          valorBase: '0.75',
-          valorUnitario: '0.75',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "M.O PRODUÇÃO",
+          quantidade: "1",
+          valorBase: "0.75",
+          valorUnitario: "0.75",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.95',
-          valorUnitario: '1.95',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '2.21',
-          valorUnitario: '2.21',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.21",
+          valorUnitario: "2.21",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'HOT STAMP',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "HOT STAMP",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'M.O MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "M.O MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO SIGMA QUADRADO',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '24',
-          valorBase: '6.9',
-          valorUnitario: '0.29',
+          produto: "RELÓGIO SIGMA QUADRADO",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "6.9",
+          valorUnitario: "0.29",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'PP -  PRETO BRANCO',
-          quantidade: '0.17',
-          valorBase: '8',
-          valorUnitario: '1.36',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Cristal (Lente)',
-          quantidade: '0.1',
-          valorBase: '14',
-          valorUnitario: '1.4',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.1",
+          valorBase: "14",
+          valorUnitario: "1.4",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.85',
-          valorUnitario: '1.85',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.015',
-          valorBase: '21.9',
-          valorUnitario: '0.33',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '1.08',
-          valorUnitario: '1.08',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Tema (Solapa)',
-          quantidade: '1',
-          valorBase: '0.36',
-          valorUnitario: '0.36',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.36",
+          valorUnitario: "0.36",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '2',
-          valorBase: '0.85',
-          valorUnitario: '1.7',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.85",
+          valorUnitario: "1.7",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO KAPPA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '12',
-          valorBase: '7.2',
-          valorUnitario: '0.6',
+          produto: "RELÓGIO KAPPA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'PP -  COLORIDO',
-          quantidade: '0.18',
-          valorBase: '11',
-          valorUnitario: '1.98',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "PP -  COLORIDO",
+          quantidade: "0.18",
+          valorBase: "11",
+          valorUnitario: "1.98",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.95',
-          valorUnitario: '1.95',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.95",
+          valorUnitario: "1.95",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.015',
-          valorBase: '23',
-          valorUnitario: '0.35',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "23",
+          valorUnitario: "0.35",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '2.2',
-          valorUnitario: '2.2',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "2.2",
+          valorUnitario: "2.2",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '1',
-          valorBase: '1.1',
-          valorUnitario: '1.1',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "1",
+          valorBase: "1.1",
+          valorUnitario: "1.1",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.45',
-          valorUnitario: '0.45',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.45",
+          valorUnitario: "0.45",
         },
         {
-          produto: 'RELÓGIO DELTA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '12',
-          valorBase: '7.2',
-          valorUnitario: '0.6',
+          produto: "RELÓGIO DELTA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'PP -  PRETO BRANCO',
-          quantidade: '0.09',
-          valorBase: '8',
-          valorUnitario: '0.72',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.09",
+          valorBase: "8",
+          valorUnitario: "0.72",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Cristal (Lente)',
-          quantidade: '0.08',
-          valorBase: '14',
-          valorUnitario: '1.12',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.08",
+          valorBase: "14",
+          valorUnitario: "1.12",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.85',
-          valorUnitario: '1.85',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.011',
-          valorBase: '21.9',
-          valorUnitario: '0.24',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.011",
+          valorBase: "21.9",
+          valorUnitario: "0.24",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '1.08',
-          valorUnitario: '1.08',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Tema (Solapa)',
-          quantidade: '1',
-          valorBase: '0.28',
-          valorUnitario: '0.28',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.28",
+          valorUnitario: "0.28",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '2',
-          valorBase: '0.6',
-          valorUnitario: '1.2',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.6",
+          valorUnitario: "1.2",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO OMEGA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '24',
-          valorBase: '7.2',
-          valorUnitario: '0.3',
+          produto: "RELÓGIO OMEGA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "7.2",
+          valorUnitario: "0.3",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'PP -  PRETO BRANCO',
-          quantidade: '0.11',
-          valorBase: '8',
-          valorUnitario: '0.88',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "PP -  PRETO BRANCO",
+          quantidade: "0.11",
+          valorBase: "8",
+          valorUnitario: "0.88",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Cristal (Lente)',
-          quantidade: '0.1',
-          valorBase: '14',
-          valorUnitario: '1.4',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.1",
+          valorBase: "14",
+          valorUnitario: "1.4",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.85',
-          valorUnitario: '1.85',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.011',
-          valorBase: '21.9',
-          valorUnitario: '0.24',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.011",
+          valorBase: "21.9",
+          valorUnitario: "0.24",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '1.08',
-          valorUnitario: '1.08',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Tema (Solapa)',
-          quantidade: '1',
-          valorBase: '0.28',
-          valorUnitario: '0.28',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.28",
+          valorUnitario: "0.28",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '2',
-          valorBase: '0.6',
-          valorUnitario: '1.2',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.6",
+          valorUnitario: "1.2",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO GAMA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '24',
-          valorBase: '7.2',
-          valorUnitario: '0.3',
+          produto: "RELÓGIO GAMA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "24",
+          valorBase: "7.2",
+          valorUnitario: "0.3",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'PSAI - BRANCO PRETO',
-          quantidade: '0.17',
-          valorBase: '8',
-          valorUnitario: '1.36',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "PSAI - BRANCO PRETO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Cristal (Lente)',
-          quantidade: '0.12',
-          valorBase: '14',
-          valorUnitario: '1.68',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.12",
+          valorBase: "14",
+          valorUnitario: "1.68",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.85',
-          valorUnitario: '1.85',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.015',
-          valorBase: '21.9',
-          valorUnitario: '0.33',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '1.08',
-          valorUnitario: '1.08',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Tema (Solapa)',
-          quantidade: '1',
-          valorBase: '0.3',
-          valorUnitario: '0.3',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.3",
+          valorUnitario: "0.3",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '2',
-          valorBase: '0.7',
-          valorUnitario: '1.4',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.7",
+          valorUnitario: "1.4",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO ALPHA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '12',
-          valorBase: '7.2',
-          valorUnitario: '0.6',
+          produto: "RELÓGIO ALPHA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'PSAI - BRANCO PRETO',
-          quantidade: '0.17',
-          valorBase: '8',
-          valorUnitario: '1.36',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "PSAI - BRANCO PRETO",
+          quantidade: "0.17",
+          valorBase: "8",
+          valorUnitario: "1.36",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Cristal (Lente)',
-          quantidade: '0.12',
-          valorBase: '14',
-          valorUnitario: '1.68',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Cristal (Lente)",
+          quantidade: "0.12",
+          valorBase: "14",
+          valorUnitario: "1.68",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Mecanismo',
-          quantidade: '1',
-          valorBase: '1.85',
-          valorUnitario: '1.85',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Mecanismo",
+          quantidade: "1",
+          valorBase: "1.85",
+          valorUnitario: "1.85",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Filme PVC TERMO ENCOLHÍVEL',
-          quantidade: '0.015',
-          valorBase: '21.9',
-          valorUnitario: '0.33',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Filme PVC TERMO ENCOLHÍVEL",
+          quantidade: "0.015",
+          valorBase: "21.9",
+          valorUnitario: "0.33",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Embalagem Individual',
-          quantidade: '1',
-          valorBase: '1.08',
-          valorUnitario: '1.08',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Embalagem Individual",
+          quantidade: "1",
+          valorBase: "1.08",
+          valorUnitario: "1.08",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Tema (Solapa)',
-          quantidade: '1',
-          valorBase: '0.3',
-          valorUnitario: '0.3',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Tema (Solapa)",
+          quantidade: "1",
+          valorBase: "0.3",
+          valorUnitario: "0.3",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'INJEÇÃO',
-          quantidade: '2',
-          valorBase: '0.7',
-          valorUnitario: '1.4',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "INJEÇÃO",
+          quantidade: "2",
+          valorBase: "0.7",
+          valorUnitario: "1.4",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'MONTAGEM',
-          quantidade: '1',
-          valorBase: '0.5',
-          valorUnitario: '0.5',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "MONTAGEM",
+          quantidade: "1",
+          valorBase: "0.5",
+          valorUnitario: "0.5",
         },
         {
-          produto: 'RELÓGIO BETHA',
-          materiaPrima: 'Caixa Coletiva',
-          quantidade: '12',
-          valorBase: '7.2',
-          valorUnitario: '0.6',
+          produto: "RELÓGIO BETHA",
+          materiaPrima: "Caixa Coletiva",
+          quantidade: "12",
+          valorBase: "7.2",
+          valorUnitario: "0.6",
         },
       ]
       const MONTADORES_INICIAIS = [
@@ -7345,9 +7239,7 @@
                 seedProdutos(
                   seedProdutosInjetados(
                     seedProdutores(
-                      seedFornecedoresMateriaPrima(
-                        seedFornecedores(defaultDB())
-                      )
+                      seedFornecedoresMateriaPrima(seedFornecedores(defaultDB()))
                     )
                   )
                 )
@@ -9308,14 +9200,13 @@
       }
       let estMateriaAtivo = 'entradas'
       function renderEstMateriaSubtabs() {
-        document.getElementById('est-materia-subtabs').innerHTML = Object.keys(
-          estMateriaConfig
-        )
-          .map(
-            (k) =>
-              `<button class="subtab-btn ${k === estMateriaAtivo ? 'active' : ''}" onclick="trocarEstMateria('${k}')">${estMateriaConfig[k].label}</button>`
-          )
-          .join('')
+        document.getElementById('est-materia-subtabs').innerHTML =
+          Object.keys(estMateriaConfig)
+            .map(
+              (k) =>
+                `<button class="subtab-btn ${k === estMateriaAtivo ? 'active' : ''}" onclick="trocarEstMateria('${k}')">${estMateriaConfig[k].label}</button>`
+            )
+            .join('')
         Object.keys(estMateriaConfig).forEach((k) => {
           const el = document.getElementById('est-materia-sub-' + k)
           if (el) el.classList.toggle('active', k === estMateriaAtivo)
@@ -9940,6 +9831,7 @@
               key: 'receita',
               label: 'Receita',
               type: 'text',
+
             },
             { key: 'unidade', label: 'Unidade', type: 'text' },
             { key: 'codNcm', label: 'COD NCM', type: 'text' },
@@ -10089,9 +9981,7 @@
         }
         const formFields = cfg.fields
           .filter((f) => !f.auto)
-          .map((f) =>
-            renderCadastroFieldHTML(f, f.defaultValue || '', 'cad-f-')
-          )
+          .map((f) => renderCadastroFieldHTML(f, f.defaultValue || '', 'cad-f-'))
           .join('')
         const searchTerm = (cadBusca || '').toLowerCase().trim()
         const valorExibicaoCadastro = (item, f) => {
@@ -11220,44 +11110,6 @@
           )
           .join('')
       }
-
-      /* ============================= TEMA (CLARO/ESCURO) ============================= */
-      // Modo Claro é o padrão. A preferência do usuário é salva no
-      // localStorage e reaplicada nas próximas visitas.
-      const THEME_KEY = 'flowplashome_theme'
-      function toggleTheme() {
-        const atual =
-          document.documentElement.getAttribute('data-theme') === 'dark'
-            ? 'dark'
-            : 'light'
-        const novo = atual === 'dark' ? 'light' : 'dark'
-        aplicarTema(novo)
-      }
-      function aplicarTema(tema) {
-        if (tema === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark')
-        } else {
-          document.documentElement.removeAttribute('data-theme')
-        }
-        try {
-          localStorage.setItem(THEME_KEY, tema)
-        } catch (e) {}
-        const btn = document.getElementById('theme-toggle-btn')
-        if (btn) {
-          btn.setAttribute(
-            'title',
-            tema === 'dark'
-              ? 'Alternar para Modo Claro'
-              : 'Alternar para Modo Escuro'
-          )
-        }
-      }
-      // Sincroniza o título do botão com o tema já aplicado (via script no <head>)
-      aplicarTema(
-        document.documentElement.getAttribute('data-theme') === 'dark'
-          ? 'dark'
-          : 'light'
-      )
 
       /* ============================= RENDER ALL ============================= */
       // Redesenha todas as telas — chamado após qualquer alteração de dados.
