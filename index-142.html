@@ -1052,7 +1052,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.4.4</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.4.3</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -1084,7 +1084,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.4.4</span>
+        <span>Controle de Produção · Relógios · Versão 1.4.3</span>
       </div>
       <button
         class="theme-toggle"
@@ -1118,7 +1118,6 @@
       </div>
       <div class="drawer-user">
         Logado como <b id="drawer-usuario-nome">—</b>
-        <span id="drawer-usuario-admin" class="badge badge-done" style="display:none;margin-left:6px;">Administrador</span>
       </div>
       <button
         class="drawer-item drawer-item-highlight"
@@ -1845,7 +1844,6 @@
                   <th>Qtde</th>
                   <th>R$ Líq</th>
                   <th>R$ Total</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody id="tbl-expedicoes"></tbody>
@@ -7456,29 +7454,11 @@
 
       /* ============================= LOGIN / AUTENTICAÇÃO ============================= */
       // Login local simples (sem servidor) + controle de sessão no localStorage.
-      // Usuários e grupos são fixos no código (não há tela de gestão de
-      // usuários ainda). Grupo "administradores" identifica quem é admin.
       const AUTH_KEY = 'chronoflow_auth_v1'
-      const GRUPO_ADMINISTRADORES = 'administradores'
-      const USUARIOS_INICIAIS = [
-        { usuario: 'Rodrigo', senha: '123', grupos: [GRUPO_ADMINISTRADORES] },
-        { usuario: 'Marcell', senha: '123', grupos: [] },
-      ]
+      const APP_USUARIO = 'Rodrigo'
+      const APP_SENHA = '123'
       let currentUser = null
-      let currentUserIsAdmin = false
 
-      function encontrarUsuario(usuario, senha) {
-        const usuarioNorm = String(usuario || '').trim().toLowerCase()
-        return USUARIOS_INICIAIS.find(
-          (u) =>
-            u.usuario.trim().toLowerCase() === usuarioNorm &&
-            u.senha === senha
-        )
-      }
-      function atualizarBadgeAdmin() {
-        const badge = document.getElementById('drawer-usuario-admin')
-        if (badge) badge.style.display = currentUserIsAdmin ? '' : 'none'
-      }
       // Verifica se há sessão de login ativa; se não houver, exibe a tela de login.
       function checkAuth() {
         try {
@@ -7486,11 +7466,9 @@
           const auth = raw ? JSON.parse(raw) : null
           if (auth && auth.usuario) {
             currentUser = auth.usuario
-            currentUserIsAdmin = !!auth.isAdmin
             document.getElementById('login-overlay').style.display = 'none'
             const nameEl = document.getElementById('drawer-usuario-nome')
             if (nameEl) nameEl.textContent = currentUser
-            atualizarBadgeAdmin()
             return true
           }
         } catch (e) {}
@@ -7502,17 +7480,11 @@
         const usuario = document.getElementById('login-usuario').value.trim()
         const senha = document.getElementById('login-senha').value
         const errEl = document.getElementById('login-error')
-        const encontrado = encontrarUsuario(usuario, senha)
-        if (encontrado) {
-          currentUser = encontrado.usuario
-          currentUserIsAdmin = encontrado.grupos.includes(GRUPO_ADMINISTRADORES)
+        if (usuario === APP_USUARIO && senha === APP_SENHA) {
+          currentUser = usuario
           sessionStorage.setItem(
             AUTH_KEY,
-            JSON.stringify({
-              usuario: currentUser,
-              isAdmin: currentUserIsAdmin,
-              entradaEm: nowISO(),
-            })
+            JSON.stringify({ usuario, entradaEm: nowISO() })
           )
           document.getElementById('login-overlay').style.display = 'none'
           document.getElementById('login-error').textContent = ''
@@ -7520,9 +7492,8 @@
           document.getElementById('login-senha').value = ''
           const nameEl = document.getElementById('drawer-usuario-nome')
           if (nameEl) nameEl.textContent = currentUser
-          atualizarBadgeAdmin()
           addHistorico('Acesso', 'Login realizado')
-          toast('Bem-vindo, ' + currentUser + '.')
+          toast('Bem-vindo, ' + usuario + '.')
           renderAll()
         } else {
           errEl.textContent = 'Usuário ou senha inválidos.'
@@ -7544,8 +7515,6 @@
         addHistorico('Acesso', 'Logout realizado')
         sessionStorage.removeItem(AUTH_KEY)
         currentUser = null
-        currentUserIsAdmin = false
-        atualizarBadgeAdmin()
         closeDrawer()
         document.getElementById('login-overlay').style.display = 'flex'
       }
@@ -8533,273 +8502,6 @@
         toast('Entrega registrada e estoque atualizado.')
         renderAll()
       }
-      // Estorna (reverte) toda a retirada de matéria-prima registrada para
-      // uma ordem/origem específica: devolve a quantidade ao estoque e
-      // remove os registros de retirada correspondentes, para que uma nova
-      // retirada possa ser lançada em seguida sem ficar bloqueada pela
-      // checagem de "já registrada" em registrarBaixaMateriaPrima.
-      function estornarConsumoMateriaPrimaOrdem(ordemId, origem) {
-        const registros = (db.retiradasMateriaPrima || []).filter(
-          (r) => r.ordemId === ordemId && r.origem === origem
-        )
-        registros.forEach((r) => {
-          addStock('materiaPrima', r.materiaId, r.quantidade)
-        })
-        db.retiradasMateriaPrima = (db.retiradasMateriaPrima || []).filter(
-          (r) => !(r.ordemId === ordemId && r.origem === origem)
-        )
-        return registros
-      }
-      // Abre o modal de edição de uma Ordem de Produção aberta. Somente
-      // usuários do grupo Administradores têm acesso ao botão que chama
-      // esta função (ver renderProducao). Produtor e Produto só podem ser
-      // alterados enquanto a ordem ainda não tiver nenhuma entrega
-      // registrada, para não deixar estoque de semiacabados creditado sob
-      // um produto diferente do que a ordem passaria a representar.
-      function abrirEdicaoOrdemProducao(id) {
-        if (!currentUserIsAdmin) return
-        const o = db.ordensProducao.find((x) => x.id === id)
-        if (!o) return
-        const temEntregas = (o.entregas || []).length > 0
-        const produtorAtual = db.produtores.find((x) => x.id === o.produtorId)
-        const fornecedorAtual = produtorAtual ? produtorAtual.fornecedor : ''
-        const camposProdutorProduto = temEntregas
-          ? `
-    <p class="hint">Esta ordem já tem entregas registradas — Produtor e Produto não podem ser alterados (para trocar, delete e crie uma nova ordem).</p>
-    <label>Produtor Terceirizado</label><input type="text" value="${escapeHtml(nome(db.produtores, o.produtorId))}" disabled>
-    <label>Produto (Injetado)</label><input type="text" value="${escapeHtml(nome(db.produtosSemiacabados, o.produtoId))}" disabled>`
-          : `
-    <label>Produtor Terceirizado</label><select id="modal-op-produtor" onchange="atualizarProdutosDoProdutorModalOP()">${optListProdutoresAgrupados(fornecedorAtual)}</select>
-    <label>Produto (Injetado)</label><select id="modal-op-produto"></select>`
-        openModal(
-          'Editar Ordem de Produção',
-          `
-    ${camposProdutorProduto}
-    <label>Quantidade Solicitada</label><input type="number" id="modal-op-quantidade" min="${o.quantidadeRecebida}" step="1" value="${o.quantidadeSolicitada}">
-    ${o.quantidadeRecebida > 0 ? `<p class="hint">Já recebido: <b>${o.quantidadeRecebida}</b> — a quantidade solicitada não pode ficar menor que isso.</p>` : ''}
-    <div class="btn-row">
-      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn-primary" onclick="salvarEdicaoOrdemProducao('${id}')">Salvar</button>
-    </div>`
-        )
-        if (!temEntregas) atualizarProdutosDoProdutorModalOP(o.produtoId)
-      }
-      // Mesma lógica de atualizarProdutosDoProdutor(), mas operando nos
-      // campos do modal de edição de Ordem de Produção.
-      function atualizarProdutosDoProdutorModalOP(selecionarProdutoId) {
-        const selectProdutor = document.getElementById('modal-op-produtor')
-        const selectProduto = document.getElementById('modal-op-produto')
-        if (!selectProdutor || !selectProduto) return
-        const fornecedorSelecionado = (selectProdutor.value || '')
-          .trim()
-          .toLowerCase()
-        const linhasFornecedor = db.produtores.filter(
-          (p) =>
-            String(p.fornecedor || '')
-              .trim()
-              .toLowerCase() === fornecedorSelecionado
-        )
-        const opcoes = linhasFornecedor.map((p) => {
-          const produtoCatalogo = db.produtosSemiacabados.find(
-            (m) => m.id === p.produto
-          )
-          if (produtoCatalogo) {
-            return { value: produtoCatalogo.id, label: produtoCatalogo.nome }
-          }
-          return {
-            value: 'pendente:' + p.id,
-            label: (p.produto || '(sem produto)') + ' — não vinculado',
-          }
-        })
-        const produtoAtual = selecionarProdutoId || selectProduto.value
-        const aindaValido = opcoes.some((o) => o.value === produtoAtual)
-        selectProduto.innerHTML = opcoes
-          .map(
-            (o) =>
-              `<option value="${escapeHtml(o.value)}" ${o.value === produtoAtual && aindaValido ? 'selected' : ''}>${escapeHtml(o.label)}</option>`
-          )
-          .join('')
-      }
-      // Salva a edição de uma Ordem de Produção aberta. Para evitar
-      // divergências de estoque, primeiro estorna (devolve) toda a
-      // matéria-prima que havia sido retirada para esta ordem e, em
-      // seguida, registra a retirada novamente com base nos dados
-      // atualizados (produto/quantidade), exatamente como na criação da
-      // ordem. Se a nova retirada não puder ser aplicada, o estorno
-      // anterior é desfeito para não deixar a ordem sem lançamento.
-      function salvarEdicaoOrdemProducao(id) {
-        if (!currentUserIsAdmin) return
-        const o = db.ordensProducao.find((x) => x.id === id)
-        if (!o) return
-        const temEntregas = (o.entregas || []).length > 0
-        const quantidade = parseFloat(
-          document.getElementById('modal-op-quantidade').value
-        )
-        if (!quantidade || quantidade <= 0) {
-          toast('Informe uma quantidade válida.')
-          return
-        }
-        if (quantidade < o.quantidadeRecebida) {
-          toast(
-            'A quantidade solicitada não pode ser menor que a quantidade já recebida (' +
-              o.quantidadeRecebida +
-              ').'
-          )
-          return
-        }
-        let produtorId = o.produtorId
-        let produtoId = o.produtoId
-        if (!temEntregas) {
-          const fornecedorNome = document.getElementById(
-            'modal-op-produtor'
-          ).value
-          const produtoSelecionado = document.getElementById(
-            'modal-op-produto'
-          ).value
-          if (!fornecedorNome || !produtoSelecionado) {
-            toast('Preencha todos os campos.')
-            return
-          }
-          if (produtoSelecionado.startsWith('pendente:')) {
-            toast(
-              'Este produto ainda não está vinculado ao catálogo de Injetados. Corrija em Cadastros > Fornecedores Injeção antes de editar a ordem.'
-            )
-            return
-          }
-          const novoProdutorId = resolverProdutorId(
-            fornecedorNome,
-            produtoSelecionado
-          )
-          if (!novoProdutorId) {
-            toast('Selecione um Produtor Terceirizado válido.')
-            return
-          }
-          produtorId = novoProdutorId
-          produtoId = produtoSelecionado
-        }
-        const produtoInjetado = db.produtosSemiacabados.find(
-          (x) => x.id === produtoId
-        )
-        const consumo = calcularConsumoMateriaPrima(produtoInjetado, quantidade)
-        if (!consumo) {
-          toast('Não há estoque de material cadastrado para este produto.')
-          return
-        }
-        const registrosAnteriores = estornarConsumoMateriaPrimaOrdem(
-          o.id,
-          'producao'
-        )
-        const estoqueMateria = getStock('materiaPrima', consumo.materiaId)
-        if (estoqueMateria <= 0) {
-          // Desfaz o estorno para não deixar a ordem sem consumo registrado.
-          registrosAnteriores.forEach((r) => {
-            db.retiradasMateriaPrima.push(r)
-            addStock('materiaPrima', r.materiaId, -r.quantidade)
-          })
-          toast(
-            'Não há estoque de material cadastrado para ' +
-              materiaLabel(consumo.materiaId) +
-              '.'
-          )
-          return
-        }
-        const baixaRegistrada = registrarBaixaMateriaPrima({
-          materiaId: consumo.materiaId,
-          quantidade: consumo.quantidade,
-          origem: 'producao',
-          ordemId: o.id,
-          descricao: 'Ordem de Produção (editada)',
-        })
-        if (baixaRegistrada) {
-          addStock('materiaPrima', consumo.materiaId, -consumo.quantidade)
-        }
-        const produtorAnteriorNome = nome(db.produtores, o.produtorId)
-        const produtoAnteriorNome = nome(db.produtosSemiacabados, o.produtoId)
-        const quantidadeAnterior = o.quantidadeSolicitada
-        o.produtorId = produtorId
-        o.produtoId = produtoId
-        o.quantidadeSolicitada = quantidade
-        o.status = o.quantidadeRecebida >= o.quantidadeSolicitada ? 'concluida' : 'aberta'
-        addHistorico(
-          'Produção',
-          'Ordem editada (' +
-            o.id +
-            '): ' +
-            produtoAnteriorNome +
-            ' (' +
-            produtorAnteriorNome +
-            '), qtd solicitada ' +
-            quantidadeAnterior +
-            ' → ' +
-            nome(db.produtosSemiacabados, o.produtoId) +
-            ' (' +
-            nome(db.produtores, o.produtorId) +
-            '), qtd solicitada ' +
-            o.quantidadeSolicitada +
-            '. Retirada de matéria-prima estornada e relançada para refletir a edição.'
-        )
-        save()
-        closeModal()
-        toast('Ordem de produção atualizada e estoque de matéria-prima ajustado.')
-        renderAll()
-      }
-      // Confirmação de exclusão de uma Ordem de Produção aberta.
-      function abrirExclusaoOrdemProducao(id) {
-        if (!currentUserIsAdmin) return
-        const o = db.ordensProducao.find((x) => x.id === id)
-        if (!o) return
-        openModal(
-          'Excluir Ordem de Produção',
-          `
-    <div style="padding:8px 0 4px;">
-      <p style="margin:0 0 12px;">Deseja realmente excluir esta ordem de produção?</p>
-      <div class="hint" style="margin-bottom:12px;">${escapeHtml(nome(db.produtosSemiacabados, o.produtoId))} — ${escapeHtml(nome(db.produtores, o.produtorId))} (solicitado: ${o.quantidadeSolicitada}, recebido: ${o.quantidadeRecebida})</div>
-      <div class="hint" style="margin-bottom:12px;">A matéria-prima retirada para esta ordem será devolvida ao estoque${o.quantidadeRecebida > 0 ? ', e o estoque de produto injetado recebido será estornado' : ''}.</div>
-      <div class="btn-row">
-        <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-        <button class="btn-danger" onclick="confirmarExclusaoOrdemProducao('${id}')">Excluir</button>
-      </div>
-    </div>`
-        )
-      }
-      // Exclui a ordem, estornando corretamente a matéria-prima retirada
-      // na criação e o produto injetado creditado por entregas já
-      // recebidas, evitando divergências no estoque.
-      function confirmarExclusaoOrdemProducao(id) {
-        if (!currentUserIsAdmin) return
-        const o = db.ordensProducao.find((x) => x.id === id)
-        if (!o) return
-        const produtoNome = nome(db.produtosSemiacabados, o.produtoId)
-        const produtorNome = nome(db.produtores, o.produtorId)
-        const registros = estornarConsumoMateriaPrimaOrdem(o.id, 'producao')
-        const materiaisEstornados = registros
-          .map((r) => materiaLabel(r.materiaId) + ': +' + r.quantidade)
-          .join(', ')
-        if (o.quantidadeRecebida > 0) {
-          addStock('semiacabado', o.produtoId, -o.quantidadeRecebida)
-        }
-        db.ordensProducao = db.ordensProducao.filter((x) => x.id !== o.id)
-        addHistorico(
-          'Produção',
-          'Ordem excluída (' +
-            id +
-            '): ' +
-            produtoNome +
-            ' (' +
-            produtorNome +
-            '). Estorno: ' +
-            (o.quantidadeRecebida > 0
-              ? produtoNome + ' -' + o.quantidadeRecebida + '; '
-              : '') +
-            (materiaisEstornados
-              ? 'matéria-prima ' + materiaisEstornados
-              : 'sem retirada de matéria-prima registrada')
-        )
-        save()
-        closeModal()
-        toast('Ordem de produção excluída e estoque estornado.')
-        renderAll()
-      }
       function baixarOrdemProducaoPDF(id) {
         const o = db.ordensProducao.find((x) => x.id === id)
         if (!o) {
@@ -8983,7 +8685,7 @@
     <tr><td class="serial">${o.id}</td><td>${nome(db.produtores, o.produtorId)}</td><td>${nome(db.produtosSemiacabados, o.produtoId)}</td>
     <td class="mono">${o.quantidadeSolicitada}</td><td class="mono">${o.quantidadeRecebida}</td><td class="mono">${o.quantidadeSolicitada - o.quantidadeRecebida}</td>
     <td class="mono">${fmtDate(o.dataCriacao)}</td>
-    <td><button class="btn-ghost btn-sm" title="Baixar PDF" onclick="baixarOrdemProducaoPDF('${o.id}')">${ICON_PDF}</button><button class="btn-primary btn-sm" onclick="registrarEntregaProducao('${o.id}')">+ Entrega</button>${currentUserIsAdmin ? `<button class="btn-ghost btn-sm" title="Editar" onclick="abrirEdicaoOrdemProducao('${o.id}')">✏️</button><button class="btn-danger btn-sm" title="Deletar" onclick="abrirExclusaoOrdemProducao('${o.id}')">🗑️</button>` : ''}</td></tr>`
+    <td><button class="btn-ghost btn-sm" title="Baixar PDF" onclick="baixarOrdemProducaoPDF('${o.id}')">${ICON_PDF}</button><button class="btn-primary btn-sm" onclick="registrarEntregaProducao('${o.id}')">+ Entrega</button></td></tr>`
               )
               .join('')
           : `<tr class="empty-row"><td colspan="8">Nenhuma ordem aberta.</td></tr>`
@@ -9336,7 +9038,7 @@
       // caem no formato legado — exibidas com os campos disponíveis.
       function linhasExpedicao(e) {
         if (Array.isArray(e.itensVenda)) {
-          return e.itensVenda.map((it, idx) => ({
+          return e.itensVenda.map((it) => ({
             data: fmtDataPedido(e.dataPedido) || fmtDate(e.data),
             pedido: e.pedido || '—',
             cnpj: e.cnpj || '—',
@@ -9346,12 +9048,10 @@
             qtde: it.qtde != null ? it.qtde : '—',
             rLiq: it.rLiq != null ? fmtMoney(it.rLiq) : '—',
             rTotal: it.rTotal != null ? fmtMoney(it.rTotal) : '—',
-            expedicaoId: e.id,
-            itemIndex: idx,
           }))
         }
         // Formato legado (expedição manual por modelo, sem dados de venda importados)
-        return (e.itens || []).map((i, idx) => ({
+        return (e.itens || []).map((i) => ({
           data: fmtDate(e.data),
           pedido: '—',
           cnpj: '—',
@@ -9365,8 +9065,6 @@
           qtde: i.quantidade,
           rLiq: '—',
           rTotal: '—',
-          expedicaoId: e.id,
-          itemIndex: idx,
         }))
       }
       function renderExpedicao() {
@@ -9404,204 +9102,11 @@
                   (l) => `
     <tr><td class="mono">${l.data}</td><td class="serial">${escapeHtml(String(l.pedido))}</td><td class="mono">${escapeHtml(String(l.cnpj))}</td>
     <td>${escapeHtml(String(l.clienteNome))}</td><td class="serial">${escapeHtml(String(l.codigoVd))}</td><td>${escapeHtml(String(l.produto))}</td>
-    <td class="mono">${escapeHtml(String(l.qtde))}</td><td class="mono">${escapeHtml(String(l.rLiq))}</td><td class="mono">${escapeHtml(String(l.rTotal))}</td>
-    <td>${currentUserIsAdmin ? `<button class="btn-ghost btn-sm" title="Editar" onclick="abrirEdicaoItemExpedicao('${l.expedicaoId}', ${l.itemIndex})">✏️</button><button class="btn-danger btn-sm" title="Deletar" onclick="abrirExclusaoItemExpedicao('${l.expedicaoId}', ${l.itemIndex})">🗑️</button>` : ''}</td></tr>`
+    <td class="mono">${escapeHtml(String(l.qtde))}</td><td class="mono">${escapeHtml(String(l.rLiq))}</td><td class="mono">${escapeHtml(String(l.rTotal))}</td></tr>`
                 )
                 .join('')
-            : `<tr class="empty-row"><td colspan="10">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
+            : `<tr class="empty-row"><td colspan="9">${buscaExp ? 'Nenhuma expedição encontrada para a busca.' : 'Nenhuma expedição registrada.'}</td></tr>`
         reaplicarBuscasGenericas()
-      }
-      // Abre o modal de edição de um item do Histórico de Expedições.
-      // Somente usuários do grupo Administradores têm acesso ao botão que
-      // chama esta função (ver renderExpedicao). Trata os dois formatos de
-      // expedição: manual (itens, baixa estoque de acabados na confirmação)
-      // e importada de venda (itensVenda, não baixa estoque — mantém o
-      // mesmo comportamento da importação original).
-      function abrirEdicaoItemExpedicao(expedicaoId, itemIndex) {
-        if (!currentUserIsAdmin) return
-        const e = db.expedicoes.find((x) => x.id === expedicaoId)
-        if (!e) return
-        if (Array.isArray(e.itensVenda)) {
-          const it = e.itensVenda[itemIndex]
-          if (!it) return
-          openModal(
-            'Editar Item da Expedição',
-            `
-    <p class="hint">Pedido ${escapeHtml(String(e.pedido || '—'))} — ${escapeHtml(it.produto || '—')}</p>
-    <p class="hint">Item importado de venda: não movimenta o estoque de acabados (assim como na importação original).</p>
-    <label>Quantidade</label><input type="number" id="modal-exp-qtde" min="0" step="1" value="${it.qtde != null ? it.qtde : 0}">
-    <label>R$ Líquido</label><input type="number" id="modal-exp-rliq" min="0" step="0.01" value="${it.rLiq != null ? it.rLiq : 0}">
-    <label>R$ Total</label><input type="number" id="modal-exp-rtotal" min="0" step="0.01" value="${it.rTotal != null ? it.rTotal : 0}">
-    <div class="btn-row">
-      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn-primary" onclick="salvarEdicaoItemExpedicaoVenda('${expedicaoId}', ${itemIndex})">Salvar</button>
-    </div>`
-          )
-          return
-        }
-        const it = (e.itens || [])[itemIndex]
-        if (!it) return
-        openModal(
-          'Editar Item da Expedição',
-          `
-    <p class="hint">Cliente: ${escapeHtml(nome(db.clientes, e.clienteId))}</p>
-    <label>Modelo</label><select id="modal-exp-modelo">${optListModelos(db.modelosRelogio, it.modeloId)}</select>
-    <label>Quantidade</label><input type="number" id="modal-exp-qtde-manual" min="0" step="1" value="${it.quantidade}">
-    <p class="hint">Ao salvar, o estoque de produtos acabados é estornado (modelo/quantidade antigos) e a nova baixa é aplicada.</p>
-    <div class="btn-row">
-      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-      <button class="btn-primary" onclick="salvarEdicaoItemExpedicaoManual('${expedicaoId}', ${itemIndex})">Salvar</button>
-    </div>`
-        )
-      }
-      // Salva a edição de um item de expedição importado de venda (não
-      // afeta estoque, mantendo o mesmo comportamento da importação).
-      function salvarEdicaoItemExpedicaoVenda(expedicaoId, itemIndex) {
-        if (!currentUserIsAdmin) return
-        const e = db.expedicoes.find((x) => x.id === expedicaoId)
-        if (!e || !Array.isArray(e.itensVenda)) return
-        const it = e.itensVenda[itemIndex]
-        if (!it) return
-        const qtde = parseFloat(document.getElementById('modal-exp-qtde').value)
-        const rLiq = parseFloat(document.getElementById('modal-exp-rliq').value)
-        const rTotal = parseFloat(
-          document.getElementById('modal-exp-rtotal').value
-        )
-        if (!qtde || qtde <= 0) {
-          toast('Informe uma quantidade válida.')
-          return
-        }
-        it.qtde = qtde
-        it.rLiq = isNaN(rLiq) ? it.rLiq : rLiq
-        it.rTotal = isNaN(rTotal) ? it.rTotal : rTotal
-        addHistorico(
-          'Expedição',
-          'Item de venda editado no pedido ' +
-            (e.pedido || e.id) +
-            ' (' +
-            (it.produto || '—') +
-            ').'
-        )
-        save()
-        closeModal()
-        toast('Item da expedição atualizado.')
-        renderAll()
-      }
-      // Salva a edição de um item de expedição manual (por modelo),
-      // estornando a baixa de estoque anterior e aplicando a nova para
-      // manter o saldo de produtos acabados correto.
-      function salvarEdicaoItemExpedicaoManual(expedicaoId, itemIndex) {
-        if (!currentUserIsAdmin) return
-        const e = db.expedicoes.find((x) => x.id === expedicaoId)
-        if (!e || !Array.isArray(e.itens)) return
-        const it = e.itens[itemIndex]
-        if (!it) return
-        const novoModeloId = document.getElementById('modal-exp-modelo').value
-        const novaQtde = parseFloat(
-          document.getElementById('modal-exp-qtde-manual').value
-        )
-        if (!novoModeloId || !novaQtde || novaQtde <= 0) {
-          toast('Preencha modelo e quantidade válidos.')
-          return
-        }
-        const modeloAnteriorNome = nomeModeloComCodigo(it.modeloId)
-        const qtdeAnterior = it.quantidade
-        // Estorna a baixa anterior e aplica a nova baixa de estoque.
-        addStock('acabado', it.modeloId, qtdeAnterior)
-        addStock('acabado', novoModeloId, -novaQtde)
-        it.modeloId = novoModeloId
-        it.quantidade = novaQtde
-        addHistorico(
-          'Expedição',
-          'Item editado (' +
-            e.id +
-            '): ' +
-            qtdeAnterior +
-            'x ' +
-            modeloAnteriorNome +
-            ' → ' +
-            novaQtde +
-            'x ' +
-            nomeModeloComCodigo(novoModeloId) +
-            '. Estoque de acabados estornado e reajustado.'
-        )
-        save()
-        closeModal()
-        toast('Item da expedição atualizado e estoque ajustado.')
-        renderAll()
-      }
-      // Confirmação de exclusão de um item do Histórico de Expedições.
-      function abrirExclusaoItemExpedicao(expedicaoId, itemIndex) {
-        if (!currentUserIsAdmin) return
-        const e = db.expedicoes.find((x) => x.id === expedicaoId)
-        if (!e) return
-        const isVenda = Array.isArray(e.itensVenda)
-        const it = isVenda ? e.itensVenda[itemIndex] : (e.itens || [])[itemIndex]
-        if (!it) return
-        const descricao = isVenda
-          ? (it.produto || '—') + ' — qtde ' + it.qtde
-          : it.quantidade + 'x ' + nomeModeloComCodigo(it.modeloId)
-        openModal(
-          'Excluir Item da Expedição',
-          `
-    <div style="padding:8px 0 4px;">
-      <p style="margin:0 0 12px;">Deseja realmente excluir este item da expedição?</p>
-      <div class="hint" style="margin-bottom:12px;">${escapeHtml(descricao)}</div>
-      ${
-        !isVenda
-          ? `<div class="hint" style="margin-bottom:12px;">O estoque de produtos acabados será estornado (+${it.quantidade} unidade(s) devolvida(s)).</div>`
-          : `<div class="hint" style="margin-bottom:12px;">Item importado de venda: não movimenta estoque ao excluir.</div>`
-      }
-      <div class="btn-row">
-        <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
-        <button class="btn-danger" onclick="confirmarExclusaoItemExpedicao('${expedicaoId}', ${itemIndex})">Excluir</button>
-      </div>
-    </div>`
-        )
-      }
-      // Exclui o item da expedição, estornando o estoque de acabados
-      // quando aplicável (item manual). Se a expedição ficar sem itens,
-      // ela é removida do histórico.
-      function confirmarExclusaoItemExpedicao(expedicaoId, itemIndex) {
-        if (!currentUserIsAdmin) return
-        const e = db.expedicoes.find((x) => x.id === expedicaoId)
-        if (!e) return
-        const isVenda = Array.isArray(e.itensVenda)
-        const lista = isVenda ? e.itensVenda : e.itens
-        if (!lista || !lista[itemIndex]) return
-        const it = lista[itemIndex]
-        let descricaoEstorno = ''
-        if (!isVenda) {
-          addStock('acabado', it.modeloId, it.quantidade)
-          descricaoEstorno =
-            ' Estoque estornado: +' +
-            it.quantidade +
-            ' ' +
-            nomeModeloComCodigo(it.modeloId) +
-            '.'
-        }
-        lista.splice(itemIndex, 1)
-        const listaVazia = lista.length === 0
-        if (listaVazia) {
-          db.expedicoes = db.expedicoes.filter((x) => x.id !== e.id)
-        }
-        addHistorico(
-          'Expedição',
-          'Item excluído da expedição ' +
-            (e.pedido || e.id) +
-            (isVenda ? ' (venda importada)' : '') +
-            '.' +
-            descricaoEstorno +
-            (listaVazia
-              ? ' Expedição removida do histórico por ficar sem itens.'
-              : '')
-        )
-        save()
-        closeModal()
-        toast(
-          'Item excluído' + (isVenda ? '.' : ' e estoque de acabados estornado.')
-        )
-        renderAll()
       }
 
       /* ------- Importação de venda a partir de arquivo .txt (Pedido) ------- */
@@ -10856,41 +10361,17 @@
         // continuam separados por baixo dos panos (getStock/addStock usam
         // o tipo guardado no value da option) — só a exibição foi unificada.
         // Só entram itens com saldo em estoque (> 0) no momento.
-        // Itens bloqueados por nome (não devem aparecer em "Peça / Material"),
-        // independentemente de já terem sido criados em materiasPrimas via
-        // resolveMateriaId (registro "sombra" a partir de fornecedores).
-        const ITENS_BLOQUEADOS_PECA_MATERIAL = [
-          'PP PRETO',
-          'PP BRANCO',
-          'PS CRISTAL',
-          'PSAI BRANCO',
-          'PSAI PRETO',
-          'PP NATURAL',
-          'PP HOMO',
-          'PP COLORIDO',
-        ].map((n) => n.trim().toLowerCase())
-        // Guarda a lista "crua" (tipo/id/nome) para o autocomplete de
-        // "Peça / Material" filtrar conforme o usuário digita.
-        bomItensDisponiveis = [
+        const itemOptions = [
           ...db.materiasPrimas
             .filter((m) => getStock('materiaPrima', m.id) > 0)
-            .filter(
-              (m) =>
-                !ITENS_BLOQUEADOS_PECA_MATERIAL.includes(
-                  String(m.nome || '').trim().toLowerCase()
-                )
-            )
             .map((m) => ({ tipo: 'materiaPrima', id: m.id, nome: m.nome })),
           ...db.produtosSemiacabados
             .filter((m) => getStock('semiacabado', m.id) > 0)
-            .filter(
-              (m) =>
-                !ITENS_BLOQUEADOS_PECA_MATERIAL.includes(
-                  String(m.nome || '').trim().toLowerCase()
-                )
-            )
             .map((m) => ({ tipo: 'semiacabado', id: m.id, nome: m.nome })),
-        ].sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+        ]
+          .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+          .map((p) => `<option value="${p.tipo}:${p.id}">${p.nome}</option>`)
+          .join('')
         const termo = (modeloBusca || '').toLowerCase().trim()
         const lista = db.modelosRelogio.filter((m) => {
           if (!termo) return true
@@ -10908,14 +10389,7 @@
       <div class="divider"></div>
       <h3>Composição (BOM)</h3>
       <div class="bom-row">
-        <div>
-          <label>Peça / Material</label>
-          <div class="autocomplete-wrap">
-            <input id="bom-item-nome" placeholder="${bomItensDisponiveis.length ? 'Digite para buscar...' : 'Nenhuma matéria-prima/injetado com saldo em estoque'}" autocomplete="off" ${bomItensDisponiveis.length ? '' : 'disabled'} oninput="filtrarSugestoesBomItem(this.value)" onfocus="filtrarSugestoesBomItem(this.value)" onblur="setTimeout(fecharSugestoesBomItem, 150)">
-            <input type="hidden" id="bom-item">
-            <div id="bom-item-sugestoes" class="autocomplete-list"></div>
-          </div>
-        </div>
+        <div><label>Peça / Material</label><select id="bom-item">${itemOptions || '<option value="">Nenhuma matéria-prima/injetado com saldo em estoque</option>'}</select></div>
         <div><label>Qtd por unidade</label><input id="bom-qtd" type="number" min="0" step="0.01" value="1"></div>
         <div></div>
         <button class="btn-ghost btn-sm" onclick="addBomTemp()">+ Peça</button>
@@ -10961,56 +10435,6 @@
     </div>`
       }
       let modeloNomeSugestoesAtual = []
-      let bomItensDisponiveis = []
-      let bomItemSugestoesAtual = []
-      // Autocomplete de "Peça / Material" (Composição/BOM), no mesmo padrão
-      // do campo "Nome do Modelo": filtra a lista conforme o usuário digita.
-      function filtrarSugestoesBomItem(v) {
-        const termo = (v || '').trim().toLowerCase()
-        const el = document.getElementById('bom-item-sugestoes')
-        const hidden = document.getElementById('bom-item')
-        // Qualquer edição no texto invalida a seleção anterior; só um clique
-        // numa sugestão volta a preencher o valor real (tipo:id).
-        if (hidden) hidden.value = ''
-        if (!el) return
-        if (!termo) {
-          bomItemSugestoesAtual = []
-          el.classList.remove('show')
-          el.innerHTML = ''
-          return
-        }
-        bomItemSugestoesAtual = bomItensDisponiveis
-          .filter((p) => (p.nome || '').toString().toLowerCase().includes(termo))
-          .slice(0, 8)
-        if (!bomItemSugestoesAtual.length) {
-          el.classList.remove('show')
-          el.innerHTML = ''
-          return
-        }
-        el.innerHTML = bomItemSugestoesAtual
-          .map(
-            (p, idx) =>
-              `<div class="autocomplete-item" onmousedown="selecionarSugestaoBomItem(${idx})">${escapeHtml(p.nome || '—')}</div>`
-          )
-          .join('')
-        el.classList.add('show')
-      }
-      function selecionarSugestaoBomItem(idx) {
-        const p = bomItemSugestoesAtual[idx]
-        if (!p) return
-        const nomeInput = document.getElementById('bom-item-nome')
-        const hidden = document.getElementById('bom-item')
-        if (nomeInput) nomeInput.value = p.nome || ''
-        if (hidden) hidden.value = `${p.tipo}:${p.id}`
-        fecharSugestoesBomItem()
-      }
-      function fecharSugestoesBomItem() {
-        const el = document.getElementById('bom-item-sugestoes')
-        if (el) {
-          el.classList.remove('show')
-          el.innerHTML = ''
-        }
-      }
       function filtrarSugestoesModeloNome(v) {
         const termo = (v || '').trim().toLowerCase()
         const el = document.getElementById('modelo-nome-sugestoes')
@@ -11094,17 +10518,12 @@
         const val = document.getElementById('bom-item').value
         const qtd = parseFloat(document.getElementById('bom-qtd').value)
         if (!val || !qtd) {
-          toast('Digite e selecione a peça/material na lista, e informe a quantidade.')
+          toast('Selecione a peça e a quantidade.')
           return
         }
         const [tipo, itemId] = val.split(':')
         bomTemp.push({ tipo, itemId, qtd })
         document.getElementById('bom-temp-list').innerHTML = renderBomTempList()
-        const nomeInput = document.getElementById('bom-item-nome')
-        const hidden = document.getElementById('bom-item')
-        if (nomeInput) nomeInput.value = ''
-        if (hidden) hidden.value = ''
-        fecharSugestoesBomItem()
       }
       function removeBomTemp(idx) {
         bomTemp.splice(idx, 1)
