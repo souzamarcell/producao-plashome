@@ -1052,7 +1052,7 @@
       <div class="login-card">
         <div class="brand-dial"></div>
         <h1>Flow PlasHome</h1>
-        <div class="sub">Controle de Produção · Relógios · Versão 1.4.4</div>
+        <div class="sub">Controle de Produção · Relógios · Versão 1.4.5</div>
         <label>Usuário</label>
         <input
           id="login-usuario"
@@ -1084,7 +1084,7 @@
       <div class="brand-dial"></div>
       <div class="brand-text">
         <h1>Flow PlasHome</h1>
-        <span>Controle de Produção · Relógios · Versão 1.4.4</span>
+        <span>Controle de Produção · Relógios · Versão 1.4.5</span>
       </div>
       <button
         class="theme-toggle"
@@ -1117,8 +1117,13 @@
         <button class="drawer-close" onclick="closeDrawer()">✕</button>
       </div>
       <div class="drawer-user">
-        Logado como <b id="drawer-usuario-nome">—</b>
-        <span id="drawer-usuario-admin" class="badge badge-done" style="display:none;margin-left:6px;">Administrador</span>
+        Logado como: <b id="drawer-usuario-nome">—</b>
+        <span
+          id="drawer-usuario-admin"
+          class="badge badge-done"
+          style="display: none; margin-left: 6px"
+          >Administrador</span
+        >
       </div>
       <button
         class="drawer-item drawer-item-highlight"
@@ -1661,6 +1666,7 @@
                   <th>Montador</th>
                   <th>Modelo</th>
                   <th>Cód. Barras</th>
+                  <th>Código VD</th>
                   <th>Kits Enviados</th>
                   <th>Saldo</th>
                   <th>Data Envio</th>
@@ -1786,7 +1792,7 @@
             >
               📄 Exportar PDF
             </button>
-            <!-- <label
+            <label
               class="btn-upload-venda"
               title="Importar pedido de venda (.txt)"
             >
@@ -1820,7 +1826,7 @@
                 style="display: none"
                 onchange="handleImportVendaTxt(event)"
               />
-            </label> -->
+            </label>
           </div>
         </div>
         <div class="card">
@@ -2112,7 +2118,9 @@
                   <tr>
                     <th>Modelo</th>
                     <th>Cód. Barras</th>
+                    <th>Código VD</th>
                     <th>Quantidade</th>
+                    <th>Data</th>
                   </tr>
                 </thead>
                 <tbody id="tbl-est-acabados"></tbody>
@@ -6789,6 +6797,8 @@
           estoqueMateriaPrimaAtualizadoEm: {},
           estoqueSemiacabados: {},
           estoqueAcabados: {},
+          estoqueAcabadosAtualizadoEm: {},
+          movimentacoesEstoqueAcabados: [],
           historico: [],
           ajustes: [],
           retiradasMateriaPrima: [],
@@ -7216,6 +7226,12 @@
           })
           data[key] = lista
         })
+        if (!data.estoqueAcabadosAtualizadoEm) {
+          data.estoqueAcabadosAtualizadoEm = {}
+        }
+        if (!Array.isArray(data.movimentacoesEstoqueAcabados)) {
+          data.movimentacoesEstoqueAcabados = []
+        }
         return data
       }
       // Migra registros antigos de "Fornecedores Injeção" que ainda guardam o
@@ -7468,11 +7484,12 @@
       let currentUserIsAdmin = false
 
       function encontrarUsuario(usuario, senha) {
-        const usuarioNorm = String(usuario || '').trim().toLowerCase()
+        const usuarioNorm = String(usuario || '')
+          .trim()
+          .toLowerCase()
         return USUARIOS_INICIAIS.find(
           (u) =>
-            u.usuario.trim().toLowerCase() === usuarioNorm &&
-            u.senha === senha
+            u.usuario.trim().toLowerCase() === usuarioNorm && u.senha === senha
         )
       }
       function atualizarBadgeAdmin() {
@@ -7642,9 +7659,35 @@
         if (!m) return '—'
         return m.codigoRef ? m.codigoRef + ' — ' + m.nome : m.nome
       }
+      // Resolve o Código de Barras de um modelo: usa o campo cadastrado no
+      // próprio modelo quando preenchido; caso contrário, tenta localizar
+      // pelo produto vinculado (mesmo cálculo usado em Cadastros > Modelos,
+      // via completarModeloComProduto), evitando que o código apareça em
+      // branco em Montagem/Estoque só porque não foi digitado manualmente.
+      function resolverCodigoBarrasModelo(m) {
+        if (!m) return null
+        if (m.codigoBarras) return m.codigoBarras
+        const produtoRef = encontrarProdutoPorModelo(m.nome)
+        return produtoRef?.codigoBarras || null
+      }
       function barcodeModelo(id) {
         const m = db.modelosRelogio.find((x) => x.id === id)
-        return m && m.codigoBarras ? m.codigoBarras : '—'
+        const codigo = resolverCodigoBarrasModelo(m)
+        return codigo || '—'
+      }
+      // Resolve o Código VD (código de venda) de um modelo: usa o campo
+      // cadastrado diretamente no modelo quando preenchido (via edição ou
+      // cadastro manual); caso contrário, tenta descobrir pelo produto
+      // vinculado ao nome do modelo.
+      function resolverCodigoVdModelo(m) {
+        if (!m) return null
+        if (m.codigoVd) return m.codigoVd
+        const produtoRef = encontrarProdutoPorModelo(m.nome)
+        return produtoRef?.codigo_v || null
+      }
+      function codigoVdModelo(id) {
+        const m = db.modelosRelogio.find((x) => x.id === id)
+        return resolverCodigoVdModelo(m) || '—'
       }
       function optListModelos(arr, selected) {
         return arr
@@ -7677,6 +7720,10 @@
           if (!db.estoqueMateriaPrimaAtualizadoEm)
             db.estoqueMateriaPrimaAtualizadoEm = {}
           db.estoqueMateriaPrimaAtualizadoEm[id] = nowISO()
+        } else if (tipo === 'acabado') {
+          if (!db.estoqueAcabadosAtualizadoEm)
+            db.estoqueAcabadosAtualizadoEm = {}
+          db.estoqueAcabadosAtualizadoEm[id] = nowISO()
         }
       }
       // Soma (ou subtrai, se delta negativo) uma quantidade ao estoque de um item.
@@ -8006,6 +8053,18 @@
     <div class="btn-row"><button class="btn-primary" onclick="finalizarRecebimento('${id}')">Confirmar</button></div>
   `
         )
+        // Ao abrir o modal, já posiciona o cursor no campo "Recebido por",
+        // no final do nome sugerido (usuário logado), pronto para confirmar
+        // ou ajustar sem precisar clicar no campo primeiro.
+        setTimeout(() => {
+          const campo = document.getElementById('modal-recebido-por')
+          if (!campo) return
+          campo.focus()
+          if (typeof campo.setSelectionRange === 'function') {
+            const fim = campo.value.length
+            campo.setSelectionRange(fim, fim)
+          }
+        }, 0)
       }
       function finalizarRecebimento(id) {
         const nomeFunc = document
@@ -8650,12 +8709,10 @@
         let produtorId = o.produtorId
         let produtoId = o.produtoId
         if (!temEntregas) {
-          const fornecedorNome = document.getElementById(
-            'modal-op-produtor'
-          ).value
-          const produtoSelecionado = document.getElementById(
-            'modal-op-produto'
-          ).value
+          const fornecedorNome =
+            document.getElementById('modal-op-produtor').value
+          const produtoSelecionado =
+            document.getElementById('modal-op-produto').value
           if (!fornecedorNome || !produtoSelecionado) {
             toast('Preencha todos os campos.')
             return
@@ -8719,7 +8776,10 @@
         o.produtorId = produtorId
         o.produtoId = produtoId
         o.quantidadeSolicitada = quantidade
-        o.status = o.quantidadeRecebida >= o.quantidadeSolicitada ? 'concluida' : 'aberta'
+        o.status =
+          o.quantidadeRecebida >= o.quantidadeSolicitada
+            ? 'concluida'
+            : 'aberta'
         addHistorico(
           'Produção',
           'Ordem editada (' +
@@ -8740,7 +8800,9 @@
         )
         save()
         closeModal()
-        toast('Ordem de produção atualizada e estoque de matéria-prima ajustado.')
+        toast(
+          'Ordem de produção atualizada e estoque de matéria-prima ajustado.'
+        )
         renderAll()
       }
       // Confirmação de exclusão de uma Ordem de Produção aberta.
@@ -9187,12 +9249,12 @@
                   (o.quantidadeRecebida || 0) -
                   (o.perdas || 0)
                 return `
-    <tr><td class="serial">${o.id}</td><td>${nome(db.montadores, o.montadorId)}</td><td>${nomeModeloComCodigo(o.modeloId)}</td><td class="mono">${barcodeModelo(o.modeloId)}</td>
+    <tr><td class="serial">${o.id}</td><td>${nome(db.montadores, o.montadorId)}</td><td>${nomeModeloComCodigo(o.modeloId)}</td><td class="mono">${barcodeModelo(o.modeloId)}</td><td class="mono">${codigoVdModelo(o.modeloId)}</td>
     <td class="mono">${o.quantidadeEnviada}</td><td class="mono">${saldo}</td><td>${fmtDate(o.dataEnvio)}</td>
     <td><button class="btn-primary btn-sm" onclick="registrarRetornoMontagem('${o.id}')">Registrar Retorno</button> <button class="btn-danger btn-sm" onclick="registrarPerdaMontagem('${o.id}')">Registrar Perda</button></td></tr>`
               })
               .join('')
-          : `<tr class="empty-row"><td colspan="8">Nenhuma ordem em aberto.</td></tr>`
+          : `<tr class="empty-row"><td colspan="9">Nenhuma ordem em aberto.</td></tr>`
         // Agrupa os registros de "Ordens Concluídas" por ID, somando enviado/prontos/perdas.
         const concPorId = new Map()
         db.ordensMontagem
@@ -9428,7 +9490,7 @@
             'Editar Item da Expedição',
             `
     <p class="hint">Pedido ${escapeHtml(String(e.pedido || '—'))} — ${escapeHtml(it.produto || '—')}</p>
-    <p class="hint">Item importado de venda: não movimenta o estoque de acabados (assim como na importação original).</p>
+    <p class="hint">${it.modeloId ? 'Ao salvar, o estoque de produtos acabados é reajustado (baixa antiga estornada e nova quantidade baixada).' : 'Item importado de venda: modelo não localizado no cadastro, não movimenta o estoque de acabados.'}</p>
     <label>Quantidade</label><input type="number" id="modal-exp-qtde" min="0" step="1" value="${it.qtde != null ? it.qtde : 0}">
     <label>R$ Líquido</label><input type="number" id="modal-exp-rliq" min="0" step="0.01" value="${it.rLiq != null ? it.rLiq : 0}">
     <label>R$ Total</label><input type="number" id="modal-exp-rtotal" min="0" step="0.01" value="${it.rTotal != null ? it.rTotal : 0}">
@@ -9471,20 +9533,37 @@
           toast('Informe uma quantidade válida.')
           return
         }
+        const qtdeAnterior = it.qtde
         it.qtde = qtde
         it.rLiq = isNaN(rLiq) ? it.rLiq : rLiq
         it.rTotal = isNaN(rTotal) ? it.rTotal : rTotal
+        let ajusteEstoque = ''
+        if (it.modeloId) {
+          addStock('acabado', it.modeloId, qtdeAnterior)
+          addStock('acabado', it.modeloId, -qtde)
+          if (it.movimentoId) {
+            const mv = db.movimentacoesEstoqueAcabados.find(
+              (m) => m.id === it.movimentoId
+            )
+            if (mv) mv.quantidade = -qtde
+          }
+          ajusteEstoque = ' Estoque de acabados reajustado.'
+        }
         addHistorico(
           'Expedição',
           'Item de venda editado no pedido ' +
             (e.pedido || e.id) +
             ' (' +
             (it.produto || '—') +
-            ').'
+            ').' +
+            ajusteEstoque
         )
         save()
         closeModal()
-        toast('Item da expedição atualizado.')
+        toast(
+          'Item da expedição atualizado' +
+            (it.modeloId ? ' e estoque ajustado.' : '.')
+        )
         renderAll()
       }
       // Salva a edição de um item de expedição manual (por modelo),
@@ -9536,11 +9615,14 @@
         const e = db.expedicoes.find((x) => x.id === expedicaoId)
         if (!e) return
         const isVenda = Array.isArray(e.itensVenda)
-        const it = isVenda ? e.itensVenda[itemIndex] : (e.itens || [])[itemIndex]
+        const it = isVenda
+          ? e.itensVenda[itemIndex]
+          : (e.itens || [])[itemIndex]
         if (!it) return
         const descricao = isVenda
           ? (it.produto || '—') + ' — qtde ' + it.qtde
           : it.quantidade + 'x ' + nomeModeloComCodigo(it.modeloId)
+        const vendaComBaixa = isVenda && it.modeloId
         openModal(
           'Excluir Item da Expedição',
           `
@@ -9550,7 +9632,9 @@
       ${
         !isVenda
           ? `<div class="hint" style="margin-bottom:12px;">O estoque de produtos acabados será estornado (+${it.quantidade} unidade(s) devolvida(s)).</div>`
-          : `<div class="hint" style="margin-bottom:12px;">Item importado de venda: não movimenta estoque ao excluir.</div>`
+          : vendaComBaixa
+            ? `<div class="hint" style="margin-bottom:12px;">O estoque de produtos acabados será estornado (+${it.qtde} unidade(s) devolvida(s)).</div>`
+            : `<div class="hint" style="margin-bottom:12px;">Item importado de venda: não movimenta estoque ao excluir (modelo não foi localizado no cadastro).</div>`
       }
       <div class="btn-row">
         <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
@@ -9571,6 +9655,7 @@
         if (!lista || !lista[itemIndex]) return
         const it = lista[itemIndex]
         let descricaoEstorno = ''
+        let estoqueEstornado = false
         if (!isVenda) {
           addStock('acabado', it.modeloId, it.quantidade)
           descricaoEstorno =
@@ -9579,6 +9664,22 @@
             ' ' +
             nomeModeloComCodigo(it.modeloId) +
             '.'
+          estoqueEstornado = true
+        } else if (it.modeloId) {
+          addStock('acabado', it.modeloId, it.qtde)
+          if (it.movimentoId) {
+            db.movimentacoesEstoqueAcabados =
+              db.movimentacoesEstoqueAcabados.filter(
+                (mv) => mv.id !== it.movimentoId
+              )
+          }
+          descricaoEstorno =
+            ' Estoque estornado: +' +
+            it.qtde +
+            ' ' +
+            nomeModeloComCodigo(it.modeloId) +
+            '.'
+          estoqueEstornado = true
         }
         lista.splice(itemIndex, 1)
         const listaVazia = lista.length === 0
@@ -9599,7 +9700,8 @@
         save()
         closeModal()
         toast(
-          'Item excluído' + (isVenda ? '.' : ' e estoque de acabados estornado.')
+          'Item excluído' +
+            (estoqueEstornado ? ' e estoque de acabados estornado.' : '.')
         )
         renderAll()
       }
@@ -9667,6 +9769,9 @@
           return {
             codigoVd: it.codigoVd,
             produto: prod ? prod.produto : '⚠ não encontrado no cadastro',
+            modelo: prod ? prod.modelo : null,
+            codigo: prod ? prod.codigo : null,
+            codigoBarras: prod ? prod.codigoBarras : null,
             qtde: it.qtde,
             rLiq: it.rLiq,
             rTotal: it.rTotal,
@@ -9726,6 +9831,30 @@
       function confirmarImportacaoVenda() {
         const venda = vendaImportadaPendente
         if (!venda) return
+        const dataMovimento = nowISO()
+        let naoBaixados = 0
+        const itensNaoLocalizados = []
+        venda.itens.forEach((item) => {
+          const modelo = encontrarModeloParaItemVenda(item)
+          if (!modelo) {
+            naoBaixados += item.qtde || 0
+            itensNaoLocalizados.push(
+              (item.produto || item.codigoVd || '—') + ' (' + item.qtde + 'un)'
+            )
+            return
+          }
+          item.modeloId = modelo.id
+          addStock('acabado', modelo.id, -item.qtde)
+          const movimentoId = uid()
+          item.movimentoId = movimentoId
+          db.movimentacoesEstoqueAcabados.push({
+            id: movimentoId,
+            modeloId: modelo.id,
+            quantidade: -item.qtde,
+            dataHora: dataMovimento,
+            pedido: venda.pedido,
+          })
+        })
         db.expedicoes.push({
           id: uid(),
           pedido: venda.pedido,
@@ -9733,7 +9862,7 @@
           cnpj: venda.cnpj,
           clienteNome: venda.clienteNome,
           itensVenda: venda.itens,
-          data: nowISO(),
+          data: dataMovimento,
         })
         addHistorico(
           'Expedição',
@@ -9743,12 +9872,27 @@
             venda.clienteNome +
             '): ' +
             venda.itens.length +
-            ' item(ns)'
+            ' item(ns).' +
+            (naoBaixados
+              ? ' ⚠ ' +
+                naoBaixados +
+                ' unidade(s) não baixada(s) do estoque — modelo não localizado no cadastro para: ' +
+                itensNaoLocalizados.join(', ') +
+                '.'
+              : ' Estoque de produtos acabados baixado.')
         )
         vendaImportadaPendente = null
         save()
         closeModal()
-        toast('Venda importada e adicionada ao Histórico de Expedições.')
+        toast(
+          'Venda importada e adicionada ao Histórico de Expedições.' +
+            (naoBaixados
+              ? ' ⚠ ' +
+                naoBaixados +
+                ' unidade(s) não baixada(s): ' +
+                itensNaoLocalizados.join(', ')
+              : ' Estoque de acabados atualizado.')
+        )
         renderAll()
       }
 
@@ -10077,14 +10221,48 @@
               )
               .join('')
           : `<tr class="empty-row"><td colspan="3">Nenhum produto injetado cadastrado.</td></tr>`
-        const aRows = db.modelosRelogio.length
-          ? db.modelosRelogio
-              .map(
-                (m) =>
-                  `<tr><td>${nomeModeloComCodigo(m.id)}</td><td class="mono">${m.codigoBarras || '—'}</td><td class="mono">${getStock('acabado', m.id)}</td></tr>`
+        // Estoque de Produtos Acabados: para modelos com movimentações de
+        // venda registradas (via "Subir Venda"), lista cada baixa
+        // individualmente (agrupada por modelo) e fecha o grupo com uma
+        // linha de total (estoque atual real + data da última atualização).
+        // Modelos sem movimentação de venda registrada mantêm a linha única
+        // de saldo atual, como antes.
+        function renderAcabadosAgrupadosHTML() {
+          if (!db.modelosRelogio.length)
+            return `<tr class="empty-row"><td colspan="5">Nenhum modelo cadastrado.</td></tr>`
+          const porModelo = new Map()
+          ;(db.movimentacoesEstoqueAcabados || []).forEach((mv) => {
+            if (!porModelo.has(mv.modeloId)) porModelo.set(mv.modeloId, [])
+            porModelo.get(mv.modeloId).push(mv)
+          })
+          return db.modelosRelogio
+            .map((m) => {
+              const nomeCol = nomeModeloComCodigo(m.id)
+              const barras = resolverCodigoBarrasModelo(m) || '—'
+              const codigoVd = resolverCodigoVdModelo(m) || '—'
+              const dataAtual =
+                db.estoqueAcabadosAtualizadoEm &&
+                db.estoqueAcabadosAtualizadoEm[m.id]
+                  ? fmtDate(db.estoqueAcabadosAtualizadoEm[m.id])
+                  : '—'
+              const movs = (porModelo.get(m.id) || []).slice().sort(
+                (a, b) => new Date(b.dataHora || 0) - new Date(a.dataHora || 0)
               )
-              .join('')
-          : `<tr class="empty-row"><td colspan="3">Nenhum modelo cadastrado.</td></tr>`
+              if (!movs.length) {
+                return `<tr><td>${nomeCol}</td><td class="mono">${barras}</td><td class="mono">${codigoVd}</td><td class="mono">${getStock('acabado', m.id)}</td><td class="mono">${dataAtual}</td></tr>`
+              }
+              const linhasMov = movs
+                .map((mv) => {
+                  const valor = mv.quantidade
+                  const valorText = `${valor < 0 ? '-' : '+'}${Math.abs(valor)}`
+                  return `<tr style="background:rgba(220,38,38,0.08);"><td>${nomeCol}</td><td class="mono">${barras}</td><td class="mono">${codigoVd}</td><td class="mono" style="color:#dc2626 !important;">${valorText}</td><td class="mono">${fmtDate(mv.dataHora)}</td></tr>`
+                })
+                .join('')
+              return `${linhasMov}<tr class="report-balance-row" style="font-weight:700;"><td>Total — ${nomeCol}</td><td class="mono">${barras}</td><td class="mono">${codigoVd}</td><td class="mono">${getStock('acabado', m.id)}</td><td class="mono">${dataAtual}</td></tr><tr class="report-group-spacer" aria-hidden="true"><td colspan="5"></td></tr>`
+            })
+            .join('')
+        }
+        const aRows = renderAcabadosAgrupadosHTML()
         document.getElementById('tbl-est-materia').innerHTML = mRowsEst
         document.getElementById('est-saldos-materia').innerHTML = mRows
         document.getElementById('tbl-est-semi').innerHTML = sRows
@@ -10838,6 +11016,81 @@
           })
         })
       }
+      // Resolve o modelo cadastrado (db.modelosRelogio) correspondente a um
+      // item de venda importada. Prioriza o Código de Barras (identificador
+      // confiável e único entre produto vendido e modelo cadastrado); só
+      // recorre à busca por nome/descrição como alternativa quando o modelo
+      // não tiver código de barras preenchido.
+      // Verifica se dois nomes normalizados são "compatíveis": todas as
+      // palavras do nome mais curto aparecem no nome mais longo, em
+      // qualquer ordem (tolera nomes cadastrados com palavras reordenadas
+      // ou com termos extras, ex: "GAMA PRETO GALINHA" vs "RELÓGIO GAMA
+      // PRETO-GALINHA").
+      function nomesModeloCompativeis(a, b) {
+        const ta = a.split(' ').filter(Boolean)
+        const tb = b.split(' ').filter(Boolean)
+        if (!ta.length || !tb.length) return false
+        const [menor, maior] = ta.length <= tb.length ? [ta, tb] : [tb, ta]
+        return menor.every((tok) => maior.includes(tok))
+      }
+      function encontrarModeloParaItemVenda(item) {
+        // Prioridade máxima: CÓDIGO VD do pedido, comparado com o Código VD
+        // resolvido de cada modelo (via produto vinculado). É o
+        // identificador mais direto entre o item do pedido.txt e o modelo.
+        if (item.codigoVd) {
+          const alvoVd = String(item.codigoVd)
+            .trim()
+            .replace(/^0+(?=\d)/, '')
+          const porCodigoVd = db.modelosRelogio.find((m) => {
+            const vd = resolverCodigoVdModelo(m)
+            return (
+              vd &&
+              String(vd).trim().replace(/^0+(?=\d)/, '') === alvoVd
+            )
+          })
+          if (porCodigoVd) return porCodigoVd
+        }
+        if (item.codigoBarras) {
+          const alvo = String(item.codigoBarras).trim()
+          const porBarras = db.modelosRelogio.find(
+            (m) => resolverCodigoBarrasModelo(m) === alvo
+          )
+          if (porBarras) return porBarras
+        }
+        if (item.codigo) {
+          const porCodigo = db.modelosRelogio.find(
+            (m) =>
+              m.codigoRef &&
+              String(m.codigoRef).trim().toLowerCase() ===
+                String(item.codigo).trim().toLowerCase()
+          )
+          if (porCodigo) return porCodigo
+        }
+        const candidatos = [item.modelo, item.produto].filter(Boolean)
+        for (const cand of candidatos) {
+          const termo = normalizeModeloLookup(cand)
+          if (!termo) continue
+          const exato = db.modelosRelogio.find(
+            (m) => normalizeModeloLookup(m.nome) === termo
+          )
+          if (exato) return exato
+        }
+        for (const cand of candidatos) {
+          const termo = normalizeModeloLookup(cand)
+          if (!termo) continue
+          const parcial = db.modelosRelogio.find((m) => {
+            const nomeNorm = normalizeModeloLookup(m.nome)
+            return (
+              nomeNorm &&
+              (nomeNorm.includes(termo) ||
+                termo.includes(nomeNorm) ||
+                nomesModeloCompativeis(termo, nomeNorm))
+            )
+          })
+          if (parcial) return parcial
+        }
+        return null
+      }
       function completarModeloComProduto(modelo) {
         const produtoRef = encontrarProdutoPorModelo(modelo?.nome)
         return {
@@ -10877,7 +11130,9 @@
             .filter(
               (m) =>
                 !ITENS_BLOQUEADOS_PECA_MATERIAL.includes(
-                  String(m.nome || '').trim().toLowerCase()
+                  String(m.nome || '')
+                    .trim()
+                    .toLowerCase()
                 )
             )
             .map((m) => ({ tipo: 'materiaPrima', id: m.id, nome: m.nome })),
@@ -10886,7 +11141,9 @@
             .filter(
               (m) =>
                 !ITENS_BLOQUEADOS_PECA_MATERIAL.includes(
-                  String(m.nome || '').trim().toLowerCase()
+                  String(m.nome || '')
+                    .trim()
+                    .toLowerCase()
                 )
             )
             .map((m) => ({ tipo: 'semiacabado', id: m.id, nome: m.nome })),
@@ -10902,9 +11159,12 @@
     <div class="card"><h3>Novo Modelo de Relógio</h3>
       <label>Nome do Modelo</label>
       <div class="autocomplete-wrap">
-        <input id="modelo-nome" placeholder="Ex: Relógio Ômega" autocomplete="off" oninput="filtrarSugestoesModeloNome(this.value)" onfocus="filtrarSugestoesModeloNome(this.value)" onblur="setTimeout(fecharSugestoesModeloNome, 150)">
+        <input id="modelo-nome" placeholder="Ex: Relógio Ômega" autocomplete="off" oninput="filtrarSugestoesModeloNome(this.value)" onfocus="filtrarSugestoesModeloNome(this.value)" onblur="setTimeout(function(){ fecharSugestoesModeloNome(); preencherCodigoVdAutomatico(); }, 150)">
         <div id="modelo-nome-sugestoes" class="autocomplete-list"></div>
       </div>
+      <label>Código VD (opcional — vínculo direto com o Pedido de venda)</label>
+      <input id="modelo-codigo-vd" placeholder="Ex: 2113" autocomplete="off">
+      <div class="hint" style="margin-top:-6px;margin-bottom:10px;">Se não preenchido, o sistema tenta descobrir automaticamente pelo produto vinculado ao nome do modelo.</div>
       <div class="divider"></div>
       <h3>Composição (BOM)</h3>
       <div class="bom-row">
@@ -10933,12 +11193,13 @@
         <button class="btn-ghost btn-sm" onclick="exportarTabelaGenericaPDF('modelo-tbody','Modelos / Catálogo Cadastrado','Cadastro_Modelos_Catalogo','modelo-busca')">📄 Exportar PDF</button>
       </div>
       <div class="table-wrap" style="margin-top:10px;"><table>
-        <thead><tr><th>Cód. Ref</th><th>Descrição</th><th>Cód. Barras</th><th>NCM</th><th>Valor</th><th>Peso</th><th></th></tr></thead>
+        <thead><tr><th>Cód. Ref</th><th>Descrição</th><th>Cód. Barras</th><th>Código VD</th><th>NCM</th><th>Valor</th><th>Peso</th><th></th></tr></thead>
         <tbody id="modelo-tbody">${
           lista.length
             ? lista
                 .map((m) => {
                   const modeloCompleto = completarModeloComProduto(m)
+                  const codigoVd = resolverCodigoVdModelo(m) || '—'
                   return `
           <tr>
             <td class="serial">${escapeHtml(modeloCompleto.codigoRef || '—')}</td>
@@ -10947,14 +11208,15 @@
               <div class="hint" style="margin-top:4px;">${modeloCompleto.bom && modeloCompleto.bom.length ? modeloCompleto.bom.map((b) => `${b.qtd}x ${itemNomeGeral(b.tipo, b.itemId)}`).join('<br>') : 'Sem composição'}</div>
             </td>
             <td class="mono">${escapeHtml(modeloCompleto.codigoBarras || '—')}</td>
+            <td class="mono">${escapeHtml(codigoVd)}</td>
             <td class="mono">${escapeHtml(modeloCompleto.ncm || '—')}</td>
             <td class="mono">${modeloCompleto.valor && modeloCompleto.valor !== '—' ? fmtMoney(modeloCompleto.valor) : '—'}</td>
             <td>${escapeHtml(modeloCompleto.peso || '—')}</td>
-            <td><button class="btn-danger btn-sm" onclick="excluirModelo('${m.id}')">excluir</button></td>
+            <td><button class="btn-ghost btn-sm" onclick="abrirEdicaoModelo('${m.id}')">editar</button> <button class="btn-danger btn-sm" onclick="excluirModelo('${m.id}')">excluir</button></td>
           </tr>`
                 })
                 .join('')
-            : `<tr class="empty-row"><td colspan="7">Nenhum modelo encontrado.</td></tr>`
+            : `<tr class="empty-row"><td colspan="8">Nenhum modelo encontrado.</td></tr>`
         }
         </tbody></table></div>
       <div class="hint" style="text-align:right;margin-top:8px;">${textoUltimaAtualizacao()}</div>
@@ -10980,7 +11242,9 @@
           return
         }
         bomItemSugestoesAtual = bomItensDisponiveis
-          .filter((p) => (p.nome || '').toString().toLowerCase().includes(termo))
+          .filter((p) =>
+            (p.nome || '').toString().toLowerCase().includes(termo)
+          )
           .slice(0, 8)
         if (!bomItemSugestoesAtual.length) {
           el.classList.remove('show')
@@ -11046,7 +11310,26 @@
         if (!p) return
         const input = document.getElementById('modelo-nome')
         if (input) input.value = p.produto || ''
+        // Já traz o Código VD automaticamente do produto selecionado,
+        // sem precisar digitar/colar na mão.
+        const vdInput = document.getElementById('modelo-codigo-vd')
+        if (vdInput) vdInput.value = p.codigo_v || ''
         fecharSugestoesModeloNome()
+      }
+      // Tenta descobrir e preencher o Código VD automaticamente a partir do
+      // que foi digitado em "Nome do Modelo", usando o vínculo já existente
+      // em Cadastros > Produtos (Nome do Modelo <-> Código VD). Só entra em
+      // ação se o campo de Código VD ainda estiver vazio, para nunca
+      // sobrescrever um valor que o usuário já preencheu manualmente.
+      function preencherCodigoVdAutomatico() {
+        const nomeInput = document.getElementById('modelo-nome')
+        const vdInput = document.getElementById('modelo-codigo-vd')
+        if (!nomeInput || !vdInput) return
+        if (vdInput.value.trim()) return
+        const produtoRef = encontrarProdutoPorModelo(nomeInput.value)
+        if (produtoRef && produtoRef.codigo_v) {
+          vdInput.value = produtoRef.codigo_v
+        }
       }
       function fecharSugestoesModeloNome() {
         const el = document.getElementById('modelo-nome-sugestoes')
@@ -11094,7 +11377,9 @@
         const val = document.getElementById('bom-item').value
         const qtd = parseFloat(document.getElementById('bom-qtd').value)
         if (!val || !qtd) {
-          toast('Digite e selecione a peça/material na lista, e informe a quantidade.')
+          toast(
+            'Digite e selecione a peça/material na lista, e informe a quantidade.'
+          )
           return
         }
         const [tipo, itemId] = val.split(':')
@@ -11116,6 +11401,9 @@
           toast('Informe o nome do modelo.')
           return
         }
+        const codigoVdInformado = (
+          document.getElementById('modelo-codigo-vd')?.value || ''
+        ).trim()
         const produtoRef = encontrarProdutoPorModelo(nomeModelo)
         db.modelosRelogio.push({
           id: uid(),
@@ -11123,6 +11411,7 @@
           bom: [...bomTemp],
           codigoRef: produtoRef?.codigo || '',
           codigoBarras: produtoRef?.codigoBarras || '',
+          codigoVd: codigoVdInformado || produtoRef?.codigo_v || '',
           ncm: produtoRef?.codNcm || '',
           valor: produtoRef?.valor || '',
           peso: produtoRef?.peso || '',
@@ -11131,6 +11420,53 @@
         bomTemp = []
         save()
         toast('Modelo salvo.')
+        renderCadastros()
+        renderAll()
+      }
+      // Abre o modal para editar os identificadores de um modelo já
+      // cadastrado (Nome, Código VD, Código de Barras, Código Ref). Existe
+      // principalmente para corrigir o vínculo com o pedido de venda
+      // (Código VD) quando a detecção automática pelo nome do produto falha.
+      function abrirEdicaoModelo(id) {
+        const m = db.modelosRelogio.find((x) => x.id === id)
+        if (!m) return
+        const completo = completarModeloComProduto(m)
+        openModal(
+          'Editar Modelo',
+          `
+    <label>Nome do Modelo</label><input id="modal-modelo-nome" value="${escapeHtml(m.nome || '')}">
+    <label>Código VD (vínculo com o Pedido de venda)</label><input id="modal-modelo-codigo-vd" value="${escapeHtml(resolverCodigoVdModelo(m) || '')}">
+    <label>Código de Barras</label><input id="modal-modelo-codigo-barras" value="${escapeHtml(resolverCodigoBarrasModelo(m) || '')}">
+    <label>Código Ref</label><input id="modal-modelo-codigo-ref" value="${escapeHtml(completo.codigoRef && completo.codigoRef !== '—' ? completo.codigoRef : '')}">
+    <div class="hint" style="margin-top:-6px;">Deixe em branco para o sistema continuar tentando descobrir automaticamente pelo produto vinculado.</div>
+    <div class="btn-row">
+      <button class="btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="salvarEdicaoModelo('${id}')">Salvar</button>
+    </div>`
+        )
+      }
+      function salvarEdicaoModelo(id) {
+        const m = db.modelosRelogio.find((x) => x.id === id)
+        if (!m) return
+        const nome = document.getElementById('modal-modelo-nome').value.trim()
+        if (!nome) {
+          toast('Informe o nome do modelo.')
+          return
+        }
+        m.nome = nome
+        m.codigoVd = document
+          .getElementById('modal-modelo-codigo-vd')
+          .value.trim()
+        m.codigoBarras = document
+          .getElementById('modal-modelo-codigo-barras')
+          .value.trim()
+        m.codigoRef = document
+          .getElementById('modal-modelo-codigo-ref')
+          .value.trim()
+        addHistorico('Cadastro', 'Modelo editado: ' + nome)
+        save()
+        closeModal()
+        toast('Modelo atualizado.')
         renderCadastros()
         renderAll()
       }
